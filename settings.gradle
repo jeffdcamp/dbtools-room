@@ -1,2 +1,2 @@
-include ':sqliteorg'
+include ':sqliteorg', ':sqlitejdbc'
 include ':app'

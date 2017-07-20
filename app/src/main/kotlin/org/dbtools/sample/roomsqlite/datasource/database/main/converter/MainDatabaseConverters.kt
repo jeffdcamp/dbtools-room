@@ -16,12 +16,14 @@ class MainDatabaseConverters {
     }
 
     @TypeConverter
-    fun fromLongToDate(value: Long): Date {
+    fun fromLongToDate(value: Long?): Date? {
+        value ?: return null
         return Date(value)
     }
 
     @TypeConverter
-    fun fromDateToLong(value: Date): Long {
+    fun fromDateToLong(value: Date?): Long? {
+        value ?: return null
         return value.time
     }
 }
