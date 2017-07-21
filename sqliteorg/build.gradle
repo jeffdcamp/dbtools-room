@@ -13,7 +13,7 @@ apply plugin: 'maven'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    buildToolsVersion '26.0.0'
 
     defaultConfig {
         minSdkVersion 15
@@ -44,22 +44,15 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${supportLibVersion}"
     implementation "com.android.support:support-v13:${supportLibVersion}" // used by material dialog
 
-
-//    compile "android.arch.lifecycle:runtime:$archLifecycleVersion"
-//    compile "android.arch.lifecycle:extensions:$archLifecycleVersion"
     implementation "android.arch.persistence.room:runtime:$archRoomVersion"
-//    kapt "android.arch.lifecycle:compiler:$archLifecycleVersion"
-//    kapt "android.arch.persistence.room:compiler:$archRoomVersion"
 
     // optional
     provided "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     provided 'org.sqlite.sqliteX:sqlite-android:3.15.2' // SQL Android Bindings
-//    provided 'net.zetetic:android-database-sqlcipher:3.5.4'
-//    provided "org.xerial:sqlite-jdbc:$xerialSqliteJdbcVersion"
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.8.47'
+    testCompile "junit:junit:$junitVersion"
+    testCompile "org.mockito:mockito-core:$mockitoVersion"
 }
 
 // =============== Maven Deployment ===============

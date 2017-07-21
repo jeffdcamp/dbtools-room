@@ -47,11 +47,6 @@ android {
     }
 }
 
-ext {
-    archLifecycleVersion = '1.0.0-alpha5'
-    archRoomVersion = '1.0.0-alpha5'
-}
-
 dependencies {
     compile project(path: ':sqliteorg')
 
@@ -74,12 +69,11 @@ dependencies {
     // Custom SQLite database
     implementation 'org.sqlite.sqliteX:sqlite-android:3.15.2'
 
-
     // Test
     testImplementation project(path: ':jdbc')
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-core:2.8.47'
-    testImplementation "android.arch.persistence.room:testing:1.0.0-alpha5"
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "android.arch.persistence.room:testing:$archRoomVersion"
     testImplementation "org.xerial:sqlite-jdbc:$xerialSqliteJdbcVersion"
     kaptTest "android.arch.persistence.room:compiler:$archRoomVersion"
     kaptTest "android.arch.lifecycle:compiler:$archLifecycleVersion"

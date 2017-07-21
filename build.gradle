@@ -33,4 +33,7 @@ ext {
     xerialSqliteJdbcVersion = '3.18.0'
     archLifecycleVersion = '1.0.0-alpha5'
     archRoomVersion = '1.0.0-alpha5'
+
+    junitVersion = '4.12'
+    mockitoVersion = '2.8.47'
 }
