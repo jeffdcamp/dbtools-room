@@ -124,7 +124,7 @@ class JdbcMemoryCursor : Cursor {
 
     override fun getColumnIndex(columnName: String): Int {
         for (i in 0..columnCount - 1) {
-            if (columnNames!![i].equals(columnName, ignoreCase = true)) {
+            if (columnNames[i].equals(columnName, ignoreCase = true)) {
                 return i
             }
         }
@@ -143,7 +143,7 @@ class JdbcMemoryCursor : Cursor {
     }
 
     override fun getColumnName(index: Int): String {
-        return columnNames!![index]
+        return columnNames[index]
     }
 
     override fun getColumnNames(): Array<String> {
@@ -154,7 +154,7 @@ class JdbcMemoryCursor : Cursor {
         return columnCount
     }
 
-    private val rowData: List<Any>
+    private val rowData: List<Any?>
         get() = data[currentPosition]
 
     override fun getBlob(i: Int): ByteArray {
