@@ -31,6 +31,6 @@ task clean(type: Delete) {
 ext {
     supportLibVersion = '25.4.0'
     xerialSqliteJdbcVersion = '3.18.0'
-    archLifecycleVersion = '1.0.0-alpha3'
-    archRoomVersion = '1.0.0-alpha3'
+    archLifecycleVersion = '1.0.0-alpha5'
+    archRoomVersion = '1.0.0-alpha5'
 }
