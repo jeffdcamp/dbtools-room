@@ -1,13 +1,15 @@
 DBTools for Android
 =================
 
-DBTools Room for Android is an library that makes it even easier to work with SQLite Databases.
+DBTools Room for Android is an library that makes it even easier to work with Google Room Library and SQLite Databases.
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.dbtools/dbtools-room/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.dbtools/dbtools-room)
 
 **Features**
 
-* 
+* Sqlite.org database support
+* JDBC database support (for Unit Tests against real sqlite databases using Room)
+* Dynamic Query support in Room Dao objects
 
 Usage
 =====
