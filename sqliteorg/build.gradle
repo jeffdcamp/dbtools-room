@@ -44,6 +44,11 @@ dependencies {
     // Android
     implementation "com.android.support:support-annotations:${supportLibVersion}"
 
+    implementation "com.android.support:appcompat-v7:${supportLibVersion}" // used by org.sqlite.sqliteX:sqlite-android
+    implementation "com.android.support:support-media-compat:${supportLibVersion}" // used by org.sqlite.sqliteX:sqlite-android
+    implementation "com.android.support:support-vector-drawable:${supportLibVersion}" // used by org.sqlite.sqliteX:sqlite-android
+    implementation "com.android.support:animated-vector-drawable:${supportLibVersion}" // used by org.sqlite.sqliteX:sqlite-android
+
     compileOnly "android.arch.lifecycle:runtime:$archVersion"
     compileOnly "android.arch.lifecycle:extensions:$archVersion"
     implementation "android.arch.persistence.room:runtime:$archVersion"
