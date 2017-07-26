@@ -32,6 +32,7 @@ class JdbcMemoryCursor : Cursor {
 
     }
 
+    @Suppress("unused")
     constructor(columnNames: Array<String>, data: MutableList<List<Any>>) {
         this.columnNames = columnNames
         this.columnCount = columnNames.size
@@ -123,13 +124,7 @@ class JdbcMemoryCursor : Cursor {
     }
 
     override fun getColumnIndex(columnName: String): Int {
-        for (i in 0..columnCount - 1) {
-            if (columnNames[i].equals(columnName, ignoreCase = true)) {
-                return i
-            }
-        }
-
-        return -1
+        return (0..columnCount - 1).firstOrNull { columnNames[it].equals(columnName, ignoreCase = true) } ?: -1
     }
 
     @Throws(IllegalArgumentException::class)
@@ -208,10 +203,12 @@ class JdbcMemoryCursor : Cursor {
         return rowData[i] == null
     }
 
+    @Deprecated(message = "Use Close", replaceWith = ReplaceWith("close()"), level = DeprecationLevel.ERROR)
     override fun deactivate() {
         throw UnsupportedOperationException("unsupported")
     }
 
+    @Deprecated(message = "Create a new Cursor", level = DeprecationLevel.ERROR, replaceWith = ReplaceWith(""))
     override fun requery(): Boolean {
         throw UnsupportedOperationException("unsupported")
     }

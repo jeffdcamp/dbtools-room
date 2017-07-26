@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         mainDatabase = Room.databaseBuilder(application, MainDatabase::class.java, MainDatabase.DATABASE_NAME)
                 .openHelperFactory(SqliteOrgSQLiteOpenHelperFactory()) // with NO password
+                .fallbackToDestructiveMigration()
 //                .openHelperFactory(SqliteOrgSQLiteOpenHelperFactory(password = "abc123")) // password protected
 //                .addMigrations(object: Migration(1, 2) {
 //                    override fun migrate(p0: SupportSQLiteDatabase?) {
@@ -74,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                 return@launch
             }
 
-            val deleteCount = run(context + CommonPool) {
+            val deleteCount = run(coroutineContext + CommonPool) {
                 val lastIndividualId = individualDao.findLastIndividualId()
                 individualDao.deleteById(lastIndividualId)
             }
@@ -92,7 +93,7 @@ class MainActivity : AppCompatActivity() {
                 return@launch
             }
 
-            val updated = run(context + CommonPool) {
+            val updated = run(coroutineContext + CommonPool) {
                 try {
                     val individual = individualDao.findLastIndividual()
                     if (individual != null) {
@@ -123,7 +124,7 @@ class MainActivity : AppCompatActivity() {
                 return@launch
             }
 
-            val firstName = run(context + CommonPool) {
+            val firstName = run(coroutineContext + CommonPool) {
                 val lastIndividualId = individualDao.findLastIndividualId()
                 return@run individualDao.findFirstNameById(lastIndividualId)
             }

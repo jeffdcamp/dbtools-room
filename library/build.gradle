@@ -13,14 +13,12 @@ apply plugin: 'maven'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
-
+    buildToolsVersion '26.0.1'
 
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 26
     }
-
     buildTypes {
         debug {
             testCoverageEnabled = true
@@ -45,13 +43,10 @@ dependencies {
     compileOnly "android.arch.lifecycle:runtime:$archLifecycleVersion"
     compileOnly "android.arch.lifecycle:extensions:$archLifecycleVersion"
     implementation "android.arch.persistence.room:runtime:$archRoomVersion"
-
-    // optional
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compileOnly "org.xerial:sqlite-jdbc:$xerialSqliteJdbcVersion"
 
-    testCompile "junit:junit:$junitVersion"
-    testCompile "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.8.47'
 }
 
 // =============== Maven Deployment ===============
