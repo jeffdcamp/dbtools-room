@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.dbtools.sample.roomsqlite">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.dbtools.sample.roomsqlite">
 
     <application
         android:name="App"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:extractNativeLibs="false"
+        tools:ignore="UnusedAttribute"
+        >
         <activity android:name="MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

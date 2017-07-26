@@ -12,12 +12,12 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'maven'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '26.0.0'
+    compileSdkVersion project.compileSdkVersion
+    buildToolsVersion project.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 25
+        minSdkVersion project.minSdkVersion
+        targetSdkVersion project.targetSdkVersion
     }
     buildTypes {
         debug {
@@ -36,20 +36,22 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        kotlinOptions.freeCompilerArgs += ['-module-name', "$POM_ARTIFACT_ID"]
     }
 }
 
 dependencies {
     // Android
-    implementation "com.android.support:appcompat-v7:${supportLibVersion}"
-    implementation "com.android.support:support-v13:${supportLibVersion}" // used by material dialog
+    implementation "com.android.support:support-annotations:${supportLibVersion}"
 
-    implementation "android.arch.persistence.room:runtime:$archRoomVersion"
+    compileOnly "android.arch.lifecycle:runtime:$archVersion"
+    compileOnly "android.arch.lifecycle:extensions:$archVersion"
+    implementation "android.arch.persistence.room:runtime:$archVersion"
 
     // optional
-    provided "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    provided 'org.sqlite.sqliteX:sqlite-android:3.15.2' // SQL Android Bindings
+    compileOnly 'org.sqlite.sqliteX:sqlite-android:3.15.2' // SQL Android Bindings
 
     testCompile "junit:junit:$junitVersion"
     testCompile "org.mockito:mockito-core:$mockitoVersion"

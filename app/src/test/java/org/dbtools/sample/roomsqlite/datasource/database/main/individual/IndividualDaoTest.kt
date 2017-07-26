@@ -1,11 +1,9 @@
-package org.dbtools.sample.roomsqlite.database.main.individual
+package org.dbtools.sample.roomsqlite.datasource.database.main.individual
 
 import android.app.Application
 import android.arch.persistence.room.Room
 import org.dbtools.android.room.jdbc.JdbcSQLiteOpenHelperFactory
 import org.dbtools.sample.roomsqlite.datasource.database.main.MainDatabase
-import org.dbtools.sample.roomsqlite.datasource.database.main.individual.Individual
-import org.dbtools.sample.roomsqlite.datasource.database.main.individual.IndividualDao
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -20,7 +18,6 @@ class IndividualDaoTest {
     lateinit var application: Application
 
     lateinit var mainDatabase: MainDatabase
-    lateinit var memoryDatabase: MainDatabase
 
     lateinit var individualDao: IndividualDao
 
@@ -31,9 +28,11 @@ class IndividualDaoTest {
         mainDatabase = Room.databaseBuilder(application, MainDatabase::class.java, MainDatabase.DATABASE_NAME)
                 .allowMainThreadQueries()
                 .openHelperFactory(JdbcSQLiteOpenHelperFactory("app/build/test-db"))
+                .fallbackToDestructiveMigration()
                 .build()
 
-//        memoryDatabase = Room.inMemoryDatabaseBuilder(application, MainDatabase::class.java)
+        // In Memory Database
+//        mainDatabase = Room.inMemoryDatabaseBuilder(application, MainDatabase::class.java)
 //                .allowMainThreadQueries()
 //                .openHelperFactory(JdbcSQLiteOpenHelperFactory())
 //                .build()

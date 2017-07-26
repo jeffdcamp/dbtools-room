@@ -19,7 +19,6 @@ android {
         minSdkVersion project.minSdkVersion
         targetSdkVersion project.targetSdkVersion
     }
-
     buildTypes {
         debug {
             testCoverageEnabled = true
@@ -45,13 +44,10 @@ dependencies {
     compileOnly "android.arch.lifecycle:runtime:$archVersion"
     compileOnly "android.arch.lifecycle:extensions:$archVersion"
     implementation "android.arch.persistence.room:runtime:$archVersion"
-
-    // optional
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compileOnly "org.xerial:sqlite-jdbc:$xerialSqliteJdbcVersion"
 
-    testCompile "junit:junit:$junitVersion"
-    testCompile "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.8.47'
 }
 
 // =============== Maven Deployment ===============
