@@ -12,12 +12,12 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'maven'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.1'
+    compileSdkVersion project.compileSdkVersion
+    buildToolsVersion project.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 26
+        minSdkVersion project.minSdkVersion
+        targetSdkVersion project.targetSdkVersion
     }
     buildTypes {
         debug {
@@ -36,13 +36,14 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        kotlinOptions.freeCompilerArgs += ['-module-name', "$POM_ARTIFACT_ID"]
     }
 }
 
 dependencies {
-    compileOnly "android.arch.lifecycle:runtime:$archLifecycleVersion"
-    compileOnly "android.arch.lifecycle:extensions:$archLifecycleVersion"
-    implementation "android.arch.persistence.room:runtime:$archRoomVersion"
+    compileOnly "android.arch.lifecycle:runtime:$archVersion"
+    compileOnly "android.arch.lifecycle:extensions:$archVersion"
+    implementation "android.arch.persistence.room:runtime:$archVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     testImplementation 'junit:junit:4.12'
