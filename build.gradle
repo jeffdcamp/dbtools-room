@@ -11,7 +11,6 @@ buildscript {
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.15.0' // version plugin support
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
-        classpath 'org.dbtools:gradle-dbtools-plugin:9.0.0'
     }
 }
 
@@ -29,15 +28,15 @@ task clean(type: Delete) {
 }
 
 ext {
-    supportLibVersion = '26.0.0'
-    xerialSqliteJdbcVersion = '3.19.3'
-    archVersion = '1.0.0-alpha6'
-
-    junitVersion = '4.12'
-    mockitoVersion = '2.8.47'
-
     compileSdkVersion = 26
     buildToolsVersion = '26.0.1'
     minSdkVersion = 16
     targetSdkVersion = 26
+
+    supportLibVersion = '26.0.0'
+    xerialSqliteJdbcVersion = '3.19.3'
+    archVersion = '1.0.0-alpha7'
+
+    junitVersion = '4.12'
+    mockitoVersion = '2.8.47'
 }
