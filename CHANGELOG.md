@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 1.0.4 *(2017-08)*
+---------------------------
+* Room 1.0.0-alpha8
+
 Version 1.0.3 *(2017-07)*
 ---------------------------
 * Added the ability to supply custom sqlite library loader

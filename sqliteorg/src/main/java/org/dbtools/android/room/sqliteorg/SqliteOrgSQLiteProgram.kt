@@ -3,7 +3,7 @@ package org.dbtools.android.room.sqliteorg
 import android.arch.persistence.db.SupportSQLiteProgram
 import org.sqlite.database.sqlite.SQLiteProgram
 
-class SqliteOrgSQLiteProgram(val delegate: SQLiteProgram) : SupportSQLiteProgram {
+open class SqliteOrgSQLiteProgram(val delegate: SQLiteProgram) : SupportSQLiteProgram {
 
     override fun bindNull(index: Int) {
         this.delegate.bindNull(index)
@@ -27,5 +27,9 @@ class SqliteOrgSQLiteProgram(val delegate: SQLiteProgram) : SupportSQLiteProgram
 
     override fun clearBindings() {
         this.delegate.clearBindings()
+    }
+
+    override fun close() {
+        this.delegate.close()
     }
 }

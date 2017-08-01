@@ -33,7 +33,7 @@ open class JdbcSQLiteProgram(conn: Connection, sql: String) : SupportSQLiteProgr
         statement.clearParameters()
     }
 
-    fun close() {
+    override fun close() {
         statement.close()
     }
 
