@@ -50,8 +50,8 @@ dependencies {
     implementation "com.android.support:animated-vector-drawable:${supportLibVersion}" // used by org.sqlite.sqliteX:sqlite-android
 
     compileOnly "android.arch.lifecycle:runtime:$archVersion"
-    compileOnly "android.arch.lifecycle:extensions:$archVersion"
-    implementation "android.arch.persistence.room:runtime:$archVersion"
+    compileOnly "android.arch.lifecycle:extensions:$archVersionEA"
+    implementation "android.arch.persistence.room:runtime:$archVersionEA"
 
     // optional
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

@@ -33,9 +33,10 @@ ext {
     minSdkVersion = 16
     targetSdkVersion = 26
 
-    supportLibVersion = '26.0.2'
+    supportLibVersion = '26.1.0'
     xerialSqliteJdbcVersion = '3.20.0'
-    archVersion = '1.0.0-alpha9'
+    archVersion = '1.0.0'
+    archVersionEA = '1.0.0-alpha9-1'
 
     junitVersion = '4.12'
     mockitoVersion = '2.10.0'

@@ -59,10 +59,10 @@ dependencies {
 
     // Architecture
     implementation "android.arch.lifecycle:runtime:$archVersion"
-    implementation "android.arch.lifecycle:extensions:$archVersion"
-    implementation "android.arch.persistence.room:runtime:$archVersion"
-    kapt "android.arch.lifecycle:compiler:$archVersion"
-    kapt "android.arch.persistence.room:compiler:$archVersion"
+    implementation "android.arch.lifecycle:extensions:$archVersionEA"
+    implementation "android.arch.persistence.room:runtime:$archVersionEA"
+    kapt "android.arch.lifecycle:compiler:$archVersionEA"
+    kapt "android.arch.persistence.room:compiler:$archVersionEA"
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -75,17 +75,17 @@ dependencies {
     testImplementation project(path: ':jdbc')
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
-    testImplementation "android.arch.persistence.room:testing:$archVersion"
+    testImplementation "android.arch.persistence.room:testing:$archVersionEA"
     testImplementation "org.xerial:sqlite-jdbc:$xerialSqliteJdbcVersion"
 
-    testCompile ("android.arch.core:core-testing:$archVersion", {
+    testCompile ("android.arch.core:core-testing:$archVersionEA", {
         exclude group: 'com.android.support', module: 'support-compat'
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'support-core-utils'
     })
 
-    kaptTest "android.arch.persistence.room:compiler:$archVersion"
-    kaptTest "android.arch.lifecycle:compiler:$archVersion"
+    kaptTest "android.arch.persistence.room:compiler:$archVersionEA"
+    kaptTest "android.arch.lifecycle:compiler:$archVersionEA"
 
 }
 
