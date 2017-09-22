@@ -7,6 +7,6 @@ import android.arch.persistence.db.SupportSQLiteOpenHelper
 class JdbcSQLiteOpenHelperFactory(val path: String = "") : SupportSQLiteOpenHelper.Factory {
 
     override fun create(configuration: SupportSQLiteOpenHelper.Configuration): SupportSQLiteOpenHelper {
-        return JdbcSQLiteOpenHelper(path, configuration.name, configuration.version, configuration.callback)
+        return JdbcSQLiteOpenHelper(path, configuration.name, configuration.callback)
     }
 }

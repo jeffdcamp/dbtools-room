@@ -6,7 +6,6 @@ import java.io.File
 
 open class JdbcSQLiteOpenHelper(val path: String,
                                 val name: String?,
-                                val version: Int,
                                 val callback: SupportSQLiteOpenHelper.Callback) : SupportSQLiteOpenHelper {
 
     private val dbPath: String
@@ -76,6 +75,7 @@ open class JdbcSQLiteOpenHelper(val path: String,
             db = JdbcSqliteDatabase(dbPath)
 
             callback.onConfigure(db)
+            val version = callback.version
 
             val dbVersion = db.version
             if (dbVersion != version) {

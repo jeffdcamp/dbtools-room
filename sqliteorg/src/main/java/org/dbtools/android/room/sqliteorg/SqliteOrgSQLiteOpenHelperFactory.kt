@@ -7,7 +7,7 @@ import android.arch.persistence.db.SupportSQLiteOpenHelper
 class SqliteOrgSQLiteOpenHelperFactory(val path: String = "", val password: String = "", val libraryLoader: () -> Unit = DEFAULT_SQLITEX_LIBRARY_LOADER) : SupportSQLiteOpenHelper.Factory {
 
     override fun create(configuration: SupportSQLiteOpenHelper.Configuration): SupportSQLiteOpenHelper {
-        return SqliteOrgSQLiteOpenHelper(configuration.context, path, configuration.name, configuration.version, configuration.callback, password, libraryLoader)
+        return SqliteOrgSQLiteOpenHelper(configuration.context, path, configuration.name, configuration.callback, password, libraryLoader)
     }
 
     companion object {

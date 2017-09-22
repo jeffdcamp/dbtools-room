@@ -11,7 +11,6 @@ import java.io.File
 open class SqliteOrgSQLiteOpenHelper(context: Context,
                                      path: String,
                                      name: String?,
-                                     version: Int,
                                      callback: SupportSQLiteOpenHelper.Callback,
                                      password: String,
                                      libraryLoader: () -> Unit = DEFAULT_SQLITEX_LIBRARY_LOADER) : SupportSQLiteOpenHelper {
@@ -28,7 +27,7 @@ open class SqliteOrgSQLiteOpenHelper(context: Context,
         val databaseFile = File(databaseFilepath)
         databaseFile.parentFile.mkdirs()
 
-        delegate = SqliteOrgSQLiteOpenHelper.OpenHelper(context, libraryLoader, databaseFilepath, version, callback, password)
+        delegate = SqliteOrgSQLiteOpenHelper.OpenHelper(context, libraryLoader, databaseFilepath, callback, password)
     }
 
     override fun getDatabaseName(): String? {
@@ -54,9 +53,8 @@ open class SqliteOrgSQLiteOpenHelper(context: Context,
     class OpenHelper(context: Context,
                      libraryLoader: () -> Unit = {},
                      private val name: String?,
-                     version: Int,
                      private val callback: SupportSQLiteOpenHelper.Callback,
-                     private val password: String) : SQLiteOpenHelper(context, name, null, version) {
+                     private val password: String) : SQLiteOpenHelper(context, name, null, callback.version) {
         var wrappedDb: SqliteOrgDatabase? = null
 
         init {
