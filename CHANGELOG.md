@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 1.1.0 *(2017-11)*
+-------------------------
+* Room 1.0.0
+* Android SDK 27 / Support Library 27.0.0
+* Kotlin 1.1.51
+
 Version 1.0.7 *(2017-09)*
 -------------------------
 * Room 1.0.0-beta1

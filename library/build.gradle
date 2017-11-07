@@ -38,16 +38,17 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
         kotlinOptions.freeCompilerArgs += ['-module-name', "$POM_ARTIFACT_ID"]
     }
+    buildToolsVersion '26.0.2'
 }
 
 dependencies {
-    compileOnly "android.arch.lifecycle:runtime:$archVersion"
-    compileOnly "android.arch.lifecycle:extensions:$archVersionEA"
-    implementation "android.arch.persistence.room:runtime:$archVersionEA"
+    compileOnly "android.arch.lifecycle:runtime:$archVersionLifecycleRT"
+    compileOnly "android.arch.lifecycle:extensions:$archVersion"
+    implementation "android.arch.persistence.room:runtime:$archVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-core:2.10.0'
+    testImplementation 'org.mockito:mockito-core:2.11.0'
 }
 
 // =============== Maven Deployment ===============

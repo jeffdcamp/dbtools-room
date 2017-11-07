@@ -38,6 +38,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
         kotlinOptions.freeCompilerArgs += ['-module-name', "$POM_ARTIFACT_ID"]
     }
+    buildToolsVersion '26.0.2'
 }
 
 dependencies {
@@ -49,9 +50,9 @@ dependencies {
     implementation "com.android.support:support-vector-drawable:${supportLibVersion}" // used by org.sqlite.sqliteX:sqlite-android
     implementation "com.android.support:animated-vector-drawable:${supportLibVersion}" // used by org.sqlite.sqliteX:sqlite-android
 
-    compileOnly "android.arch.lifecycle:runtime:$archVersion"
-    compileOnly "android.arch.lifecycle:extensions:$archVersionEA"
-    implementation "android.arch.persistence.room:runtime:$archVersionEA"
+    compileOnly "android.arch.lifecycle:runtime:$archVersionLifecycleRT"
+    compileOnly "android.arch.lifecycle:extensions:$archVersion"
+    implementation "android.arch.persistence.room:runtime:$archVersion"
 
     // optional
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

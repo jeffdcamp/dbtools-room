@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.1.4-3'
+    ext.kotlin_version = '1.1.51'
 
     repositories {
         mavenLocal()
@@ -7,8 +7,8 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-beta6'
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.15.0' // version plugin support
+        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0' // version plugin support
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
     }
@@ -28,16 +28,16 @@ task clean(type: Delete) {
 }
 
 ext {
-    compileSdkVersion = 26
+    compileSdkVersion = 27
     buildToolsVersion = '26.0.1'
     minSdkVersion = 16
-    targetSdkVersion = 26
+    targetSdkVersion = 27
 
-    supportLibVersion = '26.1.0'
-    xerialSqliteJdbcVersion = '3.20.0'
+    supportLibVersion = '27.0.0'
+    xerialSqliteJdbcVersion = '3.20.1'
     archVersion = '1.0.0'
-    archVersionEA = '1.0.0-beta1'
+    archVersionLifecycleRT = '1.0.3'
 
     junitVersion = '4.12'
-    mockitoVersion = '2.10.0'
+    mockitoVersion = '2.11.0'
 }
