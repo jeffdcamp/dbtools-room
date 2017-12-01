@@ -48,7 +48,7 @@ dependencies {
     implementation "android.arch.persistence.room:runtime:$archVersion"
 
     // optional
-    compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly "org.xerial:sqlite-jdbc:$xerialSqliteJdbcVersion"
 
     testCompile "junit:junit:$junitVersion"

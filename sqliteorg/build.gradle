@@ -55,7 +55,7 @@ dependencies {
     implementation "android.arch.persistence.room:runtime:$archVersion"
 
     // optional
-    compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     compileOnly 'org.sqlite.sqliteX:sqlite-android:3.15.2' // SQL Android Bindings
 
