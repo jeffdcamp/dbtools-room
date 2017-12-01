@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+Version 1.2.0 *(2017-12)*
+-------------------------
+* Added Support for swapping databases using new CloseableDatabaseManager (https://issuetracker.google.com/issues/64681453)
+* Support Library 27.0.2
+* Kotlin 1.2.0
+* Changed Kotlin Standard Library to kotlin-stdlib-jdk7
+
 Version 1.1.0 *(2017-11)*
 -------------------------
 * Room 1.0.0
