@@ -7,15 +7,13 @@ import android.database.Cursor
 import android.database.DataSetObserver
 import android.net.Uri
 import android.os.Bundle
-
 import java.math.BigDecimal
 import java.sql.ResultSet
 import java.sql.SQLException
-import java.util.ArrayList
 
 class JdbcMemoryCursor : Cursor {
     private var currentPosition = -1
-    private val data: MutableList<List<Any>>
+    private val data: MutableList<List<Any?>>
     private var columnCount: Int = 0
     private var columnNames = arrayOf<String>()
     private var closed = false // state variable
@@ -33,7 +31,7 @@ class JdbcMemoryCursor : Cursor {
     }
 
     @Suppress("unused")
-    constructor(columnNames: Array<String>, data: MutableList<List<Any>>) {
+    constructor(columnNames: Array<String>, data: MutableList<List<Any?>>) {
         this.columnNames = columnNames
         this.columnCount = columnNames.size
         this.data = data
@@ -45,7 +43,7 @@ class JdbcMemoryCursor : Cursor {
         columnCount = metaData.columnCount
         columnNames = Array(columnCount) { "" }
 
-        for (i in 0..columnCount - 1) {
+        for (i in 0 until columnCount) {
             val sqlIndex = i + 1
             columnNames[i] = metaData.getColumnName(sqlIndex)
         }
@@ -54,10 +52,7 @@ class JdbcMemoryCursor : Cursor {
     @Throws(SQLException::class)
     private fun readData(resultSet: ResultSet) {
         while (resultSet.next()) {
-            val rowData = (0..columnCount - 1)
-                    .map { it + 1 }
-                    .mapTo(ArrayList<Any>()) { resultSet.getObject(it) }
-            data.add(rowData)
+            data.add(List(columnCount) { resultSet.getObject(it + 1) })
         }
     }
 
@@ -75,12 +70,10 @@ class JdbcMemoryCursor : Cursor {
 
     override fun moveToPosition(position: Int): Boolean {
         val count = count
-        if (position < 0) {
-            currentPosition = -1
-        } else if (position >= count) {
-            currentPosition = count
-        } else {
-            currentPosition = position
+        currentPosition = when {
+            position < 0 -> -1
+            position >= count -> count
+            else -> position
         }
         return currentPosition in 0..(count - 1)
     }
@@ -124,7 +117,7 @@ class JdbcMemoryCursor : Cursor {
     }
 
     override fun getColumnIndex(columnName: String): Int {
-        return (0..columnCount - 1).firstOrNull { columnNames[it].equals(columnName, ignoreCase = true) } ?: -1
+        return (0 until columnCount).firstOrNull { columnNames[it].equals(columnName, ignoreCase = true) } ?: -1
     }
 
     @Throws(IllegalArgumentException::class)
@@ -152,12 +145,12 @@ class JdbcMemoryCursor : Cursor {
     private val rowData: List<Any?>
         get() = data[currentPosition]
 
-    override fun getBlob(i: Int): ByteArray {
-        return rowData[i] as ByteArray
+    override fun getBlob(i: Int): ByteArray? {
+        return rowData[i] as? ByteArray
     }
 
-    override fun getString(i: Int): String {
-        return rowData[i] as String
+    override fun getString(i: Int): String? {
+        return rowData[i] as? String
     }
 
     override fun copyStringToBuffer(i: Int, charArrayBuffer: CharArrayBuffer) {
@@ -174,20 +167,20 @@ class JdbcMemoryCursor : Cursor {
 
     override fun getLong(i: Int): Long {
         val data = rowData[i]
-        if (data is Int) {
-            return (rowData[i] as Int).toLong()
+        return if (data is Int) {
+            (rowData[i] as Int).toLong()
         } else {
-            return rowData[i] as Long
+            rowData[i] as Long
         }
     }
 
     override fun getFloat(i: Int): Float {
         val data = rowData[i]
 
-        if (data is Double) {
-            return BigDecimal(rowData[i] as Double).toFloat()
+        return if (data is Double) {
+            BigDecimal(rowData[i] as Double).toFloat()
         } else {
-            return rowData[i] as Float
+            rowData[i] as Float
         }
     }
 
