@@ -57,5 +57,6 @@ class IndividualDaoTest {
 
         assertEquals(1, individualDao.findCount())
         assertEquals("Testy", individualDao.findFirstNameById(individualId))
+        assertEquals("Testy", individualDao.findById(individualId)?.firstName)
     }
 }

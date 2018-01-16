@@ -16,6 +16,9 @@ interface IndividualDao  {
     @Query("SELECT count(1) FROM individual")
     fun findCount(): Long
 
+    @Query("SELECT * FROM individual WHERE id = :id")
+    fun findById(id: Long): Individual?
+
     @Query("SELECT firstName FROM individual WHERE id = :id")
     fun findFirstNameById(id: Long): String
 
