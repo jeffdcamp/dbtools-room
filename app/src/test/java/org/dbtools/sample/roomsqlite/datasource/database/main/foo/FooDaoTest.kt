@@ -45,14 +45,14 @@ class FooDaoTest {
     fun setUp() {
         MockitoAnnotations.initMocks(this)
 
-        val dbFile = File("app/build/test-db/DynamicQueryTest.db")
+        val dbFile = File("build/test-db/DynamicQueryTest.db")
         if (dbFile.exists()) {
             dbFile.delete()
         }
 
         mainDatabase = Room.databaseBuilder(application, MainDatabase::class.java, "DynamicQueryTest.db")
                 .allowMainThreadQueries()
-                .openHelperFactory(JdbcSQLiteOpenHelperFactory("app/build/test-db"))
+                .openHelperFactory(JdbcSQLiteOpenHelperFactory("build/test-db"))
                 .fallbackToDestructiveMigration()
                 .build()
 

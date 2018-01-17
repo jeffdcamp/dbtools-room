@@ -81,7 +81,7 @@ open class JdbcSQLiteOpenHelper(val path: String,
             if (dbVersion != version) {
                 db.beginTransaction()
                 try {
-                    if (version == 0) {
+                    if (dbVersion == 0) {
                         callback.onCreate(db)
                     } else {
                         if (dbVersion > version) {
