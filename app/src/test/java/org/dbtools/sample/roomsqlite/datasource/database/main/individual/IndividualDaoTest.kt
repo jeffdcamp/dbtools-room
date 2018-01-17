@@ -1,7 +1,9 @@
 package org.dbtools.sample.roomsqlite.datasource.database.main.individual
 
 import android.app.Application
+import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.Room
+import android.arch.persistence.room.RoomDatabase
 import org.dbtools.android.room.jdbc.JdbcSQLiteOpenHelperFactory
 import org.dbtools.sample.roomsqlite.datasource.database.main.MainDatabase
 import org.junit.After
@@ -10,6 +12,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import java.io.File
 
 
 class IndividualDaoTest {
@@ -25,10 +28,22 @@ class IndividualDaoTest {
     fun setup() {
         MockitoAnnotations.initMocks(this)
 
+        val dbFile = "build/test-db/${MainDatabase.DATABASE_NAME}"
+        File(dbFile).delete()
+
         mainDatabase = Room.databaseBuilder(application, MainDatabase::class.java, MainDatabase.DATABASE_NAME)
                 .allowMainThreadQueries()
-                .openHelperFactory(JdbcSQLiteOpenHelperFactory("app/build/test-db"))
+                .openHelperFactory(JdbcSQLiteOpenHelperFactory("build/test-db"))
                 .fallbackToDestructiveMigration()
+                .addCallback(object : RoomDatabase.Callback() {
+                    override fun onCreate(db: SupportSQLiteDatabase) {
+                        println("OnCreate")
+                    }
+
+                    override fun onOpen(db: SupportSQLiteDatabase) {
+                        println("OnOpen")
+                    }
+                })
                 .build()
 
         // In Memory Database
