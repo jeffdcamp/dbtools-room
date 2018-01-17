@@ -59,4 +59,18 @@ class IndividualDaoTest {
         assertEquals("Testy", individualDao.findFirstNameById(individualId))
         assertEquals("Testy", individualDao.findById(individualId)?.firstName)
     }
+
+    @Test
+    fun reentrantTransaction() {
+        mainDatabase.runInTransaction {
+            mainDatabase.runInTransaction {
+                individualDao.insert(List(3) {
+                    Individual().apply {
+                        firstName = "R$it"
+                        lastName = "D$it"
+                    }
+                })
+            }
+        }
+    }
 }

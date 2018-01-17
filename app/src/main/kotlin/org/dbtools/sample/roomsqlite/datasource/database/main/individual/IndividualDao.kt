@@ -13,6 +13,9 @@ interface IndividualDao  {
     @Insert
     fun insert(individual: Individual)
 
+    @Insert
+    fun insert(individuals: Collection<Individual>)
+
     @Query("SELECT count(1) FROM individual")
     fun findCount(): Long
 

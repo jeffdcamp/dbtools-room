@@ -13,12 +13,14 @@ import org.sqlite.JDBC
 import java.sql.Connection
 import java.sql.DriverManager
 import java.util.Locale
+import java.util.concurrent.atomic.AtomicInteger
 
 class JdbcSqliteDatabase(private val dbPath: String) : SupportSQLiteDatabase {
     private val dbUrl = "jdbc:sqlite:$dbPath"
     private val conn: Connection
     private var commitTransaction = false
     private var transactionListener: SQLiteTransactionListener? = null
+    private val transactionCounter = AtomicInteger(0)
 
     init {
         try {
@@ -68,10 +70,14 @@ class JdbcSqliteDatabase(private val dbPath: String) : SupportSQLiteDatabase {
     }
 
     override fun beginTransactionWithListenerNonExclusive(transactionListener: SQLiteTransactionListener?) {
-        this.transactionListener = transactionListener
-        commitTransaction = false
-        conn.autoCommit = false
-        this.transactionListener?.onBegin()
+        if (conn.autoCommit) {
+            this.transactionListener = transactionListener
+            commitTransaction = false
+            conn.autoCommit = false
+            this.transactionListener?.onBegin()
+            transactionCounter.set(0)
+        }
+        transactionCounter.incrementAndGet()
     }
 
     override fun inTransaction(): Boolean {
@@ -79,26 +85,30 @@ class JdbcSqliteDatabase(private val dbPath: String) : SupportSQLiteDatabase {
     }
 
     override fun endTransaction() {
-        try {
-            when {
-                commitTransaction -> {
-                    conn.commit()
-                    transactionListener?.onCommit()
+        if (transactionCounter.decrementAndGet() == 0) {
+            try {
+                when {
+                    commitTransaction -> {
+                        conn.commit()
+                        transactionListener?.onCommit()
+                    }
+                    else -> {
+                        conn.rollback()
+                        transactionListener?.onCommit()
+                    }
                 }
-                else -> {
-                    conn.rollback()
-                    transactionListener?.onCommit()
-                }
+            } finally {
+                conn.autoCommit = true
+                commitTransaction = false
+                transactionListener = null
             }
-        } finally {
-            conn.autoCommit = true
-            commitTransaction = false
-            transactionListener = null
         }
     }
 
     override fun setTransactionSuccessful() {
-        commitTransaction = true
+        if (transactionCounter.get() == 1) {
+            commitTransaction = true
+        }
     }
 
     override fun yieldIfContendedSafely(): Boolean {
