@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 1.3.1 *(2018-01)*
+-------------------------
+* Fix for issue #5 JdbcMemoryCursor doesn't support nullable fields
+* Updated dependency versions
+
 Version 1.2.0 *(2017-12)*
 -------------------------
 * Added Support for swapping databases using new CloseableDatabaseManager (https://issuetracker.google.com/issues/64681453)
