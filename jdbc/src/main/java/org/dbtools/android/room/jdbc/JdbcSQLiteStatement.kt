@@ -4,7 +4,10 @@ import android.arch.persistence.db.SupportSQLiteStatement
 import android.database.Cursor
 import java.sql.Connection
 
-class JdbcSQLiteStatement(conn: Connection, sql: String) : JdbcSQLiteProgram(conn, sql), SupportSQLiteStatement {
+class JdbcSQLiteStatement(
+        conn: Connection,
+        sql: String
+) : JdbcSQLiteProgram(conn, sql), SupportSQLiteStatement {
 
     override fun execute() {
         statement.execute()

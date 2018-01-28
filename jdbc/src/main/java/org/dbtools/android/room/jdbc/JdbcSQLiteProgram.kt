@@ -5,7 +5,10 @@ import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.Types
 
-open class JdbcSQLiteProgram(conn: Connection, sql: String) : SupportSQLiteProgram {
+open class JdbcSQLiteProgram(
+        conn: Connection,
+        sql: String
+) : SupportSQLiteProgram {
 
     protected val statement: PreparedStatement = conn.prepareStatement(sql)
 

@@ -8,20 +8,22 @@ import org.sqlite.database.sqlite.SQLiteDatabase
 import org.sqlite.database.sqlite.SQLiteOpenHelper
 import java.io.File
 
-open class SqliteOrgSQLiteOpenHelper(context: Context,
-                                     path: String,
-                                     name: String?,
-                                     callback: SupportSQLiteOpenHelper.Callback,
-                                     password: String,
-                                     libraryLoader: () -> Unit = DEFAULT_SQLITEX_LIBRARY_LOADER) : SupportSQLiteOpenHelper {
+open class SqliteOrgSQLiteOpenHelper(
+        context: Context,
+        path: String,
+        name: String?,
+        callback: SupportSQLiteOpenHelper.Callback,
+        password: String,
+        libraryLoader: () -> Unit = DEFAULT_SQLITEX_LIBRARY_LOADER
+) : SupportSQLiteOpenHelper {
+
     private val delegate: OpenHelper
 
     init {
-        val databaseFilepath: String
-        if (path.isEmpty()) {
-            databaseFilepath = context.getDatabasePath(name).absolutePath
+        val databaseFilepath = if (path.isEmpty()) {
+            context.getDatabasePath(name).absolutePath
         } else {
-            databaseFilepath = path + "/" + name
+            path + "/" + name
         }
 
         val databaseFile = File(databaseFilepath)
@@ -50,11 +52,14 @@ open class SqliteOrgSQLiteOpenHelper(context: Context,
         delegate.close()
     }
 
-    class OpenHelper(context: Context,
-                     libraryLoader: () -> Unit = {},
-                     private val name: String?,
-                     private val callback: SupportSQLiteOpenHelper.Callback,
-                     private val password: String) : SQLiteOpenHelper(context, name, null, callback.version) {
+    class OpenHelper(
+            context: Context,
+            libraryLoader: () -> Unit = {},
+            private val name: String?,
+            private val callback: SupportSQLiteOpenHelper.Callback,
+            private val password: String) : SQLiteOpenHelper(context, name, null, callback.version
+    ) {
+
         var wrappedDb: SqliteOrgDatabase? = null
 
         init {

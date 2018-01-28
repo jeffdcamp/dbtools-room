@@ -15,7 +15,10 @@ import java.sql.DriverManager
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicInteger
 
-class JdbcSqliteDatabase(private val dbPath: String) : SupportSQLiteDatabase {
+class JdbcSqliteDatabase(
+        private val dbPath: String
+) : SupportSQLiteDatabase {
+
     private val dbUrl = "jdbc:sqlite:$dbPath"
     private val conn: Connection
     private var commitTransaction = false

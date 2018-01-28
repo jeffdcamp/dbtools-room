@@ -4,9 +4,11 @@ import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.db.SupportSQLiteOpenHelper
 import java.io.File
 
-open class JdbcSQLiteOpenHelper(val path: String,
-                                val name: String?,
-                                val callback: SupportSQLiteOpenHelper.Callback) : SupportSQLiteOpenHelper {
+open class JdbcSQLiteOpenHelper(
+        val path: String,
+        val name: String?,
+        val callback: SupportSQLiteOpenHelper.Callback
+) : SupportSQLiteOpenHelper {
 
     private val dbPath: String
 

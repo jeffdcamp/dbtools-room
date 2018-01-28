@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.run
+import kotlinx.coroutines.experimental.withContext
 import org.dbtools.android.room.sqliteorg.SqliteOrgSQLiteOpenHelperFactory
 import org.dbtools.sample.roomsqlite.datasource.database.main.MainDatabase
 import org.dbtools.sample.roomsqlite.datasource.database.main.individual.Individual
@@ -43,108 +43,101 @@ class MainActivity : AppCompatActivity() {
         showButton.setOnClickListener { showLastIndividualName() }
     }
 
-    fun createIndividual() {
-        launch(UI) {
-            val count = run(CommonPool) {
-                val individual = Individual()
-                individual.firstName = "Jeff"
-                individual.lastName = "Campbell"
-                individual.sampleDateTime = Date()
-                individual.birthDate = GregorianCalendar(1970, 1, 1).time
-                individual.lastModified = Date()
-                individual.number = 1234
-                individual.phone = "555-555-1234"
-                individual.email = "test@test.com"
-                individual.amount1 = 19.95f
-                individual.amount2 = 1000000000.25
-                individual.enabled = true
+    private fun createIndividual() = launch(UI) {
+        val count = withContext(CommonPool) {
+            val individual = Individual()
+            individual.firstName = "Jeff"
+            individual.lastName = "Campbell"
+            individual.sampleDateTime = Date()
+            individual.birthDate = GregorianCalendar(1970, 1, 1).time
+            individual.lastModified = Date()
+            individual.number = 1234
+            individual.phone = "555-555-1234"
+            individual.email = "test@test.com"
+            individual.amount1 = 19.95f
+            individual.amount2 = 1000000000.25
+            individual.enabled = true
 
-                individualDao.insert(individual)
+            individualDao.insert(individual)
 
-                return@run individualDao.findCount()
-            }
-
-            Toast.makeText(this@MainActivity, "Individual Count: " + count, Toast.LENGTH_SHORT).show()
+            return@withContext individualDao.findCount()
         }
+
+        Toast.makeText(this@MainActivity, "Individual Count: " + count, Toast.LENGTH_SHORT).show()
     }
 
-    fun deleteLastIndividual() {
+
+    private fun deleteLastIndividual() = launch(UI) {
+        if (!hasRecords()) {
+            return@launch
+        }
+
+        val deleteCount = withContext(coroutineContext + CommonPool) {
+            val lastIndividualId = individualDao.findLastIndividualId()
+            individualDao.deleteById(lastIndividualId)
+        }
+
+        if (deleteCount > 0) {
+            Toast.makeText(this@MainActivity, "Last individual deleted", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+    private fun updateLastIndividual() = launch(UI) {
         // check to make sure there is individuals
-        launch(UI) {
-            if (!hasRecords()) {
-                return@launch
-            }
-
-            val deleteCount = run(coroutineContext + CommonPool) {
-                val lastIndividualId = individualDao.findLastIndividualId()
-                individualDao.deleteById(lastIndividualId)
-            }
-
-            if (deleteCount > 0) {
-                Toast.makeText(this@MainActivity, "Last individual deleted", Toast.LENGTH_SHORT).show()
-            }
+        if (!hasRecords()) {
+            return@launch
         }
-    }
 
-    fun updateLastIndividual() {
-        launch(UI) {
-            // check to make sure there is individuals
-            if (!hasRecords()) {
-                return@launch
-            }
-
-            val updated = run(coroutineContext + CommonPool) {
-                try {
-                    val individual = individualDao.findLastIndividual()
-                    if (individual != null) {
-                        individual.firstName = "Jeffery"
-                        individualDao.update(individual)
-                        return@run true
-                    } else {
-                        return@run false
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    return@run false
+        val updated = withContext(coroutineContext + CommonPool) {
+            try {
+                val individual = individualDao.findLastIndividual()
+                if (individual != null) {
+                    individual.firstName = "Jeffery"
+                    individualDao.update(individual)
+                    return@withContext true
+                } else {
+                    return@withContext false
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return@withContext false
             }
+        }
 
-            if (updated) {
-                Toast.makeText(this@MainActivity, "Last individual updated", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this@MainActivity, "Failed to find last individual", Toast.LENGTH_SHORT).show()
-            }
+        if (updated) {
+            Toast.makeText(this@MainActivity, "Last individual updated", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this@MainActivity, "Failed to find last individual", Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun showLastIndividualName() {
-        launch(UI) {
-            // check to make sure there is individuals
-            if (!hasRecords()) {
-                return@launch
-            }
-
-            val firstName = run(coroutineContext + CommonPool) {
-                val lastIndividualId = individualDao.findLastIndividualId()
-                return@run individualDao.findFirstNameById(lastIndividualId)
-            }
-            Toast.makeText(this@MainActivity, "Last Individual First Name: " + firstName, Toast.LENGTH_SHORT).show()
+    private fun showLastIndividualName() = launch(UI) {
+        // check to make sure there is individuals
+        if (!hasRecords()) {
+            return@launch
         }
+
+        val firstName = withContext(coroutineContext + CommonPool) {
+            val lastIndividualId = individualDao.findLastIndividualId()
+            return@withContext individualDao.findFirstNameById(lastIndividualId)
+        }
+        Toast.makeText(this@MainActivity, "Last Individual First Name: " + firstName, Toast.LENGTH_SHORT).show()
     }
+
 
     private suspend fun hasRecords(): Boolean {
-        return run(CommonPool) {
+        return withContext(CommonPool) {
             val count = individualDao.findCount()
 
             if (count <= 0) {
-                run(UI) {
+                withContext(UI) {
                     Toast.makeText(this, "No Records exist", Toast.LENGTH_SHORT).show()
                 }
-                return@run false
+                return@withContext false
             } else {
-                return@run true
+                return@withContext true
             }
         }
     }
-
 }

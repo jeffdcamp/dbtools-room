@@ -3,7 +3,9 @@ package org.dbtools.android.room.sqliteorg
 import android.arch.persistence.db.SupportSQLiteStatement
 import org.sqlite.database.sqlite.SQLiteStatement
 
-class SqliteOrgSQLiteStatement(private val statementDelegate: SQLiteStatement) : SqliteOrgSQLiteProgram(statementDelegate), SupportSQLiteStatement {
+class SqliteOrgSQLiteStatement(
+        private val statementDelegate: SQLiteStatement
+) : SqliteOrgSQLiteProgram(statementDelegate), SupportSQLiteStatement {
 
     override fun execute() {
         this.statementDelegate.execute()

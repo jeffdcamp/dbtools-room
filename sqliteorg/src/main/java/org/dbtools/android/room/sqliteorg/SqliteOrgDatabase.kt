@@ -20,9 +20,9 @@ import java.util.Locale
 /**
  * Mirrored from: https://github.com/ivanovsuper/android-architecture-components/blob/master/BasicSample/app/src/main/java/com/example/android/persistence/db/cipher/CipherSQLiteDatabase.java
  */
-class SqliteOrgDatabase(private val delegate: SQLiteDatabase) : SupportSQLiteDatabase {
-    private val CONFLICT_VALUES = arrayOf("", " OR ROLLBACK ", " OR ABORT ", " OR FAIL ", " OR IGNORE ", " OR REPLACE ")
-    private val EMPTY_STRING_ARRAY = arrayOfNulls<String>(0)
+class SqliteOrgDatabase(
+        private val delegate: SQLiteDatabase
+) : SupportSQLiteDatabase {
 
     override fun compileStatement(sql: String): SupportSQLiteStatement {
         return SqliteOrgSQLiteStatement(delegate.compileStatement(sql))
@@ -268,5 +268,10 @@ class SqliteOrgDatabase(private val delegate: SQLiteDatabase) : SupportSQLiteDat
 
     private fun isEmpty(input: String?): Boolean {
         return input == null || input.isEmpty()
+    }
+
+    companion object {
+        private val CONFLICT_VALUES = arrayOf("", " OR ROLLBACK ", " OR ABORT ", " OR FAIL ", " OR IGNORE ", " OR REPLACE ")
+        private val EMPTY_STRING_ARRAY = arrayOfNulls<String>(0)
     }
 }

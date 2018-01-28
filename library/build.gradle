@@ -42,9 +42,9 @@ android {
 }
 
 dependencies {
-    compileOnly "android.arch.lifecycle:runtime:$archVersionLifecycleRT"
-    compileOnly "android.arch.lifecycle:extensions:$archVersion"
-    implementation "android.arch.persistence.room:runtime:$archVersion"
+    compileOnly "android.arch.lifecycle:runtime:$archLifecycleVersion"
+    compileOnly "android.arch.lifecycle:extensions:$archLifecycleVersion"
+    implementation "android.arch.persistence.room:runtime:$archRoomVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     testImplementation 'junit:junit:4.12'

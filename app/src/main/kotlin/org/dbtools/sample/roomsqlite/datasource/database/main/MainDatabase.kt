@@ -10,17 +10,14 @@ import org.dbtools.sample.roomsqlite.datasource.database.main.individual.Individ
 import org.dbtools.sample.roomsqlite.datasource.database.main.individual.IndividualDao
 
 
-@Database(entities = arrayOf(
-        Individual::class,
-        Foo::class
-), version = 1)
+@Database(entities = [Individual::class, Foo::class], version = 1)
 @TypeConverters(MainDatabaseConverters::class)
 abstract class MainDatabase : RoomDatabase() {
 
-    companion object {
-        val DATABASE_NAME: String = "Main"
-    }
-
     abstract fun individualDao(): IndividualDao
     abstract fun fooDao(): FooDao
+
+    companion object {
+        const val DATABASE_NAME: String = "Main"
+    }
 }

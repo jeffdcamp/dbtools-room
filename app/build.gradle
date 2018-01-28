@@ -16,6 +16,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+// todo JetBrains has indicated that coroutines are stable, but the kotlinx-coroutines designs may change ... remove this when kotlinx-coroutines are no longer experimental
+kotlin {
+    experimental {
+        coroutines 'enable' // temp disable warnings
+    }
+}
+
 android {
     compileSdkVersion project.compileSdkVersion
     buildToolsVersion project.buildToolsVersion
@@ -59,15 +66,15 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${supportLibVersion}"
 
     // Architecture
-    implementation "android.arch.lifecycle:runtime:$archVersionLifecycleRT"
-    implementation "android.arch.lifecycle:extensions:$archVersion"
-    implementation "android.arch.persistence.room:runtime:$archVersion"
-    kapt "android.arch.lifecycle:compiler:$archVersion"
-    kapt "android.arch.persistence.room:compiler:$archVersion"
+    implementation "android.arch.lifecycle:runtime:$archLifecycleVersion"
+    implementation "android.arch.lifecycle:extensions:$archLifecycleVersion"
+    implementation "android.arch.persistence.room:runtime:$archRoomVersion"
+    kapt "android.arch.lifecycle:compiler:$archLifecycleVersion"
+    kapt "android.arch.persistence.room:compiler:$archRoomVersion"
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.21.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.22"
 
     // Custom SQLite database
     implementation 'org.sqlite.sqliteX:sqlite-android:3.15.2'
@@ -76,17 +83,17 @@ dependencies {
     testImplementation project(path: ':jdbc')
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
-    testImplementation "android.arch.persistence.room:testing:$archVersion"
+    testImplementation "android.arch.persistence.room:testing:$archRoomVersion"
     testImplementation "org.xerial:sqlite-jdbc:$xerialSqliteJdbcVersion"
 
-    testCompile ("android.arch.core:core-testing:$archVersion", {
+    testCompile ("android.arch.core:core-testing:$archLifecycleVersion", {
         exclude group: 'com.android.support', module: 'support-compat'
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'support-core-utils'
     })
 
-    kaptTest "android.arch.persistence.room:compiler:$archVersion"
-    kaptTest "android.arch.lifecycle:compiler:$archVersion"
+    kaptTest "android.arch.persistence.room:compiler:$archRoomVersion"
+    kaptTest "android.arch.lifecycle:compiler:$archRoomVersion"
 
 }
 

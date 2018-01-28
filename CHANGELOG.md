@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 1.4.0 *(2018-01)*
+-------------------------
+* Lifecycle 1.1.0
+* Updated dependency versions
+
 Version 1.3.3 *(2018-01)*
 -------------------------
 * Fix for issue #5 JdbcMemoryCursor doesn't support nullable fields

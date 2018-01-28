@@ -10,7 +10,9 @@ import android.os.Bundle
 import java.sql.ResultSet
 
 @Deprecated(message = "Cannot be used since sqlite jdbc is TYPE_FORWARD_ONLY", replaceWith = ReplaceWith("JdbcMemoryCursor", imports = "org.dbtools.android.room.jdbc"))
-class JdbcCursor(private val rs: ResultSet) : Cursor {
+class JdbcCursor(
+        private val rs: ResultSet
+) : Cursor {
 
     private var extras: Bundle? = null
     private val count: Int
