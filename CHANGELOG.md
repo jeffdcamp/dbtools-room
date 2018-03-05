@@ -1,10 +1,11 @@
 Change Log
 ==========
 
-Version 1.4.0 *(2018-01)*
+Version 1.5.0 *(2018-03)*
 -------------------------
-* Lifecycle 1.1.0
-* Updated dependency versions
+* Lifecycle 1.1.0-alpha3
+* Removed conflicting BuildConfig (with dbtools-android)
+* Support Library 27.1.0
 
 Version 1.3.3 *(2018-01)*
 -------------------------

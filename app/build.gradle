@@ -60,7 +60,7 @@ dependencies {
     implementation project(path: ':sqliteorg')
     implementation 'org.dbtools:dbtools-query:3.0.0'
 
-    implementation 'com.android.support:multidex:1.0.2'
+    implementation 'com.android.support:multidex:1.0.3'
 
     // Android
     implementation "com.android.support:appcompat-v7:${supportLibVersion}"
@@ -74,7 +74,7 @@ dependencies {
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.22"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.22.3"
 
     // Custom SQLite database
     implementation 'org.sqlite.sqliteX:sqlite-android:3.15.2'

@@ -42,6 +42,11 @@ android {
     buildToolsVersion '27.0.3'
 }
 
+afterEvaluate {
+    // prevent BuildConfig from being generated (avoid conflict with dbtools-android)
+    generateReleaseBuildConfig.enabled = false
+}
+
 dependencies {
     compileOnly "android.arch.lifecycle:runtime:$archLifecycleVersion"
     compileOnly "android.arch.lifecycle:extensions:$archLifecycleVersion"

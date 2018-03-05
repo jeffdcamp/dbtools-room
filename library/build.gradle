@@ -41,6 +41,11 @@ android {
     buildToolsVersion '27.0.3'
 }
 
+afterEvaluate {
+    // prevent BuildConfig from being generated (avoid conflict with dbtools-android)
+    generateReleaseBuildConfig.enabled = false
+}
+
 dependencies {
     compileOnly "android.arch.lifecycle:runtime:$archLifecycleVersion"
     compileOnly "android.arch.lifecycle:extensions:$archLifecycleVersion"
@@ -48,7 +53,7 @@ dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-core:2.13.0'
+    testImplementation 'org.mockito:mockito-core:2.15.0'
 }
 
 // =============== Maven Deployment ===============
