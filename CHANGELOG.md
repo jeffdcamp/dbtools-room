@@ -3,7 +3,8 @@ Change Log
 
 Version 1.5.0 *(2018-03)*
 -------------------------
-* Lifecycle 1.1.0-alpha3
+* Room 1.1.0-alpha3
+* Lifecycle 1.1.0
 * Removed conflicting BuildConfig (with dbtools-android)
 * Support Library 27.1.0
 
