@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 1.5.1 *(2018-03)*
+-------------------------
+* Improvements to JdbcSqliteDatabae to for testing
+
 Version 1.5.0 *(2018-03)*
 -------------------------
 * Room 1.1.0-alpha3
