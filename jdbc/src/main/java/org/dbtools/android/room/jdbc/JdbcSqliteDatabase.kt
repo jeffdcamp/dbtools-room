@@ -264,7 +264,7 @@ class JdbcSqliteDatabase(
     }
 
     override fun getVersion(): Int {
-        return conn.prepareCall("PRAGMA user_version").executeQuery().use {
+        return conn.prepareStatement("PRAGMA user_version").executeQuery().use {
             it.getInt(1)
         }
     }
