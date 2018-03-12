@@ -264,11 +264,13 @@ class JdbcSqliteDatabase(
     }
 
     override fun getVersion(): Int {
-        return 0
+        return conn.prepareCall("PRAGMA user_version").executeQuery().use {
+            it.getInt(1)
+        }
     }
 
     override fun setVersion(version: Int) {
-
+        execSQL("PRAGMA user_version = $version")
     }
 
     override fun needUpgrade(newVersion: Int): Boolean {
