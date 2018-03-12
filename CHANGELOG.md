@@ -1,9 +1,10 @@
 Change Log
 ==========
 
-Version 1.5.1 *(2018-03)*
+Version 1.5.2 *(2018-03)*
 -------------------------
-* Improvements to JdbcSqliteDatabae to for testing
+* Improvements to JdbcSqliteDatabase to for testing
+* Fixed JdbcSqliteDatabase.getType(...)
 
 Version 1.5.0 *(2018-03)*
 -------------------------
