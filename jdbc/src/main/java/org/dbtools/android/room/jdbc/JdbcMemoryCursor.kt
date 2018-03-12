@@ -189,7 +189,14 @@ class JdbcMemoryCursor : Cursor {
     }
 
     override fun getType(i: Int): Int {
-        return getInt(i)
+        return when (rowData[i]) {
+            null -> Cursor.FIELD_TYPE_NULL
+            is Char, is String -> Cursor.FIELD_TYPE_STRING
+            is Byte, is Short, is Int, is Long -> Cursor.FIELD_TYPE_INTEGER
+            is Float, is Double, is Number -> Cursor.FIELD_TYPE_FLOAT
+            is Array<*> -> Cursor.FIELD_TYPE_BLOB
+            else -> error("Unknown type")
+        }
     }
 
     override fun isNull(i: Int): Boolean {
