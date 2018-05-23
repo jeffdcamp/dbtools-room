@@ -1,6 +1,16 @@
 Change Log
 ==========
 
+Version 2.0.0 *(2018-05)*
+-------------------------
+* Added RoomLiveData.toLiveData(...)
+* ClosableDatabaseManager to ClosableDatabaseWrapper
+* Added ClosableDatabaseWrapperRepository
+* Added DatabaseUtil: validateDatabase(...), deleteDatabaseFiles(...), renameDatabaseFiles(...)
+* Create helper to run migration unit tests locally in the JVM
+* Removed DynamicQueryDao
+* Room 1.1.0
+
 Version 1.5.4 *(2018-05)*
 -------------------------
 * Room 1.1.0-rc1
