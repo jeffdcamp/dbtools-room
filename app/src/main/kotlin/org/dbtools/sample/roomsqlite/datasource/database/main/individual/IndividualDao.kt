@@ -39,4 +39,13 @@ interface IndividualDao  {
 
     @Query("DELETE FROM INDIVIDUAL WHERE id = :id")
     fun deleteById(id: Long): Int
+
+    @Query("SELECT * FROM individual")
+    fun findAll(): List<Individual>
+
+    @Query("SELECT number FROM individual WHERE id = :id")
+    fun findNumberById(id: Long): Int?
+
+    @Query("UPDATE individual SET number = :number WHERE id = :id")
+    fun updateNumber(id: Long, number: Int)
 }

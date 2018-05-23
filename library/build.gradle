@@ -8,8 +8,14 @@ buildscript {
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'maven'
+
+// todo JetBrains has indicated that coroutines are stable, but the kotlinx-coroutines designs may change ... remove this when kotlinx-coroutines are no longer experimental
+kotlin {
+    experimental {
+        coroutines 'enable' // temp disable warnings
+    }
+}
 
 android {
     compileSdkVersion project.compileSdkVersion
@@ -51,6 +57,8 @@ dependencies {
     compileOnly "android.arch.lifecycle:extensions:$archLifecycleVersion"
     implementation "android.arch.persistence.room:runtime:$archRoomVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    compileOnly 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.22.5'
+    implementation 'com.jakewharton.timber:timber:4.7.0'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.18.3'
