@@ -57,6 +57,7 @@ dependencies {
     compileOnly "org.xerial:sqlite-jdbc:$xerialSqliteJdbcVersion"
 
     testCompile "junit:junit:$junitVersion"
+    testImplementation "android.arch.persistence.room:testing:$archRoomVersion"
     testCompile "org.mockito:mockito-core:$mockitoVersion"
 }
 
