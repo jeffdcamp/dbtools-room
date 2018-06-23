@@ -57,11 +57,11 @@ dependencies {
     compileOnly "android.arch.lifecycle:extensions:$archLifecycleVersion"
     implementation "android.arch.persistence.room:runtime:$archRoomVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    compileOnly 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.22.5'
+    compileOnly "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
     implementation 'com.jakewharton.timber:timber:4.7.0'
 
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-core:2.18.3'
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
 }
 
 // =============== Maven Deployment ===============

@@ -9,7 +9,10 @@ DBTools Room for Android is an library that makes it even easier to work with Go
 
 * Sqlite.org database support
 * JDBC database support (for Unit Tests against real sqlite databases using Room)
-* Dynamic Query support in Room Dao objects
+* Swap database files using the same Entities and Doa's (CloseableDatabaseWrapper and CloseableDatabaseWrapperRepository)
+* Room ComputableLiveData for bulk work that fires LiveData events when specific database tables change (RoomLiveData)
+* Tools to validate a Sqlite database (PRAGMA checks, etc)
+* Tools to Delete and Rename database (making sure to take care of all extra files)
 
 Usage
 =====

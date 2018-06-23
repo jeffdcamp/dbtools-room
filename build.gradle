@@ -7,8 +7,8 @@ buildscript {
         google()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:3.2.0-alpha15"
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0' // version plugin support
+        classpath 'com.android.tools.build:gradle:3.2.0-beta01'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0' // version plugin support
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
     }
@@ -34,10 +34,11 @@ ext {
     targetSdkVersion = 27
 
     supportLibVersion = '27.1.1'
-    xerialSqliteJdbcVersion = '3.21.0'
+    xerialSqliteJdbcVersion = '3.23.1'
     archLifecycleVersion = '1.1.1'
-    archRoomVersion = '1.1.0'
+    archRoomVersion = '1.1.1'
+    coroutinesVersion = '0.23.3'
 
     junitVersion = '4.12'
-    mockitoVersion = '2.18.3'
+    mockitoVersion = '2.19.0'
 }

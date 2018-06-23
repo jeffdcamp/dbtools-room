@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 2.0.1 *(2018-06)*
+-------------------------
+* Room 1.1.1
+* Updated other project versions
+
 Version 2.0.0 *(2018-05)*
 -------------------------
 * Added RoomLiveData.toLiveData(...)
