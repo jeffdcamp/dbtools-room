@@ -12,7 +12,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context="MainActivity">
+        tools:context=".ux.MainActivity">
 
         <Button
             android:id="@+id/createButton"
@@ -50,10 +50,30 @@
             />
 
         <Button
-            android:id="@+id/testRoomLiveData"
+            android:id="@+id/testRoomLiveDataButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Test Room.toLiveData()"
+            />
+
+        <Button
+            android:id="@+id/testMergeDatabaseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Test Merge Database"
+            />
+
+        <Button
+            android:id="@+id/logIndividualsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log Individual data"
+            />
+        <Button
+            android:id="@+id/deleteAllIndividualsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete All Individuals"
             />
 
     </LinearLayout>

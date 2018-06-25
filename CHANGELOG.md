@@ -1,7 +1,13 @@
 Change Log
 ==========
 
-Version 2.0.1 *(2018-06)*
+Version 2.2.0 *(2018-06)*
+-------------------------
+* Added ability to merge databases (MergeDatabaseUtil)
+* Added RoomDatabase Kotlin extensions (RoomDatabaseExt)
+* Added SupportSQLiteDatabase Kotlin extensions (SupportSQLiteDatabaseExt)
+
+Version 2.1.0 *(2018-06)*
 -------------------------
 * Room 1.1.1
 * Updated other project versions

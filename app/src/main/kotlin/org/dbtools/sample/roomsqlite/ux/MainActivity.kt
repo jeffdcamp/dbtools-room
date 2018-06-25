@@ -1,4 +1,4 @@
-package org.dbtools.sample.roomsqlite
+package org.dbtools.sample.roomsqlite.ux
 
 import android.arch.lifecycle.Observer
 import android.arch.persistence.room.Room
@@ -11,17 +11,19 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
+import org.dbtools.android.room.ext.validDatabaseFile
 import org.dbtools.android.room.sqliteorg.SqliteOrgSQLiteOpenHelperFactory
 import org.dbtools.android.room.toLiveData
 import org.dbtools.android.room.util.DatabaseUtil
+import org.dbtools.sample.roomsqlite.R
 import org.dbtools.sample.roomsqlite.databinding.ActivityMainBinding
-import org.dbtools.sample.roomsqlite.datasource.database.main.MainDatabase
-import org.dbtools.sample.roomsqlite.datasource.database.main.MainDatabaseRepository
-import org.dbtools.sample.roomsqlite.datasource.database.main.individual.Individual
-import org.dbtools.sample.roomsqlite.datasource.database.main.individual.IndividualDao
+import org.dbtools.sample.roomsqlite.model.db.main.MainDatabase
+import org.dbtools.sample.roomsqlite.model.db.main.MainDatabaseRepository
+import org.dbtools.sample.roomsqlite.model.db.main.individual.Individual
+import org.dbtools.sample.roomsqlite.model.db.main.individual.IndividualDao
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
 import timber.log.Timber
-import java.util.Date
-import java.util.GregorianCalendar
 import kotlin.coroutines.experimental.coroutineContext
 
 class MainActivity : AppCompatActivity() {
@@ -53,18 +55,21 @@ class MainActivity : AppCompatActivity() {
         binding.deleteButton.setOnClickListener { deleteLastIndividual() }
         binding.showButton.setOnClickListener { showLastIndividualName() }
         binding.testDatabaseRepositoryButton.setOnClickListener { testDatabaseRepository() }
-        binding.testRoomLiveData.setOnClickListener { testRoomLiveData() }
+        binding.testRoomLiveDataButton.setOnClickListener { testRoomLiveData() }
+        binding.testMergeDatabaseButton.setOnClickListener { testMergeDatabase() }
+        binding.logIndividualsButton.setOnClickListener { showAllIndividuals() }
+        binding.deleteAllIndividualsButton.setOnClickListener { deleteAllIndividuals() }
     }
 
-    private fun createIndividual(firstName: String, lastName: String): Individual {
+    private fun createIndividual(firstName: String, lastName: String, birth: LocalDate = LocalDate.of(1970, 2, 2), phone: String = "555-555-1234"): Individual {
         return Individual().apply {
             this.firstName = firstName
             this.lastName = lastName
-            sampleDateTime = Date()
-            birthDate = GregorianCalendar(1970, 1, 1).time
-            lastModified = Date()
+            sampleDateTime = LocalDateTime.now()
+            birthDate = birth
+            lastModified = LocalDateTime.now()
             number = 1234
-            phone = "555-555-1234"
+            this.phone = phone
             email = "test@test.com"
             amount1 = 19.95f
             amount2 = 1000000000.25
@@ -74,9 +79,12 @@ class MainActivity : AppCompatActivity() {
     }
     private fun insertIndividual() = launch(UI) {
         val count = withContext(CommonPool) {
-            val individual = createIndividual("Jeff", "Campbell")
-
-            individualDao.insert(individual)
+            individualDao.insert(createIndividual("Jeff", "Campbell"))
+//            individualDao.insert(createIndividual("Tanner", "Campbell", LocalDate.of(1970, 2, 23), "555-555-0002"))
+//            individualDao.insert(createIndividual("Ty", "Campbell", LocalDate.of(1970, 2, 13), "555-555-0005"))
+//            individualDao.insert(createIndividual("Kylee", "Campbell", LocalDate.of(1970, 2, 9), "555-555-0001"))
+//            individualDao.insert(createIndividual("Allie", "Campbell", LocalDate.of(1970, 2, 7), "555-555-0003"))
+//            individualDao.insert(createIndividual("Haley", "Campbell", LocalDate.of(1970, 2, 28), "555-555-0004"))
 
             return@withContext individualDao.findCount()
         }
@@ -181,7 +189,7 @@ class MainActivity : AppCompatActivity() {
         val mainDatabaseA = mainDatabaseRepository.getDatabase("a")
         val mainDatabaseB = mainDatabaseRepository.getDatabase("b")
 
-        if (!DatabaseUtil.validDatabaseFile("a", mainDatabaseA)) {
+        if (!mainDatabaseA.validDatabaseFile("a")) {
             Timber.e("Database validation failed.... exiting")
             return@launch
         }
@@ -247,6 +255,17 @@ class MainActivity : AppCompatActivity() {
         individualDao.updateNumber(lastIndividualId, lastNumber)
     }
 
+    private fun testMergeDatabase() = launch {
+        // copy the test database from assets
+        val mergeDatabase1 = DatabaseUtil.copyDatabaseFromAssets(this@MainActivity, "merge1", true)
+        val mergeDatabase2 = DatabaseUtil.copyDatabaseFromAssets(this@MainActivity, "merge2", true)
+
+        mainDatabase.mergeDataFromOtherDatabase(mergeDatabase1)
+        mainDatabase.mergeDataFromOtherDatabase(mergeDatabase2)
+
+        showMainDatabaseInfo("merge", mainDatabase)
+    }
+
     private fun showAllMainDatabaseInfo(event: String) {
         Timber.i("========== $event ==========")
         val mainDatabaseA = mainDatabaseRepository.getDatabase("a")
@@ -262,5 +281,13 @@ class MainActivity : AppCompatActivity() {
         individualDao.findAll().forEach {individual ->
             Timber.i("- ${individual.firstName} ${individual.lastName}")
         }
+    }
+
+    private fun showAllIndividuals() = launch {
+        showMainDatabaseInfo("ShowAll", mainDatabase)
+    }
+
+    private fun deleteAllIndividuals() = launch {
+        individualDao.deleteAll()
     }
 }

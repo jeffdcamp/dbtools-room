@@ -1,4 +1,4 @@
-package org.dbtools.sample.roomsqlite.datasource.database.main
+package org.dbtools.sample.roomsqlite.model.db.main
 
 import android.app.Application
 import android.arch.persistence.room.Room

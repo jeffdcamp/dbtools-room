@@ -1,21 +1,24 @@
 
-package org.dbtools.sample.roomsqlite.datasource.database.main.individual
+package org.dbtools.sample.roomsqlite.model.db.main.individual
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import org.dbtools.sample.roomsqlite.model.db.main.type.IndividualType
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
 
 
 @Entity(tableName = "individual")
 class Individual  {
     @PrimaryKey(autoGenerate = true)
     var id = 0L
-    var individualType = org.dbtools.sample.roomsqlite.datasource.database.main.type.IndividualType.HEAD
-    var individualTypeText = org.dbtools.sample.roomsqlite.datasource.database.main.type.IndividualType.HEAD
+    var individualType = IndividualType.HEAD
+    var individualTypeText = IndividualType.HEAD
     var firstName = ""
     var lastName = ""
-    var sampleDateTime: java.util.Date? = null
-    var birthDate: java.util.Date? = null
-    var lastModified: java.util.Date? = null
+    var sampleDateTime: LocalDateTime? = null
+    var birthDate: LocalDate? = null
+    var lastModified: LocalDateTime? = null
     var number: Int? = null
     var phone: String? = null
     var email: String? = null

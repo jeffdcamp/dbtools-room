@@ -1,5 +1,5 @@
 
-package org.dbtools.sample.roomsqlite.datasource.database.main.individual
+package org.dbtools.sample.roomsqlite.model.db.main.individual
 
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Delete
@@ -36,6 +36,9 @@ interface IndividualDao  {
 
     @Delete
     fun delete(individual: Individual)
+
+    @Query("DELETE FROM INDIVIDUAL")
+    fun deleteAll()
 
     @Query("DELETE FROM INDIVIDUAL WHERE id = :id")
     fun deleteById(id: Long): Int

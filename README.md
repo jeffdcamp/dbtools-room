@@ -13,6 +13,8 @@ DBTools Room for Android is an library that makes it even easier to work with Go
 * Room ComputableLiveData for bulk work that fires LiveData events when specific database tables change (RoomLiveData)
 * Tools to validate a Sqlite database (PRAGMA checks, etc)
 * Tools to Delete and Rename database (making sure to take care of all extra files)
+* Attach/Detach databases
+* Merge data between multiple databases
 
 Usage
 =====

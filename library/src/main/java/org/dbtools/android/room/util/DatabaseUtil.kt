@@ -1,6 +1,7 @@
 package org.dbtools.android.room.util
 
 import android.arch.persistence.room.RoomDatabase
+import android.content.Context
 import timber.log.Timber
 import java.io.File
 import java.io.FileFilter
@@ -13,10 +14,14 @@ object DatabaseUtil {
     /**
      * Preform a PRAGMA check on the database and optionally check a table for existing data
      *
+     * @param roomDatabase Database to be validated
+     * @param databaseNameTag Optional tag name to help identify database in logging
+     * @param tableDataCountCheck Optional check on a table for data. (optional)
+     *
      * @return true if validation check is OK
      */
-    fun validDatabaseFile(databaseName: String, roomDatabase: RoomDatabase, tableDataCountCheck: String = ""): Boolean {
-        Timber.i("Checking database integrity for [%s]", databaseName)
+    fun validDatabaseFile(roomDatabase: RoomDatabase, databaseNameTag: String = "", tableDataCountCheck: String = ""): Boolean {
+        Timber.i("Checking database integrity for [%s]", databaseNameTag)
         val totalTimeMs = measureTimeMillis {
             try {
                 val database = roomDatabase.openHelper.readableDatabase
@@ -24,11 +29,11 @@ object DatabaseUtil {
                 // pragma check
                 database.query("pragma quick_check", null).use { pragmaCheckCursor ->
                     if (!pragmaCheckCursor!!.moveToFirst()) {
-                        Timber.e("validateDatabase - database [%s] pragma check returned no results", databaseName)
+                        Timber.e("validateDatabase - database [%s] pragma check returned no results", databaseNameTag)
                         return false
                     }
                     if (pragmaCheckCursor.getString(0) != CORRUPTION_CHECK_PASSED) {
-                        Timber.e("validateDatabase - database [%s] pragma check failed", databaseName)
+                        Timber.e("validateDatabase - database [%s] pragma check failed", databaseNameTag)
                         return false
                     }
                 }
@@ -43,18 +48,18 @@ object DatabaseUtil {
                         }
 
                         if (count == 0) {
-                            Timber.e("validateDatabase - table [%s] is BLANK for database [%s] is blank", tableDataCountCheck, databaseName)
+                            Timber.e("validateDatabase - table [%s] is BLANK for database [%s] is blank", tableDataCountCheck, databaseNameTag)
                             return false
                         }
                     }
                 }
             } catch (e: Exception) {
-                Timber.e(e, "Failed to validate database [$databaseName]")
+                Timber.e(e, "Failed to validate database [$databaseNameTag]")
                 return false
             }
         }
 
-        Timber.i("Database integrity for [$databaseName]  OK! (${totalTimeMs}ms)")
+        Timber.i("Database integrity for [$databaseNameTag]  OK! (${totalTimeMs}ms)")
         return true
     }
 
@@ -107,5 +112,31 @@ object DatabaseUtil {
             }
         }
         return renamed
+    }
+
+    /**
+     * Copy database from assets to <app>/database
+     *
+     * @param context Android context
+     * @param databaseFilename Name of file in assets
+     * @param overwrite Overwrite the target file
+     *
+     * @return File of the copied database
+     */
+    fun copyDatabaseFromAssets(context: Context, databaseFilename: String, overwrite: Boolean = false): File {
+        val newDatabaseFile = context.getDatabasePath(databaseFilename)
+        val assetDatabaseInputStream = context.assets.open(databaseFilename)
+
+        if (newDatabaseFile.exists() && overwrite) {
+            DatabaseUtil.deleteDatabaseFiles(newDatabaseFile)
+        }
+
+        assetDatabaseInputStream.use { input ->
+            newDatabaseFile.outputStream().use { fileOut ->
+                input.copyTo(fileOut)
+            }
+        }
+
+        return newDatabaseFile
     }
 }

@@ -5,7 +5,9 @@ import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import org.dbtools.android.room.jdbc.JdbcSQLiteOpenHelperFactory
-import org.dbtools.sample.roomsqlite.datasource.database.main.MainDatabase
+import org.dbtools.sample.roomsqlite.model.db.main.MainDatabase
+import org.dbtools.sample.roomsqlite.model.db.main.individual.Individual
+import org.dbtools.sample.roomsqlite.model.db.main.individual.IndividualDao
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before

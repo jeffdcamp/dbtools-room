@@ -61,7 +61,6 @@ android {
 dependencies {
     implementation project(path: ':library')
     implementation project(path: ':sqliteorg')
-    implementation 'org.dbtools:dbtools-query:3.0.0'
 
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support:multidex-instrumentation:1.0.3'
@@ -81,6 +80,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
     // Code
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.1.0'
     implementation 'com.jakewharton.timber:timber:4.7.0'
 
     // Custom SQLite database
