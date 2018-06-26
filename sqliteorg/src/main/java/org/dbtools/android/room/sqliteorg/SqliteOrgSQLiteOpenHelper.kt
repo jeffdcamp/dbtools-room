@@ -3,18 +3,18 @@ package org.dbtools.android.room.sqliteorg
 import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.db.SupportSQLiteOpenHelper
 import android.content.Context
-import org.dbtools.android.room.sqliteorg.SqliteOrgSQLiteOpenHelperFactory.Companion.DEFAULT_SQLITEX_LIBRARY_LOADER
 import org.sqlite.database.sqlite.SQLiteDatabase
 import org.sqlite.database.sqlite.SQLiteOpenHelper
 import java.io.File
 
 open class SqliteOrgSQLiteOpenHelper(
-        context: Context,
-        path: String,
-        name: String?,
-        callback: SupportSQLiteOpenHelper.Callback,
-        password: String,
-        libraryLoader: () -> Unit = DEFAULT_SQLITEX_LIBRARY_LOADER
+    context: Context,
+    path: String,
+    name: String?,
+    callback: SupportSQLiteOpenHelper.Callback,
+    password: String,
+    libraryLoaderBlock: () -> Unit = SqliteOrgSQLiteOpenHelperFactory.loadSqliteLibrary,
+    postDatabaseCreateBlock: (sqliteDatabase: SQLiteDatabase) -> Unit = {}
 ) : SupportSQLiteOpenHelper {
 
     private val delegate: OpenHelper
@@ -23,13 +23,13 @@ open class SqliteOrgSQLiteOpenHelper(
         val databaseFilepath = if (path.isEmpty()) {
             context.getDatabasePath(name).absolutePath
         } else {
-            path + "/" + name
+            "$path/$name"
         }
 
         val databaseFile = File(databaseFilepath)
         databaseFile.parentFile.mkdirs()
 
-        delegate = SqliteOrgSQLiteOpenHelper.OpenHelper(context, libraryLoader, databaseFilepath, callback, password)
+        delegate = SqliteOrgSQLiteOpenHelper.OpenHelper(context, libraryLoaderBlock, postDatabaseCreateBlock, databaseFilepath, callback, password)
     }
 
     override fun getDatabaseName(): String? {
@@ -53,20 +53,24 @@ open class SqliteOrgSQLiteOpenHelper(
     }
 
     class OpenHelper(
-            context: Context,
-            libraryLoader: () -> Unit = {},
-            private val name: String?,
-            private val callback: SupportSQLiteOpenHelper.Callback,
-            private val password: String) : SQLiteOpenHelper(context, name, null, callback.version
+        context: Context,
+        libraryLoaderBlock: () -> Unit = {},
+        private val postDatabaseCreateBlock: (sqliteDatabase: SQLiteDatabase) -> Unit = {},
+        private val name: String?,
+        private val callback: SupportSQLiteOpenHelper.Callback,
+        private val password: String
+    ) : SQLiteOpenHelper(
+        context, name, null, callback.version
     ) {
 
         var wrappedDb: SqliteOrgDatabase? = null
 
         init {
-            libraryLoader()
+            libraryLoaderBlock()
         }
 
         override fun onCreate(sqLiteDatabase: SQLiteDatabase) {
+            postDatabaseCreateBlock(sqLiteDatabase)
             wrappedDb = SqliteOrgDatabase(sqLiteDatabase)
             callback.onCreate(wrappedDb)
         }

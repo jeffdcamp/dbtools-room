@@ -39,7 +39,20 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         mainDatabase = Room.databaseBuilder(application, MainDatabase::class.java, MainDatabase.DATABASE_NAME)
-                .openHelperFactory(SqliteOrgSQLiteOpenHelperFactory()) // with NO password
+                .openHelperFactory(SqliteOrgSQLiteOpenHelperFactory(
+                    password = "", // set a password (optional)
+                    libraryLoaderBlock = {
+                        SqliteOrgSQLiteOpenHelperFactory.loadSqliteLibrary() // NOTE! This line is REQUIRED to use SqliteOrgSQLiteOpenHelperFactory (default if libraryLoaderBlock param is not included)
+                        // System.loadLibrary("my_custom_library") // load your custom tokenizer here
+                    },
+                    postDatabaseCreateBlock = { sqliteDatabase ->
+                        // do post core org.sqlite.database.sqlite.SQLiteDatabase creation work here
+
+                        // examples
+                        // sqliteDatabase.loadExtension("...")
+                        // sqliteDatabase.registerTokenizer("...")
+                    }
+                ))
                 .fallbackToDestructiveMigration()
 //                .openHelperFactory(SqliteOrgSQLiteOpenHelperFactory(password = "abc123")) // password protected
 //                .addMigrations(object: Migration(1, 2) {

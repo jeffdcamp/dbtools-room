@@ -21,7 +21,7 @@ import java.util.Locale
  * Mirrored from: https://github.com/ivanovsuper/android-architecture-components/blob/master/BasicSample/app/src/main/java/com/example/android/persistence/db/cipher/CipherSQLiteDatabase.java
  */
 class SqliteOrgDatabase(
-        private val delegate: SQLiteDatabase
+    private val delegate: SQLiteDatabase
 ) : SupportSQLiteDatabase {
 
     override fun compileStatement(sql: String): SupportSQLiteStatement {
