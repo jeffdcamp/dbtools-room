@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 2.3.0 *(2018-06)*
+-------------------------
+* Added support for sqlite extensions (when using SqliteOrg database)
+* Added RoomDatabase.tableExists(...) and SupportSQLiteDatabase.tableExists(...)
+
 Version 2.2.0 *(2018-06)*
 -------------------------
 * Added ability to merge databases (MergeDatabaseUtil)
