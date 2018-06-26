@@ -50,3 +50,43 @@ fun RoomDatabase.findTableNames(): List<String> {
 
     return tableNames
 }
+
+/**
+ * Determines if table exist
+ *
+ * @param tableName Table name to check for
+ * @param databaseName Alias name for database (such as an attached database) (optional)
+ *
+ * @return true If tableName exist
+ */
+fun RoomDatabase.tableExists(tableName: String, databaseName: String = ""): Boolean {
+    return tablesExists(listOf(tableName), databaseName)
+}
+
+/**
+ * Determines if tables exist
+ *
+ * @param tableNames Table names to check for
+ * @param databaseName Alias name for database (such as an attached database) (optional)
+ *
+ * @return true If ALL tableNames exist
+ */
+fun RoomDatabase.tablesExists(tableNames: List<String>, databaseName: String = ""): Boolean {
+    val inClaus = tableNames.joinToString(",", prefix = "(", postfix = ")") { "'$it'" }
+
+    val tableNamesCursor = if (databaseName.isNotBlank()) {
+        query("SELECT count(1) FROM $databaseName.sqlite_master WHERE type='table' AND tbl_name IN $inClaus", null)
+    } else {
+        query("SELECT count(1) FROM sqlite_master WHERE type='table' AND tbl_name IN $inClaus", null)
+    }
+
+    var tableCount = 0
+    if (tableNamesCursor.moveToFirst()) {
+        do {
+            tableCount = tableNamesCursor.getInt(0)
+        } while (tableNamesCursor.moveToNext())
+    }
+    tableNamesCursor.close()
+
+    return tableCount == tableNames.size
+}
