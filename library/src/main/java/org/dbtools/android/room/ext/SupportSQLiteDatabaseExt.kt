@@ -108,6 +108,13 @@ fun SupportSQLiteDatabase.tablesExists(tableNames: List<String>, databaseName: S
  *         mDatabase.mergeDatabase(fromDatabaseFile, includeTables, excludeTables)
  *     }
  */
-fun SupportSQLiteDatabase.mergeDatabase(fromDatabaseFile: File, includeTables: List<String> = emptyList(), excludeTables: List<String> = emptyList()): Boolean {
-    return MergeDatabaseUtil.mergeDatabase(this, fromDatabaseFile, includeTables, excludeTables)
+fun SupportSQLiteDatabase.mergeDatabase(
+    fromDatabaseFile: File,
+    includeTables: List<String> = emptyList(),
+    excludeTables: List<String> = emptyList(),
+    mergeBlock: (database: SupportSQLiteDatabase, sourceTableName: String, targetTableName: String) -> Unit = { database, sourceTableName, targetTableName ->
+        MergeDatabaseUtil.defaultMerge(database, sourceTableName, targetTableName)
+    }
+): Boolean {
+    return MergeDatabaseUtil.mergeDatabase(this, fromDatabaseFile, includeTables, excludeTables, mergeBlock)
 }

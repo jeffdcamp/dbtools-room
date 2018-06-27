@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-Version 2.3.0 *(2018-06)*
+Version 2.3.1 *(2018-06)*
 -------------------------
 * Added support for sqlite extensions (when using SqliteOrg database)
 * Added RoomDatabase.tableExists(...) and SupportSQLiteDatabase.tableExists(...)

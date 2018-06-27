@@ -42,7 +42,9 @@ object MergeDatabaseUtil {
         fromDatabaseFile: File,
         includeTables: List<String> = emptyList(),
         excludeTables: List<String> = emptyList(),
-        mergeBlock: (database: SupportSQLiteDatabase, sourceTableName: String, targetTableName: String) -> Unit = {database, sourceTableName, targetTableName -> database.execSQL("INSERT OR IGNORE INTO $targetTableName SELECT * FROM $sourceTableName")  }
+        mergeBlock: (database: SupportSQLiteDatabase, sourceTableName: String, targetTableName: String) -> Unit = { database, sourceTableName, targetTableName ->
+            defaultMerge(database, sourceTableName, targetTableName)
+        }
     ): Boolean {
         if (!fromDatabaseFile.exists()) {
             Timber.e("Failed to merged [${fromDatabaseFile.absolutePath}] into [$database] :: fromDatabaseFile database does not exist")
@@ -106,6 +108,10 @@ object MergeDatabaseUtil {
         database.detachDatabase(mergeDbName)
 
         return true
+    }
+
+    fun defaultMerge(database: SupportSQLiteDatabase, sourceTableName: String, targetTableName: String) {
+        database.execSQL("INSERT OR IGNORE INTO $targetTableName SELECT * FROM $sourceTableName")
     }
 
     private val SYSTEM_TABLES = listOf("room_master_table", "sqlite_sequence")
