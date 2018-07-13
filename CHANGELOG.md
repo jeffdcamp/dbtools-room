@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 2.4.0 *(2018-07)*
+-------------------------
+* Apply SQL text files to a database (such as a sql diff file)
+* Added ability to validate a database prior to connecting it to Room
+
 Version 2.3.1 *(2018-06)*
 -------------------------
 * Added support for sqlite extensions (when using SqliteOrg database)

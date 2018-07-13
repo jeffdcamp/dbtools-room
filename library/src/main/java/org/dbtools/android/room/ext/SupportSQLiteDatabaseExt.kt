@@ -1,8 +1,24 @@
+@file:Suppress("unused")
+
 package org.dbtools.android.room.ext
 
 import android.arch.persistence.db.SupportSQLiteDatabase
+import org.dbtools.android.room.util.DatabaseUtil
 import org.dbtools.android.room.util.MergeDatabaseUtil
+import timber.log.Timber
 import java.io.File
+
+/**
+ * Preform a PRAGMA check on the database and optionally check a table for existing data
+ *
+ * @param databaseNameTag Optional check on a table for data. (optional)
+ * @param databaseNameTag Optional tag name to help identify database in logging
+ *
+ * @return true if validation check is OK
+ */
+fun SupportSQLiteDatabase.validDatabaseFile(databaseNameTag: String = "", tableDataCountCheck: String = ""): Boolean {
+    return DatabaseUtil.validDatabaseFile(this, databaseNameTag, tableDataCountCheck)
+}
 
 /**
  * Attach a database
@@ -117,4 +133,43 @@ fun SupportSQLiteDatabase.mergeDatabase(
     }
 ): Boolean {
     return MergeDatabaseUtil.mergeDatabase(this, fromDatabaseFile, includeTables, excludeTables, mergeBlock)
+}
+
+/**
+ * Apply many SQL statements from a file. File must contain SQL statements separated by ;
+ * All statements are executed in a single transaction
+ *
+ * @param sqlFile File containing statements
+ *
+ * @return true If all SQL statements successfully were applied
+ */
+fun SupportSQLiteDatabase.applySqlFile(sqlFile: File): Boolean {
+    if (!sqlFile.exists()) {
+        // Can't apply if there is no file
+        Timber.e("Failed to apply sql file. File: [%s] does NOT exist", sqlFile.absolutePath)
+        return false
+    }
+
+    try {
+        beginTransaction()
+        var statement = ""
+        sqlFile.forEachLine { line ->
+            statement += line
+            if (statement.endsWith(';')) {
+                this.execSQL(statement)
+                statement = ""
+            } else {
+                // If the statement currently does not end with [;] then there must be multiple lines to the full statement.
+                // Make sure to keep the newline character (some text columns may have multiple lines of data)
+                statement += '\n'
+            }
+        }
+        setTransactionSuccessful()
+    } catch (e: Exception) {
+        Timber.e(e, "Failed to apply sql file. File: [%s] Error: [%s]", sqlFile.absolutePath, e.message)
+        return false
+    } finally {
+        endTransaction()
+    }
+    return true
 }

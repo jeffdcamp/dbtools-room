@@ -58,6 +58,7 @@ dependencies {
     compileOnly "android.arch.lifecycle:runtime:$archLifecycleVersion"
     compileOnly "android.arch.lifecycle:extensions:$archLifecycleVersion"
     implementation "android.arch.persistence.room:runtime:$archRoomVersion"
+    implementation "com.jakewharton.timber:timber:$timberVersion"
 
     // optional
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

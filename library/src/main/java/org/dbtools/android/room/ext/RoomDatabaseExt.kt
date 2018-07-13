@@ -1,7 +1,13 @@
+@file:Suppress("unused")
+
 package org.dbtools.android.room.ext
 
+import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.RoomDatabase
 import org.dbtools.android.room.util.DatabaseUtil
+import org.dbtools.android.room.util.MergeDatabaseUtil
+import timber.log.Timber
+import java.io.File
 
 /**
  * Preform a PRAGMA check on the database and optionally check a table for existing data
@@ -89,4 +95,81 @@ fun RoomDatabase.tablesExists(tableNames: List<String>, databaseName: String = "
     tableNamesCursor.close()
 
     return tableCount == tableNames.size
+}
+
+/**
+ * Merge database tables from other databases.
+ *
+ * By default all tables (except Room system tables) will be merged)
+ *
+ * @param fromDatabaseFile Sqlite file that will be opened and attached to this database... then data will be copied from this database File
+ * @param includeTables Only table names in this list will be merged.  default: emptyList()
+ * @param excludeTables All tables except the table names in this list will be merged.  default: emptyList()
+ * @param mergeBlock Code to execute to perform merge.  default: database.execSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
+ *
+ * NOTE:  Room system tables are automatically excluded from the merge
+ *
+ *
+ * Add the following function to the RoomDatabase class (mDatabase is ONLY accessable from inside the RoomDatabase class)
+ *     fun mergeDataFromOtherDatabase(fromDatabaseFile: File, includeTables: List<String> = emptyList(), excludeTables: List<String> = emptyList()) {
+ *         // make sure database is open
+ *         if (!isOpen) {
+ *             openHelper.writableDatabase
+ *         }
+ *
+ *         // merge database
+ *         mDatabase.mergeDatabase(fromDatabaseFile, includeTables, excludeTables)
+ *     }
+ */
+fun RoomDatabase.mergeDatabase(
+    fromDatabaseFile: File,
+    includeTables: List<String> = emptyList(),
+    excludeTables: List<String> = emptyList(),
+    mergeBlock: (database: SupportSQLiteDatabase, sourceTableName: String, targetTableName: String) -> Unit = { database, sourceTableName, targetTableName ->
+        MergeDatabaseUtil.defaultMerge(database, sourceTableName, targetTableName)
+    }
+): Boolean {
+    return MergeDatabaseUtil.mergeDatabase(openHelper.writableDatabase, fromDatabaseFile, includeTables, excludeTables, mergeBlock)
+}
+
+/**
+ * Apply many SQL statements from a file. File must contain SQL statements separated by ;
+ * All statements are executed in a single transaction
+ *
+ * @param sqlFile File containing statements
+ *
+ * @return true If all SQL statements successfully were applied
+ */
+fun RoomDatabase.applySqlFile(sqlFile: File): Boolean {
+    if (!sqlFile.exists()) {
+        // Can't apply if there is no file
+        Timber.e("Failed to apply sql file. File: [%s] does NOT exist", sqlFile.absolutePath)
+        return false
+    }
+
+    // get the SupportSQLiteDatabase so that execSQL(statement) may be called
+    val database = openHelper.writableDatabase
+
+    try {
+        beginTransaction()
+        var statement = ""
+        sqlFile.forEachLine { line ->
+            statement += line
+            if (statement.endsWith(';')) {
+                database.execSQL(statement)
+                statement = ""
+            } else {
+                // If the statement currently does not end with [;] then there must be multiple lines to the full statement.
+                // Make sure to keep the newline character (some text columns may have multiple lines of data)
+                statement += '\n'
+            }
+        }
+        setTransactionSuccessful()
+    } catch (e: Exception) {
+        Timber.e(e, "Failed to apply sql file. File: [%s] Error: [%s]", sqlFile.absolutePath, e.message)
+        return false
+    } finally {
+        endTransaction()
+    }
+    return true
 }

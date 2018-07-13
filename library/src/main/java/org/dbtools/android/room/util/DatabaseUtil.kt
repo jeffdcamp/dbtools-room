@@ -1,7 +1,9 @@
 package org.dbtools.android.room.util
 
+import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase
 import timber.log.Timber
 import java.io.File
 import java.io.FileFilter
@@ -12,20 +14,87 @@ object DatabaseUtil {
     private const val CORRUPTION_CHECK_PASSED = "ok"
 
     /**
+     * Preform a PRAGMA check on the database and optionally check a table for existing data.  This check can be used to check a
+     * database prior to hooking it up to Room and running database table upgrades and versioning (useful for pre-existing databases)
+     *
+     * NOTE: This call will use the built-in default Android Sqlite Database Libraries... see also SqliteOrgDatabaseUtil.validateDatabaseFile(...)
+     *
+     * @param path File path to database
+     * @param databaseNameTag Optional tag name to help identify database in logging
+     * @param tableDataCountCheck Optional check on a table for data. (optional)
+     *
+     * @return true if validation check is OK
+     */
+    fun validDatabaseFile(path: String, databaseNameTag: String = "", tableDataCountCheck: String = ""): Boolean {
+        Timber.i("Checking database integrity for [%s]", databaseNameTag)
+        val totalTimeMs = measureTimeMillis {
+            try {
+                val database = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY)
+
+                // pragma check
+                database.rawQuery("pragma quick_check", null).use { pragmaCheckCursor ->
+                    if (!pragmaCheckCursor!!.moveToFirst()) {
+                        Timber.e("validateDatabase - database [%s] pragma check returned no results", databaseNameTag)
+                        return false
+                    }
+                    if (pragmaCheckCursor.getString(0) != CORRUPTION_CHECK_PASSED) {
+                        Timber.e("validateDatabase - database [%s] pragma check failed", databaseNameTag)
+                        return false
+                    }
+                }
+
+                // make sure there is data in the database
+                if (tableDataCountCheck.isNotBlank()) {
+                    database.rawQuery("SELECT count(1) FROM $tableDataCountCheck", null).use { cursor ->
+                        val count = if (cursor.moveToFirst()) {
+                            cursor.getInt(0)
+                        } else {
+                            0
+                        }
+
+                        if (count == 0) {
+                            Timber.e("validateDatabase - table [%s] is BLANK for database [%s] is blank", tableDataCountCheck, databaseNameTag)
+                            return false
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to validate database [$databaseNameTag]")
+                return false
+            }
+        }
+
+        Timber.i("Database integrity for [$databaseNameTag]  OK! (${totalTimeMs}ms)")
+        return true
+    }
+
+    /**
      * Preform a PRAGMA check on the database and optionally check a table for existing data
      *
-     * @param roomDatabase Database to be validated
+     * @param roomDatabase RoomDatabase to be validated
      * @param databaseNameTag Optional tag name to help identify database in logging
      * @param tableDataCountCheck Optional check on a table for data. (optional)
      *
      * @return true if validation check is OK
      */
     fun validDatabaseFile(roomDatabase: RoomDatabase, databaseNameTag: String = "", tableDataCountCheck: String = ""): Boolean {
+        val database = roomDatabase.openHelper.readableDatabase
+        return validDatabaseFile(database, databaseNameTag, tableDataCountCheck)
+    }
+
+    /**
+     * Preform a PRAGMA check on the database and optionally check a table for existing data
+     *
+     * @param database SupportSQLiteDatabase to be validated
+     * @param databaseNameTag Optional tag name to help identify database in logging
+     * @param tableDataCountCheck Optional check on a table for data. (optional)
+     *
+     * @return true if validation check is OK
+     */
+    fun validDatabaseFile(database: SupportSQLiteDatabase, databaseNameTag: String = "", tableDataCountCheck: String = ""): Boolean {
         Timber.i("Checking database integrity for [%s]", databaseNameTag)
         val totalTimeMs = measureTimeMillis {
             try {
-                val database = roomDatabase.openHelper.readableDatabase
-
                 // pragma check
                 database.query("pragma quick_check", null).use { pragmaCheckCursor ->
                     if (!pragmaCheckCursor!!.moveToFirst()) {

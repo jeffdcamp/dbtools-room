@@ -81,7 +81,7 @@ dependencies {
 
     // Code
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.0'
-    implementation 'com.jakewharton.timber:timber:4.7.0'
+    implementation "com.jakewharton.timber:timber:$timberVersion"
 
     // Custom SQLite database
     implementation 'org.sqlite.sqliteX:sqlite-android:3.15.2'

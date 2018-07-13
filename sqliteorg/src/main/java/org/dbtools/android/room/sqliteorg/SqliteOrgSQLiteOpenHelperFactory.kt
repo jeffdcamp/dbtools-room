@@ -1,4 +1,3 @@
-
 package org.dbtools.android.room.sqliteorg
 
 import android.arch.persistence.db.SupportSQLiteOpenHelper
@@ -15,7 +14,7 @@ class SqliteOrgSQLiteOpenHelperFactory(
     private val path: String = "",
     private val password: String = "",
     private val libraryLoaderBlock: () -> Unit = loadSqliteLibrary,
-    private val postDatabaseCreateBlock: (sqliteDatabase: SQLiteDatabase) -> Unit  = {}
+    private val postDatabaseCreateBlock: (sqliteDatabase: SQLiteDatabase) -> Unit = {}
 ) : SupportSQLiteOpenHelper.Factory {
 
     override fun create(configuration: SupportSQLiteOpenHelper.Configuration): SupportSQLiteOpenHelper {

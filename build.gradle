@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.2.41'
+    ext.kotlin_version = '1.2.51'
 
     repositories {
         mavenLocal()
@@ -7,7 +7,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0-beta01'
+        classpath 'com.android.tools.build:gradle:3.2.0-beta03'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0' // version plugin support
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
@@ -37,7 +37,8 @@ ext {
     xerialSqliteJdbcVersion = '3.23.1'
     archLifecycleVersion = '1.1.1'
     archRoomVersion = '1.1.1'
-    coroutinesVersion = '0.23.3'
+    coroutinesVersion = '0.23.4'
+    timberVersion = '4.7.1'
 
     junitVersion = '4.12'
     mockitoVersion = '2.19.0'

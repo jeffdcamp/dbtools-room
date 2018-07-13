@@ -12,6 +12,7 @@ import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import org.dbtools.android.room.ext.validDatabaseFile
+import org.dbtools.android.room.sqliteorg.SqliteOrgDatabaseUtil
 import org.dbtools.android.room.sqliteorg.SqliteOrgSQLiteOpenHelperFactory
 import org.dbtools.android.room.toLiveData
 import org.dbtools.android.room.util.DatabaseUtil
@@ -72,6 +73,7 @@ class MainActivity : AppCompatActivity() {
         binding.testMergeDatabaseButton.setOnClickListener { testMergeDatabase() }
         binding.logIndividualsButton.setOnClickListener { showAllIndividuals() }
         binding.deleteAllIndividualsButton.setOnClickListener { deleteAllIndividuals() }
+        binding.validateDatabaseButton.setOnClickListener { testValidateDatabase() }
     }
 
     private fun createIndividual(firstName: String, lastName: String, birth: LocalDate = LocalDate.of(1970, 2, 2), phone: String = "555-555-1234"): Individual {
@@ -277,6 +279,13 @@ class MainActivity : AppCompatActivity() {
         mainDatabase.mergeDataFromOtherDatabase(mergeDatabase2)
 
         showMainDatabaseInfo("merge", mainDatabase)
+    }
+
+    private fun testValidateDatabase() {
+        val database1 = DatabaseUtil.copyDatabaseFromAssets(this@MainActivity, "merge1", true)
+
+        val success = SqliteOrgDatabaseUtil.validDatabaseFile(database1.absolutePath)
+        Toast.makeText(this, "Database Valid: [$success]", Toast.LENGTH_SHORT).show()
     }
 
     private fun showAllMainDatabaseInfo(event: String) {

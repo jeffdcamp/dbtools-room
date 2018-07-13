@@ -15,6 +15,7 @@ DBTools Room for Android is an library that makes it even easier to work with Go
 * Tools to Delete and Rename database (making sure to take care of all extra files)
 * Attach/Detach databases
 * Merge data between multiple databases
+* Apply SQL text files to a database (such as a sql diff file)
 
 Usage
 =====
