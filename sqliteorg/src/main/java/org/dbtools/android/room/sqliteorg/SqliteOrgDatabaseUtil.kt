@@ -21,32 +21,32 @@ object SqliteOrgDatabaseUtil {
         Timber.i("Checking database integrity for [%s]", databaseNameTag)
         val totalTimeMs = measureTimeMillis {
             try {
-                val database = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY)
-
-                // pragma check
-                database.rawQuery("pragma quick_check", null).use { pragmaCheckCursor ->
-                    if (!pragmaCheckCursor!!.moveToFirst()) {
-                        Timber.e("validateDatabase - database [%s] pragma check returned no results", databaseNameTag)
-                        return false
-                    }
-                    if (pragmaCheckCursor.getString(0) != CORRUPTION_CHECK_PASSED) {
-                        Timber.e("validateDatabase - database [%s] pragma check failed", databaseNameTag)
-                        return false
-                    }
-                }
-
-                // make sure there is data in the database
-                if (tableDataCountCheck.isNotBlank()) {
-                    database.rawQuery("SELECT count(1) FROM $tableDataCountCheck", null).use { cursor ->
-                        val count = if (cursor.moveToFirst()) {
-                            cursor.getInt(0)
-                        } else {
-                            0
-                        }
-
-                        if (count == 0) {
-                            Timber.e("validateDatabase - table [%s] is BLANK for database [%s] is blank", tableDataCountCheck, databaseNameTag)
+                SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY).use { database ->
+                    // pragma check
+                    database.rawQuery("pragma quick_check", null).use { pragmaCheckCursor ->
+                        if (!pragmaCheckCursor!!.moveToFirst()) {
+                            Timber.e("validateDatabase - database [%s] pragma check returned no results", databaseNameTag)
                             return false
+                        }
+                        if (pragmaCheckCursor.getString(0) != CORRUPTION_CHECK_PASSED) {
+                            Timber.e("validateDatabase - database [%s] pragma check failed", databaseNameTag)
+                            return false
+                        }
+                    }
+
+                    // make sure there is data in the database
+                    if (tableDataCountCheck.isNotBlank()) {
+                        database.rawQuery("SELECT count(1) FROM $tableDataCountCheck", null).use { cursor ->
+                            val count = if (cursor.moveToFirst()) {
+                                cursor.getInt(0)
+                            } else {
+                                0
+                            }
+
+                            if (count == 0) {
+                                Timber.e("validateDatabase - table [%s] is BLANK for database [%s] is blank", tableDataCountCheck, databaseNameTag)
+                                return false
+                            }
                         }
                     }
                 }
