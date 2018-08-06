@@ -14,11 +14,11 @@ class SqliteOrgSQLiteOpenHelperFactory(
     private val path: String = "",
     private val password: String = "",
     private val libraryLoaderBlock: () -> Unit = loadSqliteLibrary,
-    private val postDatabaseCreateBlock: (sqliteDatabase: SQLiteDatabase) -> Unit = {}
+    private val onDatabaseConfigureBlock: (sqliteDatabase: SQLiteDatabase) -> Unit = {}
 ) : SupportSQLiteOpenHelper.Factory {
 
     override fun create(configuration: SupportSQLiteOpenHelper.Configuration): SupportSQLiteOpenHelper {
-        return SqliteOrgSQLiteOpenHelper(configuration.context, path, configuration.name, configuration.callback, password, libraryLoaderBlock, postDatabaseCreateBlock)
+        return SqliteOrgSQLiteOpenHelper(configuration.context, path, configuration.name, configuration.callback, password, libraryLoaderBlock, onDatabaseConfigureBlock)
     }
 
     companion object {
