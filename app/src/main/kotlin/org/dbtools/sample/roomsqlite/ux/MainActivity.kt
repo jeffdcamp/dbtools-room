@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                         SqliteOrgSQLiteOpenHelperFactory.loadSqliteLibrary() // NOTE! This line is REQUIRED to use SqliteOrgSQLiteOpenHelperFactory (default if libraryLoaderBlock param is not included)
                         // System.loadLibrary("my_custom_library") // load your custom tokenizer here
                     },
-                    postDatabaseCreateBlock = { sqliteDatabase ->
+                    onDatabaseConfigureBlock= { sqliteDatabase ->
                         // do post core org.sqlite.database.sqlite.SQLiteDatabase creation work here
 
                         // examples
