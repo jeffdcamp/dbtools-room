@@ -14,7 +14,7 @@ open class SqliteOrgSQLiteOpenHelper(
     callback: SupportSQLiteOpenHelper.Callback,
     password: String,
     libraryLoaderBlock: () -> Unit = SqliteOrgSQLiteOpenHelperFactory.loadSqliteLibrary,
-    postDatabaseCreateBlock: (sqliteDatabase: SQLiteDatabase) -> Unit = {}
+    onDatabaseConfigureBlock: (sqliteDatabase: SQLiteDatabase) -> Unit = {}
 ) : SupportSQLiteOpenHelper {
 
     private val delegate: OpenHelper
@@ -29,7 +29,7 @@ open class SqliteOrgSQLiteOpenHelper(
         val databaseFile = File(databaseFilepath)
         databaseFile.parentFile.mkdirs()
 
-        delegate = SqliteOrgSQLiteOpenHelper.OpenHelper(context, libraryLoaderBlock, postDatabaseCreateBlock, databaseFilepath, callback, password)
+        delegate = SqliteOrgSQLiteOpenHelper.OpenHelper(context, libraryLoaderBlock, onDatabaseConfigureBlock, databaseFilepath, callback, password)
     }
 
     override fun getDatabaseName(): String? {
@@ -55,7 +55,7 @@ open class SqliteOrgSQLiteOpenHelper(
     class OpenHelper(
         context: Context,
         libraryLoaderBlock: () -> Unit = {},
-        private val postDatabaseCreateBlock: (sqliteDatabase: SQLiteDatabase) -> Unit = {},
+        private val onDatabaseConfigureBlock: (sqliteDatabase: SQLiteDatabase) -> Unit = {},
         private val name: String?,
         private val callback: SupportSQLiteOpenHelper.Callback,
         private val password: String
@@ -70,7 +70,6 @@ open class SqliteOrgSQLiteOpenHelper(
         }
 
         override fun onCreate(sqLiteDatabase: SQLiteDatabase) {
-            postDatabaseCreateBlock(sqLiteDatabase)
             wrappedDb = SqliteOrgDatabase(sqLiteDatabase)
             callback.onCreate(wrappedDb)
         }
@@ -80,6 +79,7 @@ open class SqliteOrgSQLiteOpenHelper(
         }
 
         override fun onConfigure(db: SQLiteDatabase) {
+            onDatabaseConfigureBlock(db)
             callback.onConfigure(getWrappedDb(db))
         }
 
