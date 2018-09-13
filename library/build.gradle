@@ -19,7 +19,6 @@ kotlin {
 
 android {
     compileSdkVersion project.compileSdkVersion
-    buildToolsVersion project.buildToolsVersion
 
     defaultConfig {
         minSdkVersion project.minSdkVersion
@@ -44,7 +43,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
         kotlinOptions.freeCompilerArgs += ['-module-name', "$POM_ARTIFACT_ID"]
     }
-    buildToolsVersion '27.0.3'
 }
 
 afterEvaluate {

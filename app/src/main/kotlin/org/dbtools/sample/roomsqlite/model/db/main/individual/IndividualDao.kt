@@ -23,10 +23,10 @@ interface IndividualDao  {
     fun findById(id: Long): Individual?
 
     @Query("SELECT firstName FROM individual WHERE id = :id")
-    fun findFirstNameById(id: Long): String
+    fun findFirstNameById(id: Long): String?
 
     @Query("SELECT MAX(id) FROM individual")
-    fun findLastIndividualId(): Long
+    fun findLastIndividualId(): Long?
 
     @Query("SELECT * FROM individual WHERE id = (SELECT MAX(id) FROM individual)")
     fun findLastIndividual(): Individual?

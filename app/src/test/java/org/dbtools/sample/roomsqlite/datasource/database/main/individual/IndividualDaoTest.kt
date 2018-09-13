@@ -10,6 +10,7 @@ import org.dbtools.sample.roomsqlite.model.db.main.individual.Individual
 import org.dbtools.sample.roomsqlite.model.db.main.individual.IndividualDao
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -22,9 +23,8 @@ class IndividualDaoTest {
     @Mock
     lateinit var application: Application
 
-    lateinit var mainDatabase: MainDatabase
-
-    lateinit var individualDao: IndividualDao
+    private lateinit var mainDatabase: MainDatabase
+    private lateinit var individualDao: IndividualDao
 
     @Before
     fun setup() {
@@ -54,7 +54,7 @@ class IndividualDaoTest {
 //                .openHelperFactory(JdbcSQLiteOpenHelperFactory())
 //                .build()
 
-        individualDao = mainDatabase.individualDao()
+        individualDao = mainDatabase.individualDao
     }
 
     @After
@@ -71,6 +71,11 @@ class IndividualDaoTest {
 
         individualDao.insert(individual)
         val individualId = individualDao.findLastIndividualId()
+
+        if (individualId == null) {
+            assertNotNull(individualId)
+            return
+        }
 
         assertEquals(1, individualDao.findCount())
         assertEquals("Testy", individualDao.findFirstNameById(individualId))

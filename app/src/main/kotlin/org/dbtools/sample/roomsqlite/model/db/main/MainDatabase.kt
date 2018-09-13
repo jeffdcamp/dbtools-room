@@ -11,11 +11,13 @@ import org.dbtools.sample.roomsqlite.model.db.main.individual.IndividualDao
 import java.io.File
 
 
-@Database(entities = [Individual::class], version = 1)
+@Database(entities = [
+    Individual::class
+], version = 1)
 @TypeConverters(MainDatabaseConverters::class, DateTimeTextConverter::class)
 abstract class MainDatabase : RoomDatabase() {
 
-    abstract fun individualDao(): IndividualDao
+    abstract val individualDao: IndividualDao
 
     fun mergeDataFromOtherDatabase(fromDatabaseFile: File, includeTables: List<String> = emptyList(), excludeTables: List<String> = emptyList()) {
         // make sure database is open
@@ -28,6 +30,6 @@ abstract class MainDatabase : RoomDatabase() {
     }
 
     companion object {
-        const val DATABASE_NAME: String = "Main"
+        const val DATABASE_NAME: String = "main.db"
     }
 }
