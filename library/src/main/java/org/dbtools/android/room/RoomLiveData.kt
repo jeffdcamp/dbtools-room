@@ -119,6 +119,10 @@ object RoomLiveData {
             }
 
             private fun getData() {
+                if (!hasObservers()) {
+                    return
+                }
+
                 launch(coroutineContext, parent = job) {
                     var computed: Boolean
                     do {
