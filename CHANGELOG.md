@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 2.5.1 *(2018-09)*
+-------------------------
+* Fixed RoomLiveData to not getData() if there are no observers
+
 Version 2.5.0 *(2018-08)*
 -------------------------
 * Improved support to configure a Room database with custom extensions (onDatabaseConfigureBlock)
