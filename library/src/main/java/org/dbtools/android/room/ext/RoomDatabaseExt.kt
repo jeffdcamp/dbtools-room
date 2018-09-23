@@ -154,7 +154,19 @@ fun RoomDatabase.applySqlFile(sqlFile: File): Boolean {
         beginTransaction()
         var statement = ""
         sqlFile.forEachLine { line ->
-            statement += line
+            // Prepare the line
+            // - Remove any trailing comments (sqldiff may add comments to a line (Example: 'DROP TABLE speaker; -- due to schema mismatch'))
+            // - Remove any trailing spaces (we check for a line ending with ';')
+
+            // check for sqldiff comment
+            val formattedLine = if (line.contains("; -- ")) {
+                val lineWithoutComment = line.substringBefore("; -- ") + ";" // be sure to add the ; back in
+                lineWithoutComment.trim()
+            } else {
+                line.trim()
+            }
+
+            statement += formattedLine
             if (statement.endsWith(';')) {
                 database.execSQL(statement)
                 statement = ""
