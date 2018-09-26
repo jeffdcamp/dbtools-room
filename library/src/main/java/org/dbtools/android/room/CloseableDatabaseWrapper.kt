@@ -3,7 +3,7 @@
 package org.dbtools.android.room
 
 import android.app.Application
-import android.arch.persistence.room.RoomDatabase
+import androidx.room.RoomDatabase
 import org.dbtools.android.room.util.DatabaseUtil
 import java.io.File
 import java.util.concurrent.atomic.AtomicReference

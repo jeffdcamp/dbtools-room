@@ -1,6 +1,6 @@
 package org.dbtools.sample.roomsqlite
 
-import android.support.multidex.MultiDexApplication
+import androidx.multidex.MultiDexApplication
 import com.jakewharton.threetenabp.AndroidThreeTen
 import timber.log.Timber
 

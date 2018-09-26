@@ -1,6 +1,6 @@
 package org.dbtools.sample.roomsqlite.model.db.main.converter
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 import org.dbtools.sample.roomsqlite.model.db.main.type.IndividualType
 
 class MainDatabaseConverters {

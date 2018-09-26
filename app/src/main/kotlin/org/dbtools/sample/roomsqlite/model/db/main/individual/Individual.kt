@@ -1,8 +1,8 @@
 
 package org.dbtools.sample.roomsqlite.model.db.main.individual
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import org.dbtools.sample.roomsqlite.model.db.main.type.IndividualType
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime

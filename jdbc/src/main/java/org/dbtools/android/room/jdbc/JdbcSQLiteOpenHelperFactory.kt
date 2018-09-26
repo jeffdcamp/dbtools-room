@@ -1,7 +1,7 @@
 
 package org.dbtools.android.room.jdbc
 
-import android.arch.persistence.db.SupportSQLiteOpenHelper
+import androidx.sqlite.db.SupportSQLiteOpenHelper
 
 @Suppress("unused")
 class JdbcSQLiteOpenHelperFactory(

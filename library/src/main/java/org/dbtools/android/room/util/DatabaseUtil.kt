@@ -1,9 +1,9 @@
 package org.dbtools.android.room.util
 
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import timber.log.Timber
 import java.io.File
 import java.io.FileFilter

@@ -1,7 +1,7 @@
 package org.dbtools.sample.roomsqlite.model.repository
 
 import android.app.Application
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import kotlinx.coroutines.experimental.launch
 import org.dbtools.android.room.ext.validDatabaseFile
 import org.dbtools.android.room.toLiveData

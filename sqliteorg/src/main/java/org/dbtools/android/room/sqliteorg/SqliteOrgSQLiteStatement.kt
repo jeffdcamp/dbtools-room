@@ -1,6 +1,6 @@
 package org.dbtools.android.room.sqliteorg
 
-import android.arch.persistence.db.SupportSQLiteStatement
+import androidx.sqlite.db.SupportSQLiteStatement
 import org.sqlite.database.sqlite.SQLiteStatement
 
 class SqliteOrgSQLiteStatement(

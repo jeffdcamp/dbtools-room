@@ -1,5 +1,5 @@
-DBTools for Android
-=================
+DBTools Room for Android
+========================
 
 DBTools Room for Android is an library that makes it even easier to work with Google Room Library and SQLite Databases.
 

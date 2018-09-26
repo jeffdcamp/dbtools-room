@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         mavenLocal()
+        google()
         mavenCentral()
         jcenter()
     }
@@ -8,7 +9,6 @@ buildscript {
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'maven'
 
 android {
@@ -46,21 +46,15 @@ afterEvaluate {
 
 dependencies {
     // Android
-    implementation "com.android.support:support-annotations:${supportLibVersion}"
+    implementation "androidx.annotation:annotation:1.0.0"
 
-    implementation "com.android.support:appcompat-v7:${supportLibVersion}" // used by org.sqlite.sqliteX:sqlite-android
-    implementation "com.android.support:support-media-compat:${supportLibVersion}" // used by org.sqlite.sqliteX:sqlite-android
-    implementation "com.android.support:support-vector-drawable:${supportLibVersion}" // used by org.sqlite.sqliteX:sqlite-android
-    implementation "com.android.support:animated-vector-drawable:${supportLibVersion}" // used by org.sqlite.sqliteX:sqlite-android
-
-    compileOnly "android.arch.lifecycle:runtime:$archLifecycleVersion"
-    compileOnly "android.arch.lifecycle:extensions:$archLifecycleVersion"
-    implementation "android.arch.persistence.room:runtime:$archRoomVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime:$archLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
+    implementation "androidx.room:room-runtime:$archRoomVersion"
     implementation "com.jakewharton.timber:timber:$timberVersion"
 
     // optional
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
     compileOnly 'org.sqlite.sqliteX:sqlite-android:3.15.2' // SQL Android Bindings
 
     testCompile "junit:junit:$junitVersion"

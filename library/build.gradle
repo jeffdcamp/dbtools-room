@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         mavenLocal()
+        google()
         mavenCentral()
         jcenter()
     }
@@ -51,9 +52,9 @@ afterEvaluate {
 }
 
 dependencies {
-    compileOnly "android.arch.lifecycle:runtime:$archLifecycleVersion"
-    compileOnly "android.arch.lifecycle:extensions:$archLifecycleVersion"
-    implementation "android.arch.persistence.room:runtime:$archRoomVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime:$archLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
+    implementation "androidx.room:room-runtime:$archRoomVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
     implementation "com.jakewharton.timber:timber:$timberVersion"

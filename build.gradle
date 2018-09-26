@@ -1,24 +1,23 @@
 buildscript {
-    ext.kotlin_version = '1.2.61'
+    ext.kotlin_version = '1.2.71'
 
     repositories {
         mavenLocal()
-        jcenter()
         google()
+        jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0-rc03'
+        classpath 'com.android.tools.build:gradle:3.3.0-alpha11'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0' // version plugin support
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
     }
 }
 
 allprojects {
     repositories {
         mavenLocal()
-        jcenter()
         google()
+        jcenter()
     }
     apply plugin: 'com.github.ben-manes.versions' // ./gradlew dependencyUpdates -Drevision=release
 }
@@ -28,15 +27,14 @@ task clean(type: Delete) {
 }
 
 ext {
-    compileSdkVersion = 27
+    compileSdkVersion = 28
     minSdkVersion = 16
-    targetSdkVersion = 27
+    targetSdkVersion = 28
 
-    supportLibVersion = '27.1.1'
     xerialSqliteJdbcVersion = '3.23.1'
-    archLifecycleVersion = '1.1.1'
-    archRoomVersion = '1.1.1'
-    coroutinesVersion = '0.25.3'
+    archLifecycleVersion = '2.0.0'
+    archRoomVersion = '2.0.0-rc01'
+    coroutinesVersion = '0.26.1'
     timberVersion = '4.7.1'
 
     junitVersion = '4.12'

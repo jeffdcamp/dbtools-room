@@ -16,16 +16,22 @@
 package org.dbtools.android.room.testing
 
 import android.app.Application
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.db.SupportSQLiteOpenHelper
-import android.arch.persistence.room.DatabaseConfiguration
-import android.arch.persistence.room.Room
-import android.arch.persistence.room.RoomDatabase
-import android.arch.persistence.room.RoomOpenHelper
-import android.arch.persistence.room.migration.Migration
-import android.arch.persistence.room.migration.bundle.*
-import android.arch.persistence.room.util.TableInfo
 import android.util.Log
+import androidx.arch.core.executor.ArchTaskExecutor
+import androidx.room.DatabaseConfiguration
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.RoomOpenHelper
+import androidx.room.migration.Migration
+import androidx.room.migration.bundle.DatabaseBundle
+import androidx.room.migration.bundle.EntityBundle
+import androidx.room.migration.bundle.FieldBundle
+import androidx.room.migration.bundle.ForeignKeyBundle
+import androidx.room.migration.bundle.IndexBundle
+import androidx.room.migration.bundle.SchemaBundle
+import androidx.room.util.TableInfo
+import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.sqlite.db.SupportSQLiteOpenHelper
 import org.dbtools.android.room.jdbc.JdbcSQLiteOpenHelperFactory
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
@@ -33,7 +39,9 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.lang.ref.WeakReference
-import java.util.*
+import java.util.ArrayList
+import java.util.HashMap
+import java.util.HashSet
 
 /**
  * MigrationUnitTestHelper is a replica of [android.arch.persistence.room.testing.MigrationTestHelper]
@@ -88,6 +96,7 @@ class MigrationUnitTestHelper(
                 null,
                 true,
                 RoomDatabase.JournalMode.TRUNCATE,
+                ArchTaskExecutor.getIOThreadExecutor(),
                 true,
                 emptySet()
         )
@@ -158,6 +167,7 @@ class MigrationUnitTestHelper(
                 null,
                 true,
                 RoomDatabase.JournalMode.TRUNCATE,
+                ArchTaskExecutor.getIOThreadExecutor(),
                 true,
                 emptySet()
         )

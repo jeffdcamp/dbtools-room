@@ -1,9 +1,9 @@
 package org.dbtools.sample.roomsqlite.datasource.database.main.individual
 
 import android.app.Application
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.Room
-import android.arch.persistence.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import org.dbtools.android.room.jdbc.JdbcSQLiteOpenHelperFactory
 import org.dbtools.sample.roomsqlite.model.db.main.MainDatabase
 import org.dbtools.sample.roomsqlite.model.db.main.individual.Individual

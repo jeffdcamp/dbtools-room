@@ -1,8 +1,8 @@
 package org.dbtools.sample.roomsqlite.model.db.main
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.RoomDatabase
-import android.arch.persistence.room.TypeConverters
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import org.dbtools.android.room.ext.mergeDatabase
 import org.dbtools.sample.roomsqlite.model.db.main.converter.DateTimeTextConverter
 import org.dbtools.sample.roomsqlite.model.db.main.converter.MainDatabaseConverters

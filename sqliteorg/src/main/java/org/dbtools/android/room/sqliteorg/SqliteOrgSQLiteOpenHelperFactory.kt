@@ -1,6 +1,6 @@
 package org.dbtools.android.room.sqliteorg
 
-import android.arch.persistence.db.SupportSQLiteOpenHelper
+import androidx.sqlite.db.SupportSQLiteOpenHelper
 import org.sqlite.database.sqlite.SQLiteDatabase
 
 /**

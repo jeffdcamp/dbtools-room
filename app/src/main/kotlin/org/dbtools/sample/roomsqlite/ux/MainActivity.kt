@@ -1,12 +1,13 @@
 package org.dbtools.sample.roomsqlite.ux
 
-import android.arch.lifecycle.Observer
-import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.android.UI
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import kotlinx.coroutines.experimental.CoroutineScope
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
@@ -15,12 +16,15 @@ import org.dbtools.android.room.util.DatabaseUtil
 import org.dbtools.sample.roomsqlite.R
 import org.dbtools.sample.roomsqlite.databinding.ActivityMainBinding
 import org.dbtools.sample.roomsqlite.model.repository.IndividualRepository
+import kotlin.coroutines.experimental.CoroutineContext
 
-class MainActivity : AppCompatActivity() {
-
+class MainActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var binding: ActivityMainBinding
 
     private val individualRepository by lazy { IndividualRepository(application) }
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +44,8 @@ class MainActivity : AppCompatActivity() {
         binding.validateDatabaseButton.setOnClickListener { testValidateDatabase() }
     }
 
-    private fun insertIndividual() = launch(UI) {
-        val count = withContext(CommonPool) {
+    private fun insertIndividual() = launch {
+        val count = withContext(Dispatchers.Default) {
             individualRepository.addIndividual("Jeff", "Campbell")
             return@withContext individualRepository.getIndividualCount()
         }
@@ -49,12 +53,12 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this@MainActivity, "Individual Count: $count", Toast.LENGTH_SHORT).show()
     }
 
-    private fun deleteLastIndividual() = launch(UI) {
+    private fun deleteLastIndividual() = launch {
         if (!hasRecords()) {
             return@launch
         }
 
-        val deleteCount = withContext(coroutineContext + CommonPool) {
+        val deleteCount = withContext(Dispatchers.Default) {
             individualRepository.deleteLastIndividual()
         }
 
@@ -63,13 +67,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateLastIndividual() = launch(UI) {
+    private fun updateLastIndividual() = launch {
         // check to make sure there is individuals
         if (!hasRecords()) {
             return@launch
         }
 
-        val updated = withContext(coroutineContext + CommonPool) {
+        val updated = withContext(Dispatchers.Default) {
             individualRepository.updateLastIndividualName()
         }
 
@@ -80,13 +84,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showLastIndividualName() = launch(UI) {
+    private fun showLastIndividualName() = launch {
         // check to make sure there is individuals
         if (!hasRecords()) {
             return@launch
         }
 
-        val firstName = withContext(coroutineContext + CommonPool) {
+        val firstName = withContext(Dispatchers.Default) {
             return@withContext individualRepository.getLastIndividualFirstName()
         }
         Toast.makeText(this@MainActivity, "Last Individual First Name: $firstName", Toast.LENGTH_SHORT).show()
@@ -94,11 +98,11 @@ class MainActivity : AppCompatActivity() {
 
 
     private suspend fun hasRecords(): Boolean {
-        return withContext(CommonPool) {
+        return withContext(Dispatchers.Default) {
             val count = individualRepository.findCount()
 
             if (count <= 0) {
-                withContext(UI) {
+                withContext(Dispatchers.Main) {
                     Toast.makeText(this@MainActivity, "No Records exist", Toast.LENGTH_SHORT).show()
                 }
                 return@withContext false
@@ -109,7 +113,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun testDatabaseRepository() = launch {
-        individualRepository.validateDatabases()
+        withContext(Dispatchers.Default) {
+            individualRepository.validateDatabases()
+        }
     }
 
     private fun testRoomLiveData() = launch {
@@ -139,7 +145,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun testMergeDatabase() = launch {
-        individualRepository.mergeDatabases()
+        withContext(Dispatchers.Default) {
+            individualRepository.mergeDatabases()
+        }
     }
 
     private fun testValidateDatabase() {

@@ -1,6 +1,6 @@
 package org.dbtools.android.room.jdbc
 
-import android.arch.persistence.db.SupportSQLiteProgram
+import androidx.sqlite.db.SupportSQLiteProgram
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.Types

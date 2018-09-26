@@ -1,6 +1,6 @@
 package org.dbtools.android.room.util
 
-import android.arch.persistence.db.SupportSQLiteDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import org.dbtools.android.room.ext.attachDatabase
 import org.dbtools.android.room.ext.detachDatabase
 import org.dbtools.android.room.ext.findTableNames

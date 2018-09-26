@@ -2,9 +2,9 @@
 
 package org.dbtools.android.room
 
-import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.InvalidationTracker
-import android.arch.persistence.room.RoomDatabase
+import androidx.lifecycle.LiveData
+import androidx.room.InvalidationTracker
+import androidx.room.RoomDatabase
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
