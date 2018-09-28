@@ -2,8 +2,9 @@
 
 package org.dbtools.android.room.ext
 
-import androidx.sqlite.db.SupportSQLiteDatabase
+import android.util.Pair
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import org.dbtools.android.room.util.DatabaseUtil
 import org.dbtools.android.room.util.MergeDatabaseUtil
 import timber.log.Timber
@@ -27,8 +28,8 @@ fun RoomDatabase.validDatabaseFile(databaseNameTag: String = "", tableDataCountC
  * @param toDatabaseName Alias name for attached database
  */
 fun RoomDatabase.attachDatabase(toDatabasePath: String, toDatabaseName: String) {
-    val sql = "ATTACH DATABASE '$toDatabasePath' AS $toDatabaseName"
-    query(sql, null)
+    val database = openHelper.readableDatabase
+    database.attachDatabase(toDatabasePath, toDatabaseName)
 }
 
 /**
@@ -36,8 +37,35 @@ fun RoomDatabase.attachDatabase(toDatabasePath: String, toDatabaseName: String) 
  * @param databaseName Alias name for attached database
  */
 fun RoomDatabase.detachDatabase(databaseName: String) {
-    val sql = "DETACH DATABASE '$databaseName'"
-    query(sql, null)
+    val database = openHelper.readableDatabase
+    database.detachDatabase(databaseName)
+}
+
+/**
+ * List each database attached to the current database connection.
+ *      first column (name) - "main" for the main database file, "temp" for the database file used to store TEMP objects, or the name of the ATTACHed database for other database files.
+ *      second column (file) - name of the database file itself, or an empty string if the database is not associated with a file.
+ *
+ * @return ArrayList of pairs of (database name, database file path) or null if the database is not open.
+ */
+fun RoomDatabase.getAttachedDatabases(): MutableList<Pair<String, String>>? {
+    return openHelper.readableDatabase.attachedDbs
+}
+
+private fun RoomDatabase.getSqliteVersion(): String {
+    val cursor = query("select sqlite_version()", null)
+    var version = ""
+    cursor.use {
+        if (it.moveToFirst()) {
+            version = it.getString(0)
+        }
+    }
+
+    return version
+}
+
+private fun RoomDatabase.getVersion(): Int {
+    return openHelper.readableDatabase.version
 }
 
 /**
@@ -47,14 +75,33 @@ fun RoomDatabase.findTableNames(): List<String> {
     val tableNamesCursor = query("SELECT tbl_name FROM sqlite_master where type='table'", null)
 
     val tableNames = ArrayList<String>(tableNamesCursor.count)
-    if (tableNamesCursor.moveToFirst()) {
-        do {
-            tableNames.add(tableNamesCursor.getString(0))
-        } while (tableNamesCursor.moveToNext())
+
+    tableNamesCursor.use {
+        if (it.moveToFirst()) {
+            do {
+                tableNames.add(it.getString(0))
+            } while (it.moveToNext())
+        }
     }
-    tableNamesCursor.close()
 
     return tableNames
+}
+
+/**
+ * Find count of rows for tableName
+ * @param tableName Table name
+ * @return row count or 0 if not found
+ */
+fun RoomDatabase.findTableRowCount(tableName: String): Long {
+    val cursor = query("SELECT count(1) FROM $tableName", null)
+    var rowCount = 0L
+    cursor.use {
+        if (it.moveToFirst()) {
+            rowCount = it.getLong(0)
+        }
+    }
+
+    return rowCount
 }
 
 /**
@@ -87,12 +134,13 @@ fun RoomDatabase.tablesExists(tableNames: List<String>, databaseName: String = "
     }
 
     var tableCount = 0
-    if (tableNamesCursor.moveToFirst()) {
-        do {
-            tableCount = tableNamesCursor.getInt(0)
-        } while (tableNamesCursor.moveToNext())
+    tableNamesCursor.use {
+        if (it.moveToFirst()) {
+            do {
+                tableCount = it.getInt(0)
+            } while (it.moveToNext())
+        }
     }
-    tableNamesCursor.close()
 
     return tableCount == tableNames.size
 }

@@ -1,7 +1,13 @@
 Change Log
 ==========
 
-Version 3.0.0 *(2018-09)*
+Version 3.1.0 *(2018-09)*
+-------------------------
+* Fixed RoomDatabaseExt attach / detach
+* Added RoomDatabaseExt.getAttachedDatabases()  getSqliteVersion(), getVersion(), findTableRowCount(tableName)
+* Added SupportSQLiteDatabaseExt.getAttachedDatabases()
+
+Version 3.1.0 *(2018-09)*
 -------------------------
 * AndroidX / SDK 28
 

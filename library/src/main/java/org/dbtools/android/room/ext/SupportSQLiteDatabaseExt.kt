@@ -2,6 +2,7 @@
 
 package org.dbtools.android.room.ext
 
+import android.util.Pair
 import androidx.sqlite.db.SupportSQLiteDatabase
 import org.dbtools.android.room.util.DatabaseUtil
 import org.dbtools.android.room.util.MergeDatabaseUtil
@@ -40,6 +41,16 @@ fun SupportSQLiteDatabase.detachDatabase(databaseName: String) {
 }
 
 /**
+ * List each database attached to the current database connection.
+ *      first column (name) - "main" for the main database file, "temp" for the database file used to store TEMP objects, or the name of the ATTACHed database for other database files.
+ *      second column (file) - name of the database file itself, or an empty string if the database is not associated with a file.
+ * @return ArrayList of pairs of (database name, database file path) or null if the database is not open.
+ */
+fun SupportSQLiteDatabase.getAttachedDatabases(): MutableList<Pair<String, String>>? {
+    return attachedDbs
+}
+
+/**
  * Find names of tables in this database
  * @param databaseName Alias name for database (such as an attached database) (optional)
  */
@@ -51,12 +62,13 @@ fun SupportSQLiteDatabase.findTableNames(databaseName: String = ""): List<String
     }
 
     val tableNames = ArrayList<String>(tableNamesCursor.count)
-    if (tableNamesCursor.moveToFirst()) {
-        do {
-            tableNames.add(tableNamesCursor.getString(0))
-        } while (tableNamesCursor.moveToNext())
+    tableNamesCursor.use {
+        if (it.moveToFirst()) {
+            do {
+                tableNames.add(it.getString(0))
+            } while (it.moveToNext())
+        }
     }
-    tableNamesCursor.close()
 
     return tableNames
 }
@@ -90,12 +102,13 @@ fun SupportSQLiteDatabase.tablesExists(tableNames: List<String>, databaseName: S
     }
 
     var tableCount = 0
-    if (tableNamesCursor.moveToFirst()) {
-        do {
-            tableCount = tableNamesCursor.getInt(0)
-        } while (tableNamesCursor.moveToNext())
+    tableNamesCursor.use {
+        if (it.moveToFirst()) {
+            do {
+                tableCount = it.getInt(0)
+            } while (it.moveToNext())
+        }
     }
-    tableNamesCursor.close()
 
     return tableCount == tableNames.size
 }
