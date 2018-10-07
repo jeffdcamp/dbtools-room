@@ -31,12 +31,12 @@ ext {
     minSdkVersion = 16
     targetSdkVersion = 28
 
-    xerialSqliteJdbcVersion = '3.23.1'
+    xerialSqliteJdbcVersion = '3.25.2'
     archLifecycleVersion = '2.0.0'
-    archRoomVersion = '2.0.0-rc01'
-    coroutinesVersion = '0.26.1'
+    archRoomVersion = '2.0.0'
+    coroutinesVersion = '0.27.0'
     timberVersion = '4.7.1'
 
     junitVersion = '4.12'
-    mockitoVersion = '2.22.0'
+    mockitoVersion = '2.23.0'
 }
