@@ -40,11 +40,39 @@ import java.io.File
 abstract class CloseableDatabaseWrapperRepository<out T: RoomDatabase>(protected val application: Application) {
     private var databaseList = HashMap<String, T>()
 
+    /**
+     * Get database from internal repository.
+     *
+     * @param key of the database
+     * @return RoomDatabase or IllegalStateException if the database does not exist
+     */
     @Synchronized
     open fun getDatabase(key: String) = databaseList[key] ?: throw IllegalStateException("Database for key [$key] does not exist.  Be sure to registerDatabase(key, filename) before calling getDatabase(key)")
 
+    /**
+     * Get database from internal repository.
+     *
+     * @param key of the database
+     * @return RoomDatabase or null if the database does not exist
+     */
+    @Synchronized
+    open fun getDatabaseOrNull(key: String): T? = databaseList[key]
+
+    /**
+     * Identify if the database has been added to the internal repository
+     *
+     * @param key of the database
+     * @return true if the database has already been added
+     */
     open fun isDatabaseRegistered(key: String) = databaseList.containsKey(key)
 
+    /**
+     * Add database to internal repository
+     *
+     * @param key of the database
+     * @param filename of the database
+     * @return true if the database was added
+     */
     @Synchronized
     open fun registerDatabase(key: String, filename: String): Boolean {
         if (isDatabaseRegistered(key)) {
