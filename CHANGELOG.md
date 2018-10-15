@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 3.3.0 *(2018-10)*
+-------------------------
+* Removed CloseableDatabaseWrapperRepository.getDatabaseOrNull()
+* Changed CloseableDatabaseWrapperRepository.getDatabase() to return null instead of throwing an exception
+
 Version 3.2.0 *(2018-10)*
 -------------------------
 * Added CloseableDatabaseWrapperRepository.getDatabaseOrNull()

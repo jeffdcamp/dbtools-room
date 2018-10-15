@@ -79,7 +79,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
     // Code
-    implementation 'com.jakewharton.threetenabp:threetenabp:1.1.0'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.1.1'
     implementation "com.jakewharton.timber:timber:$timberVersion"
 
     // Custom SQLite database
