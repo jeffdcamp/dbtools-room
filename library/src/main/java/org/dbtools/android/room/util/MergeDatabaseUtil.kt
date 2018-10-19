@@ -36,6 +36,8 @@ object MergeDatabaseUtil {
      *         // merge database
      *         mDatabase.mergeDatabase(fromDatabaseFile, includeTables, excludeTables)
      *     }
+     *
+     * @return true if merge was successful
      */
     fun mergeDatabase(
         database: SupportSQLiteDatabase,
@@ -58,54 +60,65 @@ object MergeDatabaseUtil {
             return false
         }
 
-        // Attach fromDatabase with primary
-        database.attachDatabase(fromDatabaseFile.absolutePath, mergeDbName)
-
-        // Get a list of tables to merge
-        val tableNames = database.findTableNames()
-        val otherTableNames = database.findTableNames(mergeDbName)
-
-        // only include tables that are in "includeTables"... if empty use ALL tableNames
-        var tableNamesToMerge = if (includeTables.isNotEmpty()) {
-            tableNames.filter { includeTables.contains(it) }
-        } else {
-            tableNames
-        }
-
-        if (includeTables.isNotEmpty() && tableNamesToMerge.size != includeTables.size) {
-            Timber.e("WARNING one or more of the tables in the include list was not found in this database")
-        }
-
-        // remove excluded tableNames
-        tableNamesToMerge = tableNamesToMerge.filter { !excludeTables.contains(it) }
-
-        // remove system tableNames
-        tableNamesToMerge = tableNamesToMerge.filter { !SYSTEM_TABLES.contains(it) }
-
-        // Merge table content
-        database.beginTransaction()
-
         try {
-            tableNamesToMerge.forEach { tableName ->
-                if (otherTableNames.contains(tableName)) {
-                    val sourceTableName = "$mergeDbName.$tableName"
+            // Attach fromDatabase with primary
+            database.attachDatabase(fromDatabaseFile.absolutePath, mergeDbName)
 
-                    Timber.i("Merging [$sourceTableName] INTO [$tableName]")
-                    mergeBlock(database, sourceTableName, tableName) // default: database.execSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
-                } else {
-                    Timber.w("WARNING: Cannot merge table [$tableName]... it does not exist in fromDatabaseFile... skipping...")
-                }
+            // Get a list of tables to merge
+            val tableNames = database.findTableNames()
+            val otherTableNames = database.findTableNames(mergeDbName)
+
+            // only include tables that are in "includeTables"... if empty use ALL tableNames
+            var tableNamesToMerge = if (includeTables.isNotEmpty()) {
+                tableNames.filter { includeTables.contains(it) }
+            } else {
+                tableNames
             }
 
-            database.setTransactionSuccessful()
+            if (includeTables.isNotEmpty() && tableNamesToMerge.size != includeTables.size) {
+                Timber.e("WARNING one or more of the tables in the include list was not found in this database")
+            }
+
+            // remove excluded tableNames
+            tableNamesToMerge = tableNamesToMerge.filter { !excludeTables.contains(it) }
+
+            // remove system tableNames
+            tableNamesToMerge = tableNamesToMerge.filter { !SYSTEM_TABLES.contains(it) }
+
+            // Merge table content
+            database.beginTransaction()
+
+            try {
+                tableNamesToMerge.forEach { tableName ->
+                    if (otherTableNames.contains(tableName)) {
+                        val sourceTableName = "$mergeDbName.$tableName"
+
+                        Timber.i("Merging [$sourceTableName] INTO [$tableName]")
+                        mergeBlock(database, sourceTableName, tableName) // default: database.execSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
+                    } else {
+                        Timber.w("WARNING: Cannot merge table [$tableName]... it does not exist in fromDatabaseFile... skipping...")
+                    }
+                }
+
+                database.setTransactionSuccessful()
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to merge database tables")
+                return false
+            } finally {
+                database.endTransaction()
+            }
         } catch (e: Exception) {
             Timber.e(e, "Failed to merge database tables")
+            return false
         } finally {
-            database.endTransaction()
+            try {
+                // Detach databases
+                database.detachDatabase(mergeDbName)
+            } catch (e: Exception) {
+                Timber.e(e, "Failed detach database (merge database tables)... may have never been attached")
+            }
         }
 
-        // Detach databases
-        database.detachDatabase(mergeDbName)
 
         return true
     }

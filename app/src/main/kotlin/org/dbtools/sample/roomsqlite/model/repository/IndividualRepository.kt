@@ -2,6 +2,9 @@ package org.dbtools.sample.roomsqlite.model.repository
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
 import org.dbtools.android.room.ext.validDatabaseFile
 import org.dbtools.android.room.toLiveData
@@ -18,7 +21,7 @@ class IndividualRepository(
 
     private val mainDatabaseWrapperRepository by lazy { MainDatabaseWrapperRepository(application) }
     private fun mainDatabase(key: String) = mainDatabaseWrapperRepository.getDatabase(key)
-    private fun individualDao(key: String) = mainDatabase(key).individualDao
+    private fun individualDao(key: String) = mainDatabase(key)?.individualDao
 
     fun init() {
         mainDatabaseWrapperRepository.registerDatabase(DB_A, DB_A_PATH)
@@ -26,64 +29,64 @@ class IndividualRepository(
     }
 
     fun addIndividual(firstName: String, lastName: String, key: String = DB_A) {
-        individualDao(key).insert(createIndividual(firstName, lastName))
+        individualDao(key)?.insert(createIndividual(firstName, lastName))
     }
 
-    fun getIndividualCount(key: String = DB_A) = individualDao(key).findCount()
+    fun getIndividualCount(key: String = DB_A) = individualDao(key)?.findCount() ?: 0
 
 
     fun getLastIndividualNumber(key: String = DB_A): Int {
         getLastIndividualId(key)?.let {
-            return individualDao(key).findNumberById(it) ?: -1
+            return individualDao(key)?.findNumberById(it) ?: -1
         } ?: return -1
     }
 
     fun updateLastIndividualNumber(newNumber: Int, key: String = DB_A) {
         getLastIndividualId(key)?.let {
-            individualDao(key).updateNumber(it, newNumber)
+            individualDao(key)?.updateNumber(it, newNumber)
         }
     }
 
     fun findNumberByIdLiveData(key: String = DB_A): LiveData<Long> {
-        return mainDatabaseWrapperRepository.getDatabase(key).toLiveData("individual") {
+        return mainDatabaseWrapperRepository.getDatabase(key)?.toLiveData("individual") {
             getLastIndividualId(key) ?: 0
-        }
+        } ?: MutableLiveData<Long>()
     }
 
-    fun getLastIndividualId(key: String = DB_A) = individualDao(key).findLastIndividualId()
+    fun getLastIndividualId(key: String = DB_A) = individualDao(key)?.findLastIndividualId()
 
     fun getLastIndividual(key: String = DB_A): Individual? {
         getLastIndividualId(key)?.let {
-            return individualDao(key).findById(it)
+            return individualDao(key)?.findById(it)
         } ?: return null
     }
 
     fun getLastIndividualFirstName(key: String = DB_A): String {
         getLastIndividualId(key)?.let {
-            return individualDao(key).findFirstNameById(it) ?: ""
+            return individualDao(key)?.findFirstNameById(it) ?: ""
         } ?: return ""
     }
 
     fun deleteLastIndividual(key: String = DB_A): Int {
         getLastIndividualId(key)?.let {
-            return individualDao(key).deleteById(it)
+            return individualDao(key)?.deleteById(it) ?: 0
         } ?: return 0
     }
 
     fun updateLastIndividualName(key: String = DB_A): Boolean {
         getLastIndividual(key)?.let { individual ->
             individual.firstName = "Jeffery"
-            individualDao(key).update(individual)
+            individualDao(key)?.update(individual)
             return true
         } ?: return false
     }
 
-    fun showAllIndividuals(key: String = DB_A) = launch {
+    fun showAllIndividuals(key: String = DB_A) = GlobalScope.launch(Dispatchers.Default) {
         showMainDatabaseInfo(key)
     }
 
-    fun deleteAllIndividuals(key: String = DB_A) = launch {
-        individualDao(key).deleteAll()
+    fun deleteAllIndividuals(key: String = DB_A) = GlobalScope.launch(Dispatchers.Default) {
+        individualDao(key)?.deleteAll()
     }
 
     private fun createIndividual(firstName: String, lastName: String, birth: LocalDate = LocalDate.of(1970, 2, 2), phone: String = "555-555-1234"): Individual {
@@ -110,7 +113,7 @@ class IndividualRepository(
         val mainDatabaseA = mainDatabaseWrapperRepository.getDatabase(DB_A)
         val mainDatabaseB = mainDatabaseWrapperRepository.getDatabase(DB_B)
 
-        if (!mainDatabaseA.validDatabaseFile(DB_A)) {
+        if (mainDatabaseA?.validDatabaseFile(DB_A) == false) {
             Timber.e("Database validation failed.... exiting")
             return
         }
@@ -138,8 +141,8 @@ class IndividualRepository(
         val mergeDatabase2 = DatabaseUtil.copyDatabaseFromAssets(application, "merge2", true)
 
         val mainDatabase = mainDatabaseWrapperRepository.getDatabase(key)
-        mainDatabase.mergeDataFromOtherDatabase(mergeDatabase1)
-        mainDatabase.mergeDataFromOtherDatabase(mergeDatabase2)
+        mainDatabase?.mergeDataFromOtherDatabase(mergeDatabase1)
+        mainDatabase?.mergeDataFromOtherDatabase(mergeDatabase2)
 
         showMainDatabaseInfo(key)
     }
@@ -152,12 +155,13 @@ class IndividualRepository(
 
     private fun showMainDatabaseInfo(key: String = DB_A) {
         Timber.i("===== Database [$key] info: count[${getIndividualCount(key)}] =====")
-        individualDao(key).findAll().forEach {individual ->
+        val allIndividuals = individualDao(key)?.findAll() ?: emptyList()
+        allIndividuals.forEach {individual ->
             Timber.i("- ${individual.firstName} ${individual.lastName}")
         }
     }
 
-    fun findCount(key: String = DB_A) = individualDao(key).findCount()
+    fun findCount(key: String = DB_A) = individualDao(key)?.findCount() ?: 0
 
     companion object {
         private const val DB_A = "a"

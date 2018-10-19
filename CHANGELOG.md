@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 3.3.1 *(2018-10)*
+-------------------------
+* Prevent crash when calling mergeDatabase
+
 Version 3.3.0 *(2018-10)*
 -------------------------
 * Removed CloseableDatabaseWrapperRepository.getDatabaseOrNull()
