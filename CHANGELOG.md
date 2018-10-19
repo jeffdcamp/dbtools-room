@@ -1,9 +1,10 @@
 Change Log
 ==========
 
-Version 3.3.1 *(2018-10)*
+Version 3.3.2 *(2018-10)*
 -------------------------
 * Prevent crash when calling mergeDatabase
+* Reduced logging on registerDatabase(...)
 
 Version 3.3.0 *(2018-10)*
 -------------------------

@@ -134,7 +134,7 @@ abstract class CloseableDatabaseWrapperRepository<out T: RoomDatabase>(protected
     @Synchronized
     open fun registerDatabase(key: String, filename: String): Boolean {
         if (isDatabaseRegistered(key, false)) {
-            Timber.e("Database already registered for key [$key]")
+            Timber.d("Database already registered for key [$key]")
             return false
         }
 
