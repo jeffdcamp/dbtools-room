@@ -134,14 +134,15 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         })
 
         // CHANGE NUMBER
-        delay(1000)
-        val lastNumber = individualRepository.getLastIndividualNumber()
-        individualRepository.updateLastIndividualNumber(1)
+        withContext(Dispatchers.Default) {
+            delay(1000)
+            val lastNumber = individualRepository.getLastIndividualNumber()
+            individualRepository.updateLastIndividualNumber(1)
 
-
-        // RESTORE
-        delay(1000)
-        individualRepository.updateLastIndividualNumber(lastNumber)
+            // RESTORE
+            delay(1000)
+            individualRepository.updateLastIndividualNumber(lastNumber)
+        }
     }
 
     private fun testMergeDatabase() = launch {
