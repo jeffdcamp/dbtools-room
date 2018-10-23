@@ -5,7 +5,7 @@ package org.dbtools.android.room
 import androidx.lifecycle.LiveData
 import androidx.room.InvalidationTracker
 import androidx.room.RoomDatabase
-import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import java.lang.ref.WeakReference
@@ -51,7 +51,7 @@ object RoomLiveData {
      *
      * @return LiveData<T>
      */
-    fun <T> toLiveData(coroutineContext: CoroutineContext = CommonPool, block: suspend () -> T): LiveData<T> {
+    fun <T> toLiveData(coroutineContext: CoroutineContext = Dispatchers.Default, block: suspend () -> T): LiveData<T> {
         return toLiveDataInternal(null, coroutineContext, block)
     }
 
@@ -64,7 +64,7 @@ object RoomLiveData {
      *
      * @return LiveData<T>
      */
-    fun <T> toLiveData(tableChangeReferences: List<TableChangeReference>, coroutineContext: CoroutineContext = CommonPool, block: suspend () -> T): LiveData<T> {
+    fun <T> toLiveData(tableChangeReferences: List<TableChangeReference>, coroutineContext: CoroutineContext = Dispatchers.Default, block: suspend () -> T): LiveData<T> {
         return toLiveDataInternal(tableChangeReferences, coroutineContext, block)
     }
 
@@ -188,7 +188,7 @@ fun RoomDatabase.tableChangeReferences(vararg tableNames: String): TableChangeRe
     return TableChangeReference(this, tableNames)
 }
 
-fun <T> RoomDatabase.toLiveData(vararg tableNames: String, coroutineContext: CoroutineContext = CommonPool, block: suspend () -> T): LiveData<T> {
+fun <T> RoomDatabase.toLiveData(vararg tableNames: String, coroutineContext: CoroutineContext = Dispatchers.Default, block: suspend () -> T): LiveData<T> {
     return RoomLiveData.toLiveData(listOf(TableChangeReference(this, tableNames)), coroutineContext) { block() }
 }
 
