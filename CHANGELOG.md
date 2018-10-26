@@ -1,10 +1,9 @@
 Change Log
 ==========
 
-Version 3.3.2 *(2018-10)*
+Version 3.3.4 *(2018-10)*
 -------------------------
-* Prevent crash when calling mergeDatabase
-* Reduced logging on registerDatabase(...)
+* CloseableDatabaseWrapperRepository.closeDatabase() returns true/false if a database is removed
 
 Version 3.3.0 *(2018-10)*
 -------------------------

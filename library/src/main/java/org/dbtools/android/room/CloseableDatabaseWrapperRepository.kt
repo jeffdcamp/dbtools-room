@@ -149,9 +149,11 @@ abstract class CloseableDatabaseWrapperRepository<out T: RoomDatabase>(protected
      * Close the database and remove the reference from the WrapperRepository
      *
      * @param deleteFile Delete the database file and any associated files to this database (default: false)
+     *
+     * @return true if the entry existed and was removed
      */
     @Synchronized
-    open fun closeDatabase(key: String, deleteFile: Boolean = false) {
+    open fun closeDatabase(key: String, deleteFile: Boolean = false): Boolean {
         val database = databaseList[key]
         database?.let {
             val path = it.openHelper.writableDatabase.path
@@ -160,7 +162,8 @@ abstract class CloseableDatabaseWrapperRepository<out T: RoomDatabase>(protected
                 DatabaseUtil.deleteDatabaseFiles(File(path))
             }
         }
-        databaseList.remove(key)
+
+        return databaseList.remove(key) != null
     }
 
     /**

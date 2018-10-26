@@ -11,13 +11,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'maven'
 
-// todo JetBrains has indicated that coroutines are stable, but the kotlinx-coroutines designs may change ... remove this when kotlinx-coroutines are no longer experimental
-kotlin {
-    experimental {
-        coroutines 'enable' // temp disable warnings
-    }
-}
-
 android {
     compileSdkVersion project.compileSdkVersion
 
