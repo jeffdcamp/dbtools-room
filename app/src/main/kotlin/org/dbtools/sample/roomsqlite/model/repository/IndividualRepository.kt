@@ -3,9 +3,9 @@ package org.dbtools.sample.roomsqlite.model.repository
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.dbtools.android.room.ext.validDatabaseFile
 import org.dbtools.android.room.toLiveData
 import org.dbtools.android.room.util.DatabaseUtil
