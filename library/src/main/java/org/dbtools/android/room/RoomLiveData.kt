@@ -5,12 +5,13 @@ package org.dbtools.android.room
 import androidx.lifecycle.LiveData
 import androidx.room.InvalidationTracker
 import androidx.room.RoomDatabase
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.coroutines.CoroutineContext
 
 /**
  * This class creates a LiveData that will invalidate/update when there are changes to specific tables of a database.
@@ -70,14 +71,17 @@ object RoomLiveData {
 
     private fun <T> toLiveDataInternal(
         tableChangeReferences: List<TableChangeReference>?,
-        coroutineContext: CoroutineContext,
+        coroutineContext: CoroutineContext = Dispatchers.Default,
         block: suspend () -> T
     ): LiveData<T> {
-        return object : LiveData<T>() {
+        return object : LiveData<T>(), CoroutineScope {
             private val computing = AtomicBoolean(false)
             private val invalid = AtomicBoolean(true)
             private lateinit var job: Job
             private var observerList = mutableListOf<Pair<TableChangeReference, InvalidationTracker.Observer>>()
+
+            override val coroutineContext: CoroutineContext
+                get() = coroutineContext + job
 
             private fun addObserver(tableChangeReference: TableChangeReference?) {
                 tableChangeReference ?: return
@@ -123,7 +127,7 @@ object RoomLiveData {
                     return
                 }
 
-                launch(coroutineContext, parent = job) {
+                launch(coroutineContext) {
                     var computed: Boolean
                     do {
                         computed = false

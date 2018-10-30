@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 4.0.0 *(2018-10)*
+-------------------------
+* Kotlin 1.3.0
+* Coroutines 1.0.0
+
 Version 3.3.4 *(2018-10)*
 -------------------------
 * CloseableDatabaseWrapperRepository.closeDatabase() returns true/false if a database is removed
