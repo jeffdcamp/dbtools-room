@@ -98,6 +98,8 @@ class MigrationUnitTestHelper(
                 RoomDatabase.JournalMode.TRUNCATE,
                 ArchTaskExecutor.getIOThreadExecutor(),
                 true,
+                true,
+                true,
                 emptySet()
         )
         val roomOpenHelper = RoomOpenHelper(
@@ -169,7 +171,9 @@ class MigrationUnitTestHelper(
                 RoomDatabase.JournalMode.TRUNCATE,
                 ArchTaskExecutor.getIOThreadExecutor(),
                 true,
-                emptySet()
+                true,
+                true,
+                emptySet<Int>()
         )
         val roomOpenHelper = RoomOpenHelper(
                 configuration,

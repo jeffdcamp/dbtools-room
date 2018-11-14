@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import org.dbtools.android.room.DatabaseViewQuery
 import timber.log.Timber
 import java.io.File
 import java.io.FileFilter
@@ -208,5 +209,30 @@ object DatabaseUtil {
         }
 
         return newDatabaseFile
+    }
+
+    fun dropView(database: SupportSQLiteDatabase, viewName: String) {
+        database.execSQL("DROP VIEW IF EXISTS $viewName")
+    }
+
+    fun dropAllViews(database: SupportSQLiteDatabase, views: List<DatabaseViewQuery>) {
+        views.forEach { dropView(database, it.viewName) }
+    }
+
+    fun createView(database: SupportSQLiteDatabase, viewName: String, viewQuery: String) {
+        database.execSQL("CREATE VIEW `$viewName` AS $viewQuery")
+    }
+
+    fun createAllViews(database: SupportSQLiteDatabase, views: List<DatabaseViewQuery>) {
+        views.forEach { createView(database, it.viewName, it.viewQuery) }
+    }
+
+    fun recreateView(database: SupportSQLiteDatabase, viewName: String, viewQuery: String) {
+        dropView(database, viewName)
+        createView(database, viewName, viewQuery)
+    }
+
+    fun recreateAllViews(database: SupportSQLiteDatabase, views: List<DatabaseViewQuery>) {
+        views.forEach { recreateView(database, it.viewName, it.viewQuery) }
     }
 }

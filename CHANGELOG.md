@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+Version 4.1.0 *(2018-11)*
+-------------------------
+* Initial support for Room Views (added DatabaseUtil / CloseableDatabaseWrapper / CloseableDatabaseWrapperRepository functions to create/drop/update views)
+* Room 2.1.0-alpha02
+* Kotlin 1.3.10
+* Coroutines 1.0.1
+
 Version 4.0.0 *(2018-10)*
 -------------------------
 * Kotlin 1.3.0

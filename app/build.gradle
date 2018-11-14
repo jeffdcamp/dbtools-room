@@ -65,7 +65,7 @@ dependencies {
     implementation 'androidx.multidex:multidex-instrumentation:2.0.0'
 
     // Android
-    implementation "androidx.appcompat:appcompat:1.0.0"
+    implementation "androidx.appcompat:appcompat:1.0.2"
 
     // Architecture
     implementation "androidx.lifecycle:lifecycle-runtime:$archLifecycleVersion"
@@ -99,7 +99,7 @@ dependencies {
     })
 
     kaptTest "androidx.room:room-compiler:$archRoomVersion"
-    kaptTest "androidx.lifecycle:lifecycle-compiler:$archRoomVersion"
+    kaptTest "androidx.lifecycle:lifecycle-compiler:$archLifecycleVersion"
 
 }
 

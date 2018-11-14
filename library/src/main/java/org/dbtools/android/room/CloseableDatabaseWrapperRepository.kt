@@ -2,6 +2,7 @@ package org.dbtools.android.room
 
 import android.app.Application
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import org.dbtools.android.room.util.DatabaseUtil
 import timber.log.Timber
 import java.io.File
@@ -175,5 +176,29 @@ abstract class CloseableDatabaseWrapperRepository<out T: RoomDatabase>(protected
         val keysCopy = ArrayList<String>()
         keysCopy.addAll(databaseList.keys)
         keysCopy.forEach { key -> closeDatabase(key, deleteFiles) }
+    }
+
+    fun dropView(database: SupportSQLiteDatabase, viewName: String) {
+        DatabaseUtil.dropView(database, viewName)
+    }
+
+    fun dropAllViews(database: SupportSQLiteDatabase, views: List<DatabaseViewQuery>) {
+        DatabaseUtil.dropAllViews(database, views)
+    }
+
+    fun createView(database: SupportSQLiteDatabase, viewName: String, viewQuery: String) {
+        DatabaseUtil.createView(database, viewName, viewQuery)
+    }
+
+    fun createAllViews(database: SupportSQLiteDatabase, views: List<DatabaseViewQuery>) {
+        DatabaseUtil.createAllViews(database, views)
+    }
+
+    fun recreateView(database: SupportSQLiteDatabase, viewName: String, viewQuery: String) {
+        DatabaseUtil.recreateView(database, viewName, viewQuery)
+    }
+
+    fun recreateAllViews(database: SupportSQLiteDatabase, views: List<DatabaseViewQuery>) {
+        DatabaseUtil.recreateAllViews(database, views)
     }
 }
