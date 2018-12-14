@@ -186,3 +186,50 @@ fun SupportSQLiteDatabase.applySqlFile(sqlFile: File): Boolean {
     }
     return true
 }
+
+/**
+ * Check to see if a column in a database exists, if it does not... alter query will be run
+ * @param tableName table for columnName
+ * @param columnName column to from tableName to be checked
+ * @param alterSql SQL to be run if the column does not exits. Example: alterTableIfColumnDoesNotExist(database, "individual", "middle_name", "ALTER TABLE individual ADD `middle_name` TEXT DEFAULT '' NOT NULL")
+ */
+fun SupportSQLiteDatabase.alterTableIfColumnDoesNotExist(tableName: String, columnName: String, alterSql: String) {
+    if (!this.columnExists(tableName, columnName)) {
+        Timber.i("Adding column [$columnName] to table [$tableName]")
+        execSQL(alterSql)
+        resetRoom()
+    }
+}
+
+/**
+ * Check to see if a column in a database exists
+ * @param tableName table for columnName
+ * @param columnName column to from tableName to be checked
+ * @return true if the column exists otherwise false
+ */
+fun SupportSQLiteDatabase.columnExists(tableName: String, columnName: String): Boolean {
+    var columnExists = false
+
+    this.query("PRAGMA table_info($tableName)").use { cursor ->
+        cursor.moveToFirst()
+        do {
+            val currentColumn = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+            if (currentColumn == columnName) {
+                columnExists = true
+            }
+        } while (!columnExists && cursor.moveToNext())
+
+    }
+
+    return columnExists
+}
+
+/**
+ * If we make a manual change, then we need to reset room so that it does not fail the validation
+ *
+ * @param newVersion version to be set on database (default to 0)
+ */
+fun SupportSQLiteDatabase.resetRoom(newVersion: Int = 0) {
+    execSQL("DROP TABLE IF EXISTS room_master_table")
+    version = newVersion
+}

@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+Version 4.2.0 *(2018-12)*
+-------------------------
+* Added DatabaseUtil.alterTableIfColumnDoesNotExist(...), columnExists(...), resetRoom(...)
+* Added SQLiteDatabase and SqliteOrgDatabaseUtil .alterTableIfColumnDoesNotExist(...), columnExists(...), resetRoom(...)
+* Room 2.1.0-alpha03
+* Kotlin 1.3.11
+
 Version 4.1.0 *(2018-11)*
 -------------------------
 * Initial support for Room Views (added DatabaseUtil / CloseableDatabaseWrapper / CloseableDatabaseWrapperRepository functions to create/drop/update views)

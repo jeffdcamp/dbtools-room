@@ -135,6 +135,56 @@ object DatabaseUtil {
     }
 
     /**
+     * Check to see if a column in a database exists, if it does not... alter query will be run
+     * @param database Sqlite database
+     * @param tableName table for columnName
+     * @param columnName column to from tableName to be checked
+     * @param alterSql SQL to be run if the column does not exits. Example: alterTableIfColumnDoesNotExist(database, "individual", "middle_name", "ALTER TABLE individual ADD `middle_name` TEXT DEFAULT '' NOT NULL")
+     */
+    fun alterTableIfColumnDoesNotExist(database: SQLiteDatabase, tableName: String, columnName: String, alterSql: String) {
+        if (!columnExists(database, tableName, columnName)) {
+            Timber.i("Adding column [$columnName] to table [$tableName]")
+            database.execSQL(alterSql)
+            resetRoom(database)
+        }
+    }
+
+    /**
+     * Check to see if a column in a database exists
+     * @param database Sqlite database
+     * @param tableName table for columnName
+     * @param columnName column to from tableName to be checked
+     * @return true if the column exists otherwise false
+     */
+    fun columnExists(database: SQLiteDatabase, tableName: String, columnName: String): Boolean {
+        var columnExists = false
+
+        database.rawQuery("PRAGMA table_info($tableName)", null).use { cursor ->
+            cursor.moveToFirst()
+            do {
+                val currentColumn = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+                if (currentColumn == columnName) {
+                    columnExists = true
+                }
+            } while (!columnExists && cursor.moveToNext())
+
+        }
+
+        return columnExists
+    }
+
+    /**
+     * If we make a manual change, then we need to reset room so that it does not fail the validation
+     *
+     * @param database SQLite Database
+     * @param newVersion version to be set on database (default to 0)
+     */
+    fun resetRoom(database: SQLiteDatabase, newVersion: Int = 0) {
+        database.rawQuery("DROP TABLE IF EXISTS room_master_table", null)
+        database.version = newVersion
+    }
+
+    /**
      * Deletes a database including its journal file and other auxiliary files
      * that may have been created by the database engine.
      *

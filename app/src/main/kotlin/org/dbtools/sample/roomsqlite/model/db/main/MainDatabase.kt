@@ -28,13 +28,9 @@ abstract class MainDatabase : RoomDatabase() {
     abstract val individualDao: IndividualDao
 
     fun mergeDataFromOtherDatabase(fromDatabaseFile: File, includeTables: List<String> = emptyList(), excludeTables: List<String> = emptyList()) {
-        // make sure database is open
-        if (!isOpen) {
-            openHelper.writableDatabase
-        }
-
         // merge database
-        mDatabase.mergeDatabase(fromDatabaseFile, includeTables, excludeTables)
+        val database = openHelper.writableDatabase
+        database.mergeDatabase(fromDatabaseFile, includeTables, excludeTables)
     }
 
     companion object {

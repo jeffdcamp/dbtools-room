@@ -8,11 +8,11 @@ import org.dbtools.android.room.jdbc.JdbcSQLiteOpenHelperFactory
 import org.dbtools.sample.roomsqlite.model.db.main.MainDatabase
 import org.dbtools.sample.roomsqlite.model.db.main.individual.Individual
 import org.dbtools.sample.roomsqlite.model.db.main.individual.IndividualDao
-import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import java.io.File
@@ -26,7 +26,7 @@ class IndividualDaoTest {
     private lateinit var mainDatabase: MainDatabase
     private lateinit var individualDao: IndividualDao
 
-    @Before
+    @BeforeEach
     fun setup() {
         MockitoAnnotations.initMocks(this)
 
@@ -57,7 +57,7 @@ class IndividualDaoTest {
         individualDao = mainDatabase.individualDao
     }
 
-    @After
+    @AfterEach
     fun tearDown() {
         mainDatabase.close()
     }

@@ -52,8 +52,9 @@ dependencies {
     compileOnly "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
     implementation "com.jakewharton.timber:timber:$timberVersion"
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.2'
+    testImplementation "org.mockito:mockito-core:2.23.4"
 }
 
 // =============== Maven Deployment ===============
@@ -68,7 +69,6 @@ task installLocal(type: Upload) {
             pom.artifactId = POM_ARTIFACT_ID
             pom.version = VERSION_NAME
             pom.packaging = POM_PACKAGING
-            uniqueVersion = false // don't put in a timestamp on the filename (other project will not be able to depend on it)
         }
     }
 }
