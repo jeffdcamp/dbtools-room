@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 4.3.0 *(2018-12)*
+-------------------------
+* Added JdbcDatabaseUtil.alterTableIfColumnDoesNotExist(...), columnExists(...), resetRoom(...)
+* Added password support to JdbcSQLiteOpenHelper
+* Added onDatabaseConfigureBlock support to JdbcSQLiteOpenHelper
+
 Version 4.2.0 *(2018-12)*
 -------------------------
 * Added DatabaseUtil.alterTableIfColumnDoesNotExist(...), columnExists(...), resetRoom(...)

@@ -7,7 +7,9 @@ import java.io.File
 open class JdbcSQLiteOpenHelper(
         val path: String,
         val name: String?,
-        val callback: SupportSQLiteOpenHelper.Callback
+        val callback: SupportSQLiteOpenHelper.Callback,
+        val password: String,
+        val onDatabaseConfigureBlock: (sqliteDatabase: JdbcSqliteDatabase) -> Unit = {}
 ) : SupportSQLiteOpenHelper {
 
     private val dbPath: String
@@ -75,7 +77,11 @@ open class JdbcSQLiteOpenHelper(
         try {
             initializing = true
             db = JdbcSqliteDatabase(dbPath)
+            if (password.isNotBlank()) {
+                db.execSQL("PRAGMA key = '$password'")
+            }
 
+            onDatabaseConfigureBlock(db)
             callback.onConfigure(db)
             val version = callback.version
 

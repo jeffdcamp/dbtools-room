@@ -211,13 +211,16 @@ fun SupportSQLiteDatabase.columnExists(tableName: String, columnName: String): B
     var columnExists = false
 
     this.query("PRAGMA table_info($tableName)").use { cursor ->
-        cursor.moveToFirst()
-        do {
-            val currentColumn = cursor.getString(cursor.getColumnIndexOrThrow("name"))
-            if (currentColumn == columnName) {
-                columnExists = true
-            }
-        } while (!columnExists && cursor.moveToNext())
+        if (cursor.moveToFirst()) {
+            do {
+                val currentColumn = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+                if (currentColumn == columnName) {
+                    columnExists = true
+                }
+            } while (!columnExists && cursor.moveToNext())
+        } else {
+            Timber.w("Query: [PRAGMA table_info($tableName)] returned NO data")
+        }
 
     }
 
