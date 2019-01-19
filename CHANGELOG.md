@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 4.4.0 *(2019-01)*
+-------------------------
+* Added DatabaseUtil.checkAndFixRoomIdentityHash(...), findRoomIdentityHash(...), tableExists(...)
+
 Version 4.3.0 *(2018-12)*
 -------------------------
 * Added JdbcDatabaseUtil.alterTableIfColumnDoesNotExist(...), columnExists(...), resetRoom(...)

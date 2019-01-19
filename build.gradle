@@ -8,7 +8,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.0-alpha08'
+        classpath 'com.android.tools.build:gradle:3.4.0-beta01'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0' // version plugin support
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
@@ -36,6 +36,5 @@ ext {
     xerialSqliteJdbcVersion = '3.25.2'
     archLifecycleVersion = '2.0.0'
     archRoomVersion = '2.1.0-alpha03'
-    coroutinesVersion = '1.0.1'
     timberVersion = '4.7.1'
 }

@@ -16,13 +16,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
-// todo JetBrains has indicated that coroutines are stable, but the kotlinx-coroutines designs may change ... remove this when kotlinx-coroutines are no longer experimental
-kotlin {
-    experimental {
-        coroutines 'enable' // temp disable warnings
-    }
-}
-
 android {
     compileSdkVersion project.compileSdkVersion
 
@@ -62,7 +55,7 @@ dependencies {
     implementation project(path: ':sqliteorg')
     implementation project(path: ':jdbc')
 
-    implementation 'androidx.multidex:multidex:2.0.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.multidex:multidex-instrumentation:2.0.0'
 
     // Android
@@ -77,7 +70,7 @@ dependencies {
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.0"
 
     // Code
     implementation 'com.jakewharton.threetenabp:threetenabp:1.1.1'

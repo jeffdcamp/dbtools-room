@@ -16,6 +16,15 @@ fun SQLiteDatabase.alterTableIfColumnDoesNotExist(tableName: String, columnName:
 }
 
 /**
+ * Check to see if a table in a database exists
+ * @param tableName tableName to from database to be checked
+ * @return true if the table exists otherwise false
+ */
+fun SQLiteDatabase.tableExists(tableName: String): Boolean {
+    return SqliteOrgDatabaseUtil.tableExists(this, tableName)
+}
+
+/**
  * Check to see if a column in a database exists
  * @param tableName table for columnName
  * @param columnName column to from tableName to be checked
@@ -32,4 +41,23 @@ fun SQLiteDatabase.columnExists(tableName: String, columnName: String): Boolean 
  */
 fun SQLiteDatabase.resetRoom(newVersion: Int = 0) {
     SqliteOrgDatabaseUtil.resetRoom(this, newVersion)
+}
+
+/**
+ * If the database should NOT have a migration and is a pre-populated database that should not be managed by Room... make sure Room migration is never needed.
+ *
+ * @param expectedIdentityHash Hash that is expected.  If the expectedIdentityHash does not match the existing identity hash (currently in the room_master_table), then just delete the table
+ */
+fun SQLiteDatabase.checkAndFixRoomIdentityHash(expectedIdentityHash: String) {
+    SqliteOrgDatabaseUtil.checkAndFixRoomIdentityHash(this, expectedIdentityHash)
+}
+
+/**
+ * Find the Room Identity Hash
+ * Note: if you are not sure if the room_master_table exists, check first with tableExists(database, "room_master_table")
+ *
+ * @return identity_hash for this database OR null if it does exist
+ */
+fun SQLiteDatabase.findRoomIdentityHash(): String? {
+    return SqliteOrgDatabaseUtil.findRoomIdentityHash(this)
 }
