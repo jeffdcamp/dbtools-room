@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+Version 4.5.0 *(2019-01)*
+-------------------------
+* Room 2.1.0-alpha04
+* Added RoomDatabaseExt.runInTransactionSuspend(block) (suspend function support)
+* Kotlin 1.3.20
+* Coroutines 1.1.1
+
 Version 4.4.0 *(2019-01)*
 -------------------------
 * Added DatabaseUtil.checkAndFixRoomIdentityHash(...), findRoomIdentityHash(...), tableExists(...)
