@@ -46,7 +46,7 @@ afterEvaluate {
 
 dependencies {
     // Android
-    implementation "androidx.annotation:annotation:1.0.1"
+    implementation "androidx.annotation:annotation:1.0.2"
 
     implementation "androidx.lifecycle:lifecycle-runtime:$archLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
@@ -57,9 +57,9 @@ dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly 'org.sqlite.sqliteX:sqlite-android:3.15.2' // SQL Android Bindings
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.2'
-    testCompile "org.mockito:mockito-core:2.23.4"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.0'
+    testImplementation "org.mockito:mockito-core:2.25.0"
 }
 
 // =============== Maven Deployment ===============
