@@ -199,7 +199,10 @@ fun RoomDatabase.applySqlFile(sqlFile: File): Boolean {
     val database = openHelper.writableDatabase
 
     try {
+        @Suppress("DEPRECATION") // mirroring RoomDatabase.kt
         beginTransaction()
+        runInTransaction {  }
+
         var statement = ""
         sqlFile.forEachLine { line ->
             // Prepare the line
@@ -224,11 +227,13 @@ fun RoomDatabase.applySqlFile(sqlFile: File): Boolean {
                 statement += '\n'
             }
         }
+        @Suppress("DEPRECATION") // mirroring RoomDatabase.kt
         setTransactionSuccessful()
     } catch (e: Exception) {
         Timber.e(e, "Failed to apply sql file. File: [%s] Error: [%s]", sqlFile.absolutePath, e.message)
         return false
     } finally {
+        @Suppress("DEPRECATION") // mirroring RoomDatabase.kt
         endTransaction()
     }
     return true
@@ -240,12 +245,16 @@ fun RoomDatabase.applySqlFile(sqlFile: File): Boolean {
  *
  * @param block The piece of code to execute.
  */
+@Deprecated("Use Room 2.0.0-alpha05+ Room.withTransaction", ReplaceWith("withTransaction", "androidx.room.withTransaction"))
 suspend fun RoomDatabase.runInTransactionSuspend(block: suspend () -> Unit) {
+    @Suppress("DEPRECATION") // mirroring RoomDatabase.kt
     beginTransaction()
     try {
         block()
+        @Suppress("DEPRECATION") // mirroring RoomDatabase.kt
         setTransactionSuccessful()
     } finally {
+        @Suppress("DEPRECATION") // mirroring RoomDatabase.kt
         endTransaction()
     }
 }

@@ -36,6 +36,14 @@ android {
     }
 }
 
+repositories {
+    mavenLocal()
+    google()
+    mavenCentral()
+    jcenter()
+    maven { url "https://kotlin.bintray.com/kotlinx/" } // todo remove when dependency is Maven Central: required for Room alpha05 (https://issuetracker.google.com/issues/128511448) (https://youtrack.jetbrains.com/issue/KT-27991)
+}
+
 dependencies {
     implementation project(path: ':library')
     implementation project(path: ':sqliteorg')
@@ -50,8 +58,11 @@ dependencies {
     // Architecture
     implementation "androidx.lifecycle:lifecycle-runtime:$archLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
-    implementation "androidx.room:room-runtime:$archRoomVersion"
     kapt "androidx.lifecycle:lifecycle-compiler:$archLifecycleVersion"
+
+    // Room
+    implementation "androidx.room:room-runtime:$archRoomVersion"
+//    implementation "androidx.room:room-ktx:$archRoomVersion"
     kapt "androidx.room:room-compiler:$archRoomVersion"
 
     // Kotlin

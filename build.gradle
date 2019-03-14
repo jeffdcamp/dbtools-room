@@ -35,6 +35,6 @@ ext {
 
     xerialSqliteJdbcVersion = '3.25.2'
     archLifecycleVersion = '2.0.0'
-    archRoomVersion = '2.1.0-alpha04'
+    archRoomVersion = '2.1.0-alpha05'
     timberVersion = '4.7.1'
 }

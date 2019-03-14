@@ -40,6 +40,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime:$archLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
     implementation "androidx.room:room-runtime:$archRoomVersion"
+//    implementation "androidx.room:room-ktx:$archRoomVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1"
     implementation "com.jakewharton.timber:timber:$timberVersion"

@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 4.6.0 *(2019-03)*
+-------------------------
+* Room 2.1.0-alpha05
+* Kotlin 1.3.21
+* Deprecated RoomDatabaseExt.runInTransactionSuspend(block) (replaced with room-ktx withTransaction(block))
+
 Version 4.5.0 *(2019-01)*
 -------------------------
 * Room 2.1.0-alpha04

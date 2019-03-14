@@ -1,2 +1,1 @@
-include ':sqliteorg', ':jdbc', ':library'
-include ':app'
+include ':sqliteorg', ':jdbc', ':library', ':app'
