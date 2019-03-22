@@ -57,9 +57,9 @@ dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly 'org.sqlite.sqliteX:sqlite-android:3.15.2' // SQL Android Bindings
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.0'
-    testImplementation "org.mockito:mockito-core:2.25.0"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.1'
+    testImplementation "org.mockito:mockito-core:2.25.1"
 }
 
 // =============== Maven Deployment ===============
