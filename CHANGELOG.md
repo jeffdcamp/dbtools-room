@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 4.7.1 *(2019-04)*
+-------------------------
+* Kotlin 1.3.31 and other minor version updates
+* Minor fix when deleting or renaming database files 
+
 Version 4.7.0 *(2019-03)*
 -------------------------
 * Room 2.1.0-alpha06

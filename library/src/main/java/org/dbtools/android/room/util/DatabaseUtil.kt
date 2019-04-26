@@ -274,7 +274,7 @@ object DatabaseUtil {
         deleted = deleted or File("${file.path}-wal").delete()
 
         val dir = file.parentFile
-        if (dir != null) {
+        if (dir != null && dir.exists()) {
             val prefix = "${file.name}-mj"
             val filter = FileFilter { candidate -> candidate.name.startsWith(prefix) }
             for (masterJournal in dir.listFiles(filter)) {
@@ -300,7 +300,7 @@ object DatabaseUtil {
 
         // delete srcFile -mj files
         val dir = srcFile.parentFile
-        if (dir != null) {
+        if (dir != null && dir.exists()) {
             val prefix = "${srcFile.name}-mj"
             val filter = FileFilter { candidate -> candidate.name.startsWith(prefix) }
             for (masterJournal in dir.listFiles(filter)) {
