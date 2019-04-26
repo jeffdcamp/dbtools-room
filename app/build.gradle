@@ -26,6 +26,10 @@ android {
         enabled = true
     }
 
+    packagingOptions {
+        exclude("META-INF/atomicfu.kotlin_module") // fix for mixed versions of coroutines library (1.1.1 and 1.2.0) (https://github.com/Kotlin/kotlinx.coroutines/issues/1064)
+    }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
@@ -67,7 +71,7 @@ dependencies {
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.0"
 
     // Code
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
@@ -79,7 +83,7 @@ dependencies {
     // Test
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.1'
-    testImplementation "org.mockito:mockito-core:2.25.1"
+    testImplementation "org.mockito:mockito-core:2.27.0"
     testImplementation "androidx.room:room-testing:$archRoomVersion"
     testImplementation "org.xerial:sqlite-jdbc:$xerialSqliteJdbcVersion"
 
