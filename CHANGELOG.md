@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 4.8.0 *(2019-04)*
+-------------------------
+* Room 2.1.0-alpha07
+* Coroutines 1.2.1
+
 Version 4.7.1 *(2019-04)*
 -------------------------
 * Kotlin 1.3.31 and other minor version updates

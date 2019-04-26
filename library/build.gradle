@@ -42,7 +42,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$archRoomVersion"
 //    implementation "androidx.room:room-ktx:$archRoomVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    compileOnly "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.0"
+    compileOnly "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.1"
     implementation "com.jakewharton.timber:timber:$timberVersion"
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.1'
