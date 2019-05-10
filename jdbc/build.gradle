@@ -1,6 +1,6 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'maven'
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+apply plugin: "maven"
 
 android {
     compileSdkVersion project.compileSdkVersion
@@ -17,7 +17,7 @@ android {
     }
 
     sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
+        main.java.srcDirs += "src/main/kotlin"
     }
 
     testOptions {
@@ -27,7 +27,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-        kotlinOptions.freeCompilerArgs += ['-module-name', "$POM_ARTIFACT_ID"]
+        kotlinOptions.freeCompilerArgs += ["-module-name", "$POM_ARTIFACT_ID"]
     }
 }
 
@@ -37,25 +37,25 @@ afterEvaluate {
 }
 
 dependencies {
-    implementation "androidx.lifecycle:lifecycle-runtime:$archLifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
-    implementation "androidx.room:room-runtime:$archRoomVersion"
+    implementation("androidx.lifecycle:lifecycle-runtime:$archLifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion")
+    implementation("androidx.room:room-runtime:$archRoomVersion")
 
     // optional
-    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    compileOnly "org.xerial:sqlite-jdbc:$xerialSqliteJdbcVersion"
+    compileOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version")
+    compileOnly("org.xerial:sqlite-jdbc:$xerialSqliteJdbcVersion")
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.1'
-    testImplementation "androidx.room:room-testing:$archRoomVersion"
-    testImplementation "org.mockito:mockito-core:2.27.0"
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.1")
+    testImplementation("androidx.room:room-testing:$archRoomVersion")
+    testImplementation("org.mockito:mockito-core:2.27.0")
 }
 
 // =============== Maven Deployment ===============
 // ./gradlew clean check installLocal
 task installLocal(type: Upload) {
     description "Installs the artifacts to the local Maven repository."
-    configuration = configurations['archives']
+    configuration = configurations["archives"]
     repositories {
         mavenDeployer {
             repository (url: "file://${System.env.HOME}/.m2/repository/")
@@ -69,4 +69,4 @@ task installLocal(type: Upload) {
 
 // DEPLOY to Maven Central (this must be the last line of this file)
 // ./gradlew clean check uploadArchives
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+apply from: rootProject.file("gradle/gradle-mvn-push.gradle")

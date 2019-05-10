@@ -1,6 +1,6 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-kapt"
 
 android {
     compileSdkVersion project.compileSdkVersion
@@ -18,7 +18,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
 
@@ -27,8 +27,8 @@ android {
     }
 
     sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-        test.java.srcDirs += 'src/test/kotlin'
+        main.java.srcDirs += "src/main/kotlin"
+        test.java.srcDirs += "src/test/kotlin"
     }
 
     testOptions {
@@ -45,52 +45,52 @@ repositories {
 }
 
 dependencies {
-    implementation project(path: ':library')
-    implementation project(path: ':sqliteorg')
-    implementation project(path: ':jdbc')
+    implementation project(path: ":library")
+    implementation project(path: ":sqliteorg")
+    implementation project(path: ":jdbc")
 
-    implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.multidex:multidex-instrumentation:2.0.0'
+    implementation("androidx.multidex:multidex:2.0.1")
+    implementation("androidx.multidex:multidex-instrumentation:2.0.0")
 
     // Android
-    implementation "androidx.appcompat:appcompat:1.0.2"
+    implementation("androidx.appcompat:appcompat:1.0.2")
 
     // Architecture
-    implementation "androidx.lifecycle:lifecycle-runtime:$archLifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
-    kapt "androidx.lifecycle:lifecycle-compiler:$archLifecycleVersion"
+    implementation("androidx.lifecycle:lifecycle-runtime:$archLifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion")
+    kapt("androidx.lifecycle:lifecycle-compiler:$archLifecycleVersion")
 
     // Room
-    implementation "androidx.room:room-runtime:$archRoomVersion"
-//    implementation "androidx.room:room-ktx:$archRoomVersion"
-    kapt "androidx.room:room-compiler:$archRoomVersion"
+    implementation("androidx.room:room-runtime:$archRoomVersion")
+//    implementation("androidx.room:room-ktx:$archRoomVersion")
+    kapt("androidx.room:room-compiler:$archRoomVersion")
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.0"
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.1")
 
     // Code
-    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
-    implementation "com.jakewharton.timber:timber:$timberVersion"
+    implementation("com.jakewharton.threetenabp:threetenabp:1.2.0")
+    implementation("com.jakewharton.timber:timber:$timberVersion")
 
     // Custom SQLite database
-    implementation 'org.sqlite.sqliteX:sqlite-android:3.15.2'
+    implementation("org.sqlite.sqliteX:sqlite-android:3.15.2")
 
     // Test
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.1'
-    testImplementation "org.mockito:mockito-core:2.27.0"
-    testImplementation "androidx.room:room-testing:$archRoomVersion"
-    testImplementation "org.xerial:sqlite-jdbc:$xerialSqliteJdbcVersion"
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.1")
+    testImplementation("org.mockito:mockito-core:2.27.0")
+    testImplementation("androidx.room:room-testing:$archRoomVersion")
+    testImplementation("org.xerial:sqlite-jdbc:$xerialSqliteJdbcVersion")
 
     testImplementation ("androidx.arch.core:core-testing:$archLifecycleVersion", {
-        exclude group: 'com.android.support', module: 'support-compat'
-        exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'com.android.support', module: 'support-core-utils'
+        exclude group: "com.android.support", module: "support-compat"
+        exclude group: "com.android.support", module: "support-annotations"
+        exclude group: "com.android.support", module: "support-core-utils"
     })
 
-    kaptTest "androidx.room:room-compiler:$archRoomVersion"
-    kaptTest "androidx.lifecycle:lifecycle-compiler:$archLifecycleVersion"
+    kaptTest("androidx.room:room-compiler:$archRoomVersion")
+    kaptTest("androidx.lifecycle:lifecycle-compiler:$archLifecycleVersion")
 
 }
 
