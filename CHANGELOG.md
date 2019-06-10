@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 4.9.3 *(2019-06)*
+-------------------------
+* Added SupportSQLiteDatabase.runInTransaction
+* Added SupportSQLiteDatabase.withTransaction (support suspend)
+* AGP 3.5.0-beta04
+
 Version 4.9.1 *(2019-06)*
 -------------------------
 * Room 2.1.0-rc01

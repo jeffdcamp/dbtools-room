@@ -236,3 +236,31 @@ fun SupportSQLiteDatabase.resetRoom(newVersion: Int = 0) {
     execSQL("DROP TABLE IF EXISTS room_master_table")
     version = newVersion
 }
+
+/**
+ * Executes the specified block in a database transaction. The transaction will be
+ * marked as successful unless an exception is thrown in the block.
+ */
+inline fun SupportSQLiteDatabase.runInTransaction(block: () -> Unit) {
+    beginTransaction()
+    try {
+        block()
+        setTransactionSuccessful()
+    } finally {
+        endTransaction()
+    }
+}
+
+/**
+ * Executes the specified suspend block in a database transaction. The transaction will be
+ * marked as successful unless an exception is thrown in the suspend block.
+ */
+suspend fun SupportSQLiteDatabase.withTransaction(block: suspend () -> Unit) {
+    beginTransaction()
+    try {
+        block()
+        setTransactionSuccessful()
+    } finally {
+        endTransaction()
+    }
+}
