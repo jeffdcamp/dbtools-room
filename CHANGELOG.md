@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 4.9.4 *(2019-06)*
+-------------------------
+* Room 2.1.0
+
 Version 4.9.3 *(2019-06)*
 -------------------------
 * Added SupportSQLiteDatabase.runInTransaction

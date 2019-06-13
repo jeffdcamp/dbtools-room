@@ -36,7 +36,7 @@ object Deps {
     const val VIEWMODEL_INJECT_PROCESSOR = "com.vikingsen.inject:viewmodel-inject-processor:0.1.1"
 
     // Database
-    private const val ROOM_VERSION = "2.1.0-rc01"
+    private const val ROOM_VERSION = "2.1.0"
     const val ARCH_ROOM_RUNTIME = "androidx.room:room-runtime:$ROOM_VERSION"
     const val ARCH_ROOM_KTX = "androidx.room:room-ktx:$ROOM_VERSION"
     const val ARCH_ROOM_COMPILER = "androidx.room:room-compiler:$ROOM_VERSION"
