@@ -201,7 +201,6 @@ fun RoomDatabase.applySqlFile(sqlFile: File): Boolean {
     try {
         @Suppress("DEPRECATION") // mirroring RoomDatabase.kt
         beginTransaction()
-        runInTransaction {  }
 
         var statement = ""
         sqlFile.forEachLine { line ->

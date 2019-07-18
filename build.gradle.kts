@@ -8,7 +8,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:3.5.0-beta04")
+        classpath("com.android.tools.build:gradle:3.5.0-rc01")
         classpath("com.github.ben-manes:gradle-versions-plugin:0.21.0") // version plugin support
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION")
     }
@@ -26,7 +26,7 @@ allprojects {
 
     // Gradle Dependency Check
     apply(plugin = "com.github.ben-manes.versions") // ./gradlew dependencyUpdates -Drevision=release
-    val excludeVersionContaining = listOf("alpha") // example: "alpha", "beta"
+    val excludeVersionContaining = listOf("alpha", "eap") // example: "alpha", "beta"
     val ignoreArtifacts = emptyList<String>() // some artifacts may be OK to check for "alpha"... add these exceptions here
 
     tasks.named<DependencyUpdatesTask>("dependencyUpdates") {

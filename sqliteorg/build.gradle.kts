@@ -87,7 +87,7 @@ publishing {
             artifactId = Pom.LIBRARY_SQLITE_ORG_ARTIFACT_ID
             version = Pom.VERSION_NAME
             artifact(tasks["sourcesJar"])
-            afterEvaluate({ artifact(tasks.getByName("bundleReleaseAar")) })
+            afterEvaluate { artifact(tasks.getByName("bundleReleaseAar")) }
             pom {
                 name.set("My Library")
                 description.set(Pom.POM_DESCRIPTION)
@@ -109,6 +109,17 @@ publishing {
                     url.set(Pom.SCM_URL)
                     connection.set(Pom.SCM_CONNECTION)
                     developerConnection.set(Pom.SCM_DEV_CONNECTION)
+                }
+            }
+
+            // add dependencies to pom.xml
+            pom.withXml {
+                val dependenciesNode = asNode().appendNode("dependencies")
+                configurations.implementation.get().allDependencies.forEach {
+                    val dependencyNode = dependenciesNode.appendNode("dependency")
+                    dependencyNode.appendNode("groupId", it.group)
+                    dependencyNode.appendNode("artifactId", it.name)
+                    dependencyNode.appendNode("version", it.version)
                 }
             }
         }

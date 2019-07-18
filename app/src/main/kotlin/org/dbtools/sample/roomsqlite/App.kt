@@ -1,11 +1,11 @@
 package org.dbtools.sample.roomsqlite
 
-import androidx.multidex.MultiDexApplication
+import android.app.Application
 import com.jakewharton.threetenabp.AndroidThreeTen
 import timber.log.Timber
 
 
-class App : MultiDexApplication() {
+class App : Application() {
 
     override fun onCreate() {
         super.onCreate()

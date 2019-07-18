@@ -71,8 +71,6 @@ dependencies {
 
     // Android
     implementation(Deps.ANDROIDX_APPCOMPAT)
-    implementation(Deps.ANDROID_MULTIDEX)
-    implementation(Deps.ANDROID_MULTIDEX_INSTRUMENTATION)
 
     // Code
     implementation(Deps.KOTLIN_STD_LIB)

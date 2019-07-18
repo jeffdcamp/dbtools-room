@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 4.9.5 *(2019-07)*
+-------------------------
+* Fixed missing dependencies
+* Minor bug fixes
+* Updated versions
+
 Version 4.9.4 *(2019-06)*
 -------------------------
 * Room 2.1.0
