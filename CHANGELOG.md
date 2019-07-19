@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 4.9.6 *(2019-07)*
+-------------------------
+* Minor fix to JdbcSQLiteOpenHelper
+
 Version 4.9.5 *(2019-07)*
 -------------------------
 * Fixed missing dependencies
