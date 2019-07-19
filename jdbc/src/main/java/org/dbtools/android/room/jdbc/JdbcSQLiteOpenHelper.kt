@@ -36,7 +36,7 @@ open class JdbcSQLiteOpenHelper(
     }
 
     override fun setWriteAheadLoggingEnabled(enabled: Boolean) {
-        throw UnsupportedOperationException()
+        // Do nothing
     }
 
     override fun getWritableDatabase(): SupportSQLiteDatabase {
