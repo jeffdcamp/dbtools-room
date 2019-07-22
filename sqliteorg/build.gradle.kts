@@ -52,7 +52,7 @@ dependencies {
     api(Deps.ARCH_ROOM_RUNTIME)
     api(Deps.KOTLIN_STD_LIB)
     api(Deps.TIMBER)
-    implementation(Deps.SQLITE)
+    compileOnly(Deps.SQLITE)
 
     // Test
     testImplementation(Deps.TEST_JUNIT)
