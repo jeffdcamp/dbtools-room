@@ -6,6 +6,7 @@ Version 5.0.0 *(2019-09)*
 * Room 2.2.0-rc01
 * Added tableNameMap parameter to MergeDatabaseUtil.mergeDatabase(...)
 * Improved checkAndFixRoomIdentityHash() to work better with Room 2.2.0
+* Removed deprecated functions
 
 Version 4.9.6 *(2019-07)*
 -------------------------

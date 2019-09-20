@@ -239,23 +239,3 @@ fun RoomDatabase.applySqlFile(sqlFile: File): Boolean {
     }
     return true
 }
-
-/**
- * Executes the specified suspend block in a database transaction. The transaction will be
- * marked as successful unless an exception is thrown in the suspend block.
- *
- * @param block The piece of code to execute.
- */
-@Deprecated("Use Room 2.0.0-alpha05+ Room.withTransaction", ReplaceWith("withTransaction", "androidx.room.withTransaction"))
-suspend fun RoomDatabase.runInTransactionSuspend(block: suspend () -> Unit) {
-    @Suppress("DEPRECATION") // mirroring RoomDatabase.kt
-    beginTransaction()
-    try {
-        block()
-        @Suppress("DEPRECATION") // mirroring RoomDatabase.kt
-        setTransactionSuccessful()
-    } finally {
-        @Suppress("DEPRECATION") // mirroring RoomDatabase.kt
-        endTransaction()
-    }
-}
