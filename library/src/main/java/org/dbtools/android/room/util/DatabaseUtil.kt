@@ -205,7 +205,7 @@ object DatabaseUtil {
      * @param newVersion version to be set on database (default to 0)
      */
     fun resetRoom(database: SQLiteDatabase, newVersion: Int = 0) {
-        database.rawQuery("DROP TABLE IF EXISTS room_master_table", null)
+        database.rawQuery("DROP TABLE IF EXISTS room_master_table", null).close()
         database.version = newVersion
     }
 
@@ -277,7 +277,8 @@ object DatabaseUtil {
         if (dir != null && dir.exists()) {
             val prefix = "${file.name}-mj"
             val filter = FileFilter { candidate -> candidate.name.startsWith(prefix) }
-            for (masterJournal in dir.listFiles(filter)) {
+            val files = dir.listFiles(filter) ?: emptyArray()
+            for (masterJournal in files) {
                 deleted = deleted or masterJournal.delete()
             }
         }
@@ -303,7 +304,8 @@ object DatabaseUtil {
         if (dir != null && dir.exists()) {
             val prefix = "${srcFile.name}-mj"
             val filter = FileFilter { candidate -> candidate.name.startsWith(prefix) }
-            for (masterJournal in dir.listFiles(filter)) {
+            val files = dir.listFiles(filter) ?: emptyArray()
+            for (masterJournal in files) {
                 renamed = renamed or masterJournal.delete()
             }
         }
@@ -324,7 +326,7 @@ object DatabaseUtil {
         val assetDatabaseInputStream = context.assets.open(databaseFilename)
 
         if (newDatabaseFile.exists() && overwrite) {
-            DatabaseUtil.deleteDatabaseFiles(newDatabaseFile)
+            deleteDatabaseFiles(newDatabaseFile)
         }
 
         assetDatabaseInputStream.use { input ->

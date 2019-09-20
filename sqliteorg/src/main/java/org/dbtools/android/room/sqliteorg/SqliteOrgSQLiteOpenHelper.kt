@@ -27,9 +27,9 @@ open class SqliteOrgSQLiteOpenHelper(
         }
 
         val databaseFile = File(databaseFilepath)
-        databaseFile.parentFile.mkdirs()
+        databaseFile.parentFile?.mkdirs()
 
-        delegate = SqliteOrgSQLiteOpenHelper.OpenHelper(context, libraryLoaderBlock, onDatabaseConfigureBlock, databaseFilepath, callback, password)
+        delegate = OpenHelper(context, libraryLoaderBlock, onDatabaseConfigureBlock, databaseFilepath, callback, password)
     }
 
     override fun getDatabaseName(): String? {

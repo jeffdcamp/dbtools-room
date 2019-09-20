@@ -1,16 +1,19 @@
+const val KOTLIN_VERSION = "1.3.50"
+
 object Deps {
     // Android (https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-master-dev/buildSrc/src/main/kotlin/androidx/build/dependencies/Dependencies.kt)
     const val ANDROIDX_ANNOTATIONS = "androidx.annotation:annotation:1.0.2"
-    const val ANDROIDX_APPCOMPAT = "androidx.appcompat:appcompat:1.0.0"
+    const val ANDROIDX_APPCOMPAT = "androidx.appcompat:appcompat:1.1.0"
     const val ANDROIDX_RECYCLERVIEW = "androidx.recyclerview:recyclerview:1.0.0"
     const val ANDROIDX_PREFERENCE = "androidx.preference:preference-ktx:1.0.0"
     const val ANDROIDX_CONSTRAINT_LAYOUT = "androidx.constraintlayout:constraintlayout:1.1.3"
     const val ANDROIDX_CORE = "androidx.core:core-ktx:1.0.2"
 
-    const val ARCH_LIFECYCLE_EXT = "androidx.lifecycle:lifecycle-extensions:2.0.0"
-    const val ARCH_LIFECYCLE_RUNTIME = "androidx.lifecycle:lifecycle-runtime:2.0.0"
-    const val ARCH_LIFECYCLE_VIEWMODEL = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0"
-    const val ARCH_LIFECYCLE_COMMON = "androidx.lifecycle:lifecycle-common-java8:2.0.0"
+    private const val LIFECYCLE_VERSION = "2.1.0"
+    const val ARCH_LIFECYCLE_EXT = "androidx.lifecycle:lifecycle-extensions:$LIFECYCLE_VERSION"
+    const val ARCH_LIFECYCLE_RUNTIME = "androidx.lifecycle:lifecycle-runtime:$LIFECYCLE_VERSION"
+    const val ARCH_LIFECYCLE_VIEWMODEL = "androidx.lifecycle:lifecycle-viewmodel-ktx:$LIFECYCLE_VERSION"
+    const val ARCH_LIFECYCLE_COMMON = "androidx.lifecycle:lifecycle-common-java8:$LIFECYCLE_VERSION"
 
     const val ARCH_WORK_RUNTIME = "androidx.work:work-runtime-ktx:2.0.1"
 
@@ -22,7 +25,7 @@ object Deps {
     // Code
     const val KOTLIN_STD_LIB = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$KOTLIN_VERSION"
     const val KOTLIN_SERIALIZATION = "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.11.0"
-    private const val COROUTINES_VERSION = "1.2.1"
+    private const val COROUTINES_VERSION = "1.3.1"
     const val COROUTINES = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$COROUTINES_VERSION"
     private const val DAGGER_VERSION = "2.23"
     const val DAGGER = "com.google.dagger:dagger:$DAGGER_VERSION"
@@ -36,7 +39,7 @@ object Deps {
     const val VIEWMODEL_INJECT_PROCESSOR = "com.vikingsen.inject:viewmodel-inject-processor:0.1.1"
 
     // Database
-    private const val ROOM_VERSION = "2.1.0"
+    private const val ROOM_VERSION = "2.2.0-rc01"
     const val ARCH_ROOM_RUNTIME = "androidx.room:room-runtime:$ROOM_VERSION"
     const val ARCH_ROOM_KTX = "androidx.room:room-ktx:$ROOM_VERSION"
     const val ARCH_ROOM_COMPILER = "androidx.room:room-compiler:$ROOM_VERSION"
@@ -44,7 +47,7 @@ object Deps {
     const val XERIAL_SQLITE = "org.xerial:sqlite-jdbc:3.28.0"
 
     // Test
-    private const val JUNIT_VERSION = "5.5.0"
+    private const val JUNIT_VERSION = "5.5.2"
     const val TEST_JUNIT = "org.junit.jupiter:junit-jupiter:$JUNIT_VERSION"
     const val TEST_JUNIT_ENGINE = "org.junit.jupiter:junit-jupiter-engine:$JUNIT_VERSION"
 
@@ -56,5 +59,5 @@ object Deps {
     const val TEST_XERIAL_SQLITE = "org.xerial:sqlite-jdbc:3.27.2.1"
     const val TEST_ARCH_ROOM_TESTING = "androidx.room:room-testing:$ROOM_VERSION"
     const val TEST_KOTLIN_COROUTINES_TEST = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$COROUTINES_VERSION"
-    const val TEST_MOCKITO_KOTLIN = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
+    const val TEST_MOCKITO_KOTLIN = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
 }

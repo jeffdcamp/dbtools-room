@@ -18,16 +18,16 @@ open class JdbcSQLiteOpenHelper(
     private var initializing = false
 
     init {
-        if (name == null) {
-            dbPath = ":memory:"
+        dbPath = if (name == null) {
+            ":memory:"
         } else {
             val databaseFile = if (path.isBlank()) {
                 File(name)
             } else {
                 File(path, name)
             }
-            databaseFile.parentFile.mkdirs()
-            dbPath = databaseFile.path
+            databaseFile.parentFile?.mkdirs()
+            databaseFile.path
         }
     }
 

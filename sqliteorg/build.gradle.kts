@@ -89,7 +89,7 @@ publishing {
             artifact(tasks["sourcesJar"])
             afterEvaluate { artifact(tasks.getByName("bundleReleaseAar")) }
             pom {
-                name.set("My Library")
+                name.set(Pom.LIBRARY_SQLITE_ORG_NAME)
                 description.set(Pom.POM_DESCRIPTION)
                 url.set(Pom.URL)
                 licenses {
