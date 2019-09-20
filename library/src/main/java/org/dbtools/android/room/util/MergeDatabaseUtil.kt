@@ -21,6 +21,7 @@ object MergeDatabaseUtil {
      * @param fromDatabaseFile Sqlite file that will be opened and attached to this database... then data will be copied from this database File
      * @param includeTables Only table names in this list will be merged.  default: emptyList()
      * @param excludeTables All tables except the table names in this list will be merged.  default: emptyList()
+     * @param tableNameMap Map of name changes in target database (Example: copy table data from databaseA.foo to databaseB.bar).  Key is the source table name, value is the target table name
      * @param mergeBlock Code to execute to perform merge.  default: database.execSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
      *
      * NOTE:  Room system tables are automatically excluded from the merge
@@ -44,8 +45,9 @@ object MergeDatabaseUtil {
         fromDatabaseFile: File,
         includeTables: List<String> = emptyList(),
         excludeTables: List<String> = emptyList(),
-        mergeBlock: (database: SupportSQLiteDatabase, sourceTableName: String, targetTableName: String) -> Unit = { database, sourceTableName, targetTableName ->
-            defaultMerge(database, sourceTableName, targetTableName)
+        tableNameMap: Map<String, String> = emptyMap(),
+        mergeBlock: (database: SupportSQLiteDatabase, sourceTableName: String, targetTableName: String) -> Unit = { db, sourceTableName, targetTableName ->
+            defaultMerge(db, sourceTableName, targetTableName)
         }
     ): Boolean {
         if (!fromDatabaseFile.exists()) {
@@ -93,8 +95,15 @@ object MergeDatabaseUtil {
                     if (otherTableNames.contains(tableName)) {
                         val sourceTableName = "$mergeDbName.$tableName"
 
-                        Timber.i("Merging [$sourceTableName] INTO [$tableName]")
-                        mergeBlock(database, sourceTableName, tableName) // default: database.execSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
+                        // check to see if the target database should use a different table name for this table
+                        val targetTableName = if (tableNameMap.containsKey(tableName)) {
+                            tableNameMap[tableName] ?: tableName
+                        } else {
+                            tableName
+                        }
+
+                        Timber.i("Merging [$sourceTableName] INTO [$targetTableName]")
+                        mergeBlock(database, sourceTableName, targetTableName) // default: database.execSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
                     } else {
                         Timber.w("WARNING: Cannot merge table [$tableName]... it does not exist in fromDatabaseFile... skipping...")
                     }

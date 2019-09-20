@@ -46,10 +46,11 @@ fun SQLiteDatabase.resetRoom(newVersion: Int = 0) {
 /**
  * If the database should NOT have a migration and is a pre-populated database that should not be managed by Room... make sure Room migration is never needed.
  *
- * @param expectedIdentityHash Hash that is expected.  If the expectedIdentityHash does not match the existing identity hash (currently in the room_master_table), then just delete the table
+ * @param expectedVersion SQLite Database version (PRAGMA user_version)
+ * @param expectedIdentityHash Hash that is expected.  If the expectedIdentityHash does not match the existing identity hash (currently in the room_master_table), then just delete the table*
  */
-fun SQLiteDatabase.checkAndFixRoomIdentityHash(expectedIdentityHash: String) {
-    SqliteOrgDatabaseUtil.checkAndFixRoomIdentityHash(this, expectedIdentityHash)
+fun SQLiteDatabase.checkAndFixRoomIdentityHash(expectedVersion: Int, expectedIdentityHash: String) {
+    SqliteOrgDatabaseUtil.checkAndFixRoomIdentityHash(this, expectedVersion, expectedIdentityHash)
 }
 
 /**

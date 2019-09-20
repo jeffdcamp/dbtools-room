@@ -145,7 +145,6 @@ object DatabaseUtil {
         if (!columnExists(database, tableName, columnName)) {
             Timber.i("Adding column [$columnName] to table [$tableName]")
             database.execSQL(alterSql)
-            resetRoom(database)
         }
     }
 
@@ -199,7 +198,7 @@ object DatabaseUtil {
     }
 
     /**
-     * If we make a manual change, then we need to reset room so that it does not fail the validation
+     * Remove the room master table and set the database version (default 0)
      *
      * @param database SQLite Database
      * @param newVersion version to be set on database (default to 0)
@@ -213,21 +212,34 @@ object DatabaseUtil {
      * If the database should NOT have a migration and is a pre-populated database that should not be managed by Room... make sure Room migration is never needed.
      *
      * @param database SQLite Database
+     * @param expectedVersion SQLite Database version (PRAGMA user_version)
      * @param expectedIdentityHash Hash that is expected.  If the expectedIdentityHash does not match the existing identity hash (currently in the room_master_table), then just delete the table
      */
-    fun checkAndFixRoomIdentityHash(database: SQLiteDatabase, expectedIdentityHash: String) {
-        if (!tableExists(database, "room_master_table")) {
-            // We are OK... the table does not exist
+    fun checkAndFixRoomIdentityHash(database: SQLiteDatabase, expectedVersion: Int, expectedIdentityHash: String) {
+        if (expectedIdentityHash.isBlank()) {
+            Timber.e("checkAndFixRoomIdentityHash -- expectedIdentityHash is blank")
             return
         }
 
-        val identityHash = findRoomIdentityHash(database)
-        if (identityHash.isNullOrBlank()) {
-            Timber.w("checkAndFixRoomIdentityHash -- room_master_table.identity_hash was null or blank... making sure room_master_table does not exist")
-            resetRoom(database)
-        } else if (identityHash != expectedIdentityHash) {
-            Timber.w("checkAndFixRoomIdentityHash -- expectedIdentityHash: [$expectedIdentityHash] !=  room_master_table.identity_hash [$identityHash]... removing room_master_table")
-            resetRoom(database)
+        // set database version
+        if (database.version != expectedVersion) {
+            database.version = expectedVersion
+        }
+
+        // if we already have the correct identity hash
+        if (tableExists(database, "room_master_table") && findRoomIdentityHash(database) == expectedIdentityHash) {
+            // we are OK
+            return
+        }
+
+        Timber.w("checkAndFixRoomIdentityHash -- updating expectedIdentityHash: [$expectedIdentityHash]")
+        database.beginTransaction()
+        try {
+            database.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)", emptyArray())
+            database.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '$expectedIdentityHash')", emptyArray())
+            database.setTransactionSuccessful()
+        } finally {
+            database.endTransaction()
         }
     }
 

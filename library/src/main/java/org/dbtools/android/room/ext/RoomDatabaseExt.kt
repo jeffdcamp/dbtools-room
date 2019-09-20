@@ -153,6 +153,7 @@ fun RoomDatabase.tablesExists(tableNames: List<String>, databaseName: String = "
  * @param fromDatabaseFile Sqlite file that will be opened and attached to this database... then data will be copied from this database File
  * @param includeTables Only table names in this list will be merged.  default: emptyList()
  * @param excludeTables All tables except the table names in this list will be merged.  default: emptyList()
+ * @param tableNameMap Map of name changes in target database (Example: copy table data from databaseA.foo to databaseB.bar).  Key is the source table name, value is the target table name
  * @param mergeBlock Code to execute to perform merge.  default: database.execSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
  *
  * NOTE:  Room system tables are automatically excluded from the merge
@@ -173,11 +174,12 @@ fun RoomDatabase.mergeDatabase(
     fromDatabaseFile: File,
     includeTables: List<String> = emptyList(),
     excludeTables: List<String> = emptyList(),
+    tableNameMap: Map<String, String> = emptyMap(),
     mergeBlock: (database: SupportSQLiteDatabase, sourceTableName: String, targetTableName: String) -> Unit = { database, sourceTableName, targetTableName ->
         MergeDatabaseUtil.defaultMerge(database, sourceTableName, targetTableName)
     }
 ): Boolean {
-    return MergeDatabaseUtil.mergeDatabase(openHelper.writableDatabase, fromDatabaseFile, includeTables, excludeTables, mergeBlock)
+    return MergeDatabaseUtil.mergeDatabase(openHelper.writableDatabase, fromDatabaseFile, includeTables, excludeTables, tableNameMap, mergeBlock)
 }
 
 /**
