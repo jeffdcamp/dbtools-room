@@ -170,7 +170,7 @@ abstract class CloseableDatabaseWrapperRepository<out T: RoomDatabase>(protected
     /**
      * Close the database and remove the reference from the WrapperRepository
      *
-     * @param deleteFile Delete the database file and any associated files to this database (default: false)
+     * @param deleteFiles Delete the database file and any associated files to this database (default: false)
      */
     open fun closeAllDatabases(deleteFiles: Boolean = false) {
         val keysCopy = ArrayList<String>()
