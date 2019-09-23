@@ -27,10 +27,15 @@ abstract class MainDatabase : RoomDatabase() {
 
     abstract val individualDao: IndividualDao
 
-    fun mergeDataFromOtherDatabase(fromDatabaseFile: File, includeTables: List<String> = emptyList(), excludeTables: List<String> = emptyList()) {
+    fun mergeDataFromOtherDatabase(
+            fromDatabaseFile: File,
+            includeTables: List<String> = emptyList(),
+            excludeTables: List<String> = emptyList(),
+            tableNameMap: Map<String, String> = emptyMap()
+    ) {
         // merge database
         val database = openHelper.writableDatabase
-        database.mergeDatabase(fromDatabaseFile, includeTables, excludeTables)
+        database.mergeDatabase(fromDatabaseFile, includeTables, excludeTables, tableNameMap)
     }
 
     companion object {

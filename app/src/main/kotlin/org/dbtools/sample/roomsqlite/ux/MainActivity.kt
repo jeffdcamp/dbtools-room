@@ -15,6 +15,7 @@ import org.dbtools.android.room.util.DatabaseUtil
 import org.dbtools.sample.roomsqlite.R
 import org.dbtools.sample.roomsqlite.databinding.ActivityMainBinding
 import org.dbtools.sample.roomsqlite.model.repository.IndividualRepository
+import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity(), CoroutineScope {
@@ -145,8 +146,16 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun testMergeDatabase() = launch {
-        withContext(Dispatchers.Default) {
+        val results = withContext(Dispatchers.Default) {
             individualRepository.mergeDatabases()
+        }
+
+        if (results.success) {
+            Timber.i("Test Merge results: ${results.message}")
+            Toast.makeText(this@MainActivity, results.message, Toast.LENGTH_LONG).show()
+        } else {
+            Timber.e("Test Merge results: ${results.message}")
+            Toast.makeText(this@MainActivity, results.message, Toast.LENGTH_LONG).show()
         }
     }
 

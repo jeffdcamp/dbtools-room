@@ -2,7 +2,6 @@
 
 package org.dbtools.android.room.ext
 
-import android.database.sqlite.SQLiteDatabase
 import android.util.Pair
 import androidx.sqlite.db.SupportSQLiteDatabase
 import org.dbtools.android.room.util.DatabaseUtil
@@ -120,15 +119,17 @@ fun SupportSQLiteDatabase.tablesExists(tableNames: List<String>, databaseName: S
  * By default all tables (except Room system tables) will be merged)
  *
  * @param fromDatabaseFile Sqlite file that will be opened and attached to this database... then data will be copied from this database File
- * @param includeTables Only table names in this list will be merged.  default: emptyList()
- * @param excludeTables All tables except the table names in this list will be merged.  default: emptyList()
+ * @param includeTables Only table names in this list will be merged. Table names are source database table names.  default: emptyList()
+ * @param excludeTables All tables except the table names in this list will be merged. Table names are source database table names.  default: emptyList()
  * @param tableNameMap Map of name changes in target database (Example: copy table data from databaseA.foo to databaseB.bar).  Key is the source table name, value is the target table name
  * @param mergeBlock Code to execute to perform merge.  default: database.execSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
+ *
+ * @return true if merge was successful
  *
  * NOTE:  Room system tables are automatically excluded from the merge
  *
  *
- * Add the following function to the RoomDatabase class (mDatabase is ONLY accessable from inside the RoomDatabase class)
+ * Add the following function to the RoomDatabase class (mDatabase is ONLY accessible from inside the RoomDatabase class)
  *     fun mergeDataFromOtherDatabase(fromDatabaseFile: File, includeTables: List<String> = emptyList(), excludeTables: List<String> = emptyList()) {
  *         // make sure database is open
  *         if (!isOpen) {

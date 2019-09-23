@@ -22,6 +22,8 @@ class IndividualRepository(
     private val mainDatabaseWrapperRepository by lazy { MainDatabaseWrapperRepository(application) }
     private fun mainDatabase(key: String) = mainDatabaseWrapperRepository.getDatabase(key)
     private fun individualDao(key: String) = mainDatabase(key)?.individualDao
+    private fun individualDaoDatabaseA() = mainDatabase(DB_A)?.individualDao
+    private fun individualDaoDatabaseB() = mainDatabase(DB_B)?.individualDao
 
     fun init() {
         mainDatabaseWrapperRepository.registerDatabase(DB_A, DB_A_PATH)
@@ -135,16 +137,49 @@ class IndividualRepository(
 //        mainDatabaseWrapperRepository.closeAllDatabases(true)
     }
 
-    fun mergeDatabases(key: String = DB_A) {
+    fun mergeDatabases(): TestResults {
+        val individualDao = individualDaoDatabaseA() ?: return TestResults(false, "individualDao == null")
+        val mainDatabase = mainDatabaseWrapperRepository.getDatabase(DB_A) ?: return TestResults(false, "mainDatabase == null")
+
+        // clear database
+        individualDao.deleteAll()
+
+        // add one Individual
+        val initialIndividual = Individual().apply {
+            firstName = "Jeff"
+        }
+        individualDao.insert(initialIndividual)
+        if (individualDao.findCount() != 1L) {
+            return TestResults(false, "Invalid initial count")
+        }
+
         // copy the test database from assets
         val mergeDatabase1 = DatabaseUtil.copyDatabaseFromAssets(application, "merge1", true)
         val mergeDatabase2 = DatabaseUtil.copyDatabaseFromAssets(application, "merge2", true)
+        val mergeDatabase3 = DatabaseUtil.copyDatabaseFromAssets(application, "merge3", true)
 
-        val mainDatabase = mainDatabaseWrapperRepository.getDatabase(key)
-        mainDatabase?.mergeDataFromOtherDatabase(mergeDatabase1)
-        mainDatabase?.mergeDataFromOtherDatabase(mergeDatabase2)
 
-        showMainDatabaseInfo(key)
+        // Test1 Database 2 names
+        mainDatabase.mergeDataFromOtherDatabase(mergeDatabase1)
+        if (individualDao.findCount() != 3L) {
+            return TestResults(false, "Failed to merge1 current count: [${individualDao.findCount()}]  expected count: [3]")
+        }
+
+        // Test2 Database 3 names
+        mainDatabase.mergeDataFromOtherDatabase(mergeDatabase2)
+        if (individualDao.findCount() != 6L) {
+            return TestResults(false, "Failed to merge2 current count: [${individualDao.findCount()}]  expected count: [6]")
+        }
+
+        // Test3 Database 2 names - different table name ("person" -> "individual")
+        mainDatabase.mergeDataFromOtherDatabase(mergeDatabase3, includeTables = listOf("person"), tableNameMap = mapOf("person" to "individual"))
+        if (individualDao.findCount() != 8L) {
+            return TestResults(false, "Failed to merge3 current count: [${individualDao.findCount()}]  expected count: [8]")
+        }
+
+        showMainDatabaseInfo(DB_A)
+
+        return TestResults(true, "Success")
     }
 
     private fun showAllMainDatabaseInfo(event: String) {
@@ -170,3 +205,5 @@ class IndividualRepository(
         private const val DB_B_PATH = "b.db"
     }
 }
+
+data class TestResults(val success: Boolean, val message: String = "")

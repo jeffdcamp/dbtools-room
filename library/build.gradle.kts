@@ -70,8 +70,8 @@ tasks.withType<Test> {
 
 // ===== Maven Deploy =====
 
-// ./gradlew clean assembleRelease publishMavenPublicationToMavenLocal
-// ./gradlew clean assembleRelease publishMavenPublicationToMavenCentralRepository
+// ./gradlew clean check assembleRelease publishMavenPublicationToMavenLocal
+// ./gradlew clean check assembleRelease publishMavenPublicationToMavenCentralRepository
 
 tasks.register<Jar>("sourcesJar") {
 //    from(android.sourceSets.getByName("main").java.sourceFiles)
