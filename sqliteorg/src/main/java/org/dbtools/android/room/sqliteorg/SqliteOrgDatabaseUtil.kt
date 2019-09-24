@@ -71,7 +71,6 @@ object SqliteOrgDatabaseUtil {
         if (!columnExists(database, tableName, columnName)) {
             Timber.i("Adding column [$columnName] to table [$tableName]")
             database.execSQL(alterSql)
-            resetRoom(database)
         }
     }
 

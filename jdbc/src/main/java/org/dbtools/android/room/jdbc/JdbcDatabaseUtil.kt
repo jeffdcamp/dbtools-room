@@ -11,7 +11,6 @@ object JdbcDatabaseUtil {
     fun alterTableIfColumnDoesNotExist(database: JdbcSqliteDatabase, tableName: String, columnName: String, alterSql: String) {
         if (!columnExists(database, tableName, columnName)) {
             database.execSQL(alterSql)
-            resetRoom(database)
         }
     }
 

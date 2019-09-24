@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 5.0.1 *(2019-09)*
+-------------------------
+* Fixed issue with alterTableIfColumnDoesNotExist(...)
+
 Version 5.0.0 *(2019-09)*
 -------------------------
 * Room 2.2.0-rc01
