@@ -49,6 +49,7 @@ object Deps {
     // Test
     private const val JUNIT_VERSION = "5.5.2"
     const val TEST_JUNIT = "org.junit.jupiter:junit-jupiter:$JUNIT_VERSION"
+    const val TEST_JUNIT_API = "org.junit.jupiter:junit-jupiter-api:$JUNIT_VERSION"
     const val TEST_JUNIT_ENGINE = "org.junit.jupiter:junit-jupiter-engine:$JUNIT_VERSION"
 
     const val TEST_RUNNER = "androidx.test:runner:1.2.0"
