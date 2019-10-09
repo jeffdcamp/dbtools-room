@@ -7,7 +7,6 @@ import androidx.room.InvalidationTracker
 import androidx.room.RoomDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicBoolean
@@ -71,17 +70,15 @@ object RoomLiveData {
 
     private fun <T> toLiveDataInternal(
         tableChangeReferences: List<TableChangeReference>?,
-        coroutineContext: CoroutineContext = Dispatchers.Default,
+        coroutineContext: CoroutineContext = Dispatchers.IO,
         block: suspend () -> T
     ): LiveData<T> {
         return object : LiveData<T>(), CoroutineScope {
             private val computing = AtomicBoolean(false)
             private val invalid = AtomicBoolean(true)
-            private lateinit var job: Job
             private var observerList = mutableListOf<Pair<TableChangeReference, InvalidationTracker.Observer>>()
 
-            override val coroutineContext: CoroutineContext
-                get() = coroutineContext + job
+            override val coroutineContext = coroutineContext
 
             private fun addObserver(tableChangeReference: TableChangeReference?) {
                 tableChangeReference ?: return
@@ -105,19 +102,11 @@ object RoomLiveData {
             }
 
             override fun onActive() {
-                job = Job()
-
                 tableChangeReferences?.forEach { tableChangeManager -> addObserver(tableChangeManager) }
                 getData()
             }
 
-            protected fun finalize() {
-                job.cancel()
-            }
-
             private fun onTableChange() {
-                job.cancel()
-                job = Job()
                 invalid.set(true)
                 getData()
             }
@@ -126,8 +115,7 @@ object RoomLiveData {
                 if (!hasObservers()) {
                     return
                 }
-
-                launch(coroutineContext) {
+                launch {
                     var computed: Boolean
                     do {
                         computed = false

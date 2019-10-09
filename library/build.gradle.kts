@@ -55,10 +55,14 @@ dependencies {
     api(Deps.TIMBER)
 
     // Test
+    testImplementation(project(":jdbc"))
+    testImplementation(Deps.ARCH_ROOM_KTX)
     testImplementation(Deps.TEST_JUNIT)
+    testImplementation(Deps.TEST_JUNIT_API)
     testImplementation(Deps.TEST_JUNIT_ENGINE)
     testImplementation(Deps.TEST_MOCKITO_CORE)
     testImplementation(Deps.TEST_MOCKITO_KOTLIN)
+    kaptTest(Deps.ARCH_ROOM_COMPILER)
 }
 
 // ===== TEST TASKS =====
@@ -74,7 +78,7 @@ tasks.withType<Test> {
 // ./gradlew clean check assembleRelease publishMavenPublicationToMavenCentralRepository
 
 tasks.register<Jar>("sourcesJar") {
-//    from(android.sourceSets.getByName("main").java.sourceFiles)
+    //    from(android.sourceSets.getByName("main").java.sourceFiles)
     from(project.the<BaseExtension>().sourceSets["main"].java.srcDirs)
     archiveClassifier.set("sources")
 }
