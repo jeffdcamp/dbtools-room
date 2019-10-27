@@ -83,11 +83,11 @@ class IndividualRepository(
         } ?: return false
     }
 
-    fun showAllIndividuals(key: String = DB_A) = GlobalScope.launch(Dispatchers.Default) {
+    fun showAllIndividuals(key: String = DB_A) = GlobalScope.launch(Dispatchers.IO) {
         showMainDatabaseInfo(key)
     }
 
-    fun deleteAllIndividuals(key: String = DB_A) = GlobalScope.launch(Dispatchers.Default) {
+    fun deleteAllIndividuals(key: String = DB_A) = GlobalScope.launch(Dispatchers.IO) {
         individualDao(key)?.deleteAll()
     }
 

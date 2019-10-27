@@ -51,7 +51,7 @@ object RoomLiveData {
      *
      * @return LiveData<T>
      */
-    fun <T> toLiveData(coroutineContext: CoroutineContext = Dispatchers.Default, block: suspend () -> T): LiveData<T> {
+    fun <T> toLiveData(coroutineContext: CoroutineContext = Dispatchers.IO, block: suspend () -> T): LiveData<T> {
         return toLiveDataInternal(null, coroutineContext, block)
     }
 
@@ -64,7 +64,7 @@ object RoomLiveData {
      *
      * @return LiveData<T>
      */
-    fun <T> toLiveData(tableChangeReferences: List<TableChangeReference>, coroutineContext: CoroutineContext = Dispatchers.Default, block: suspend () -> T): LiveData<T> {
+    fun <T> toLiveData(tableChangeReferences: List<TableChangeReference>, coroutineContext: CoroutineContext = Dispatchers.IO, block: suspend () -> T): LiveData<T> {
         return toLiveDataInternal(tableChangeReferences, coroutineContext, block)
     }
 
@@ -180,7 +180,7 @@ fun RoomDatabase.tableChangeReferences(vararg tableNames: String): TableChangeRe
     return TableChangeReference(this, tableNames)
 }
 
-fun <T> RoomDatabase.toLiveData(vararg tableNames: String, coroutineContext: CoroutineContext = Dispatchers.Default, block: suspend () -> T): LiveData<T> {
+fun <T> RoomDatabase.toLiveData(vararg tableNames: String, coroutineContext: CoroutineContext = Dispatchers.IO, block: suspend () -> T): LiveData<T> {
     return RoomLiveData.toLiveData(listOf(TableChangeReference(this, tableNames)), coroutineContext) { block() }
 }
 

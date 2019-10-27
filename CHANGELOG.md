@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 5.2.0 *(2019-10)*
+-------------------------
+* Room 2.2.0
+* Remove cancelling job in `toLiveData` since a race condition can cancel all jobs (contributed by hansenji)
+* Changed default coroutine dispatchers to Dispatchers.IO
+
 Version 5.0.1 *(2019-09)*
 -------------------------
 * Fixed issue with alterTableIfColumnDoesNotExist(...)

@@ -25,7 +25,7 @@ object Deps {
     // Code
     const val KOTLIN_STD_LIB = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$KOTLIN_VERSION"
     const val KOTLIN_SERIALIZATION = "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.11.0"
-    private const val COROUTINES_VERSION = "1.3.1"
+    private const val COROUTINES_VERSION = "1.3.2"
     const val COROUTINES = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$COROUTINES_VERSION"
     private const val DAGGER_VERSION = "2.23"
     const val DAGGER = "com.google.dagger:dagger:$DAGGER_VERSION"
@@ -39,7 +39,7 @@ object Deps {
     const val VIEWMODEL_INJECT_PROCESSOR = "com.vikingsen.inject:viewmodel-inject-processor:0.1.1"
 
     // Database
-    private const val ROOM_VERSION = "2.2.0-rc01"
+    private const val ROOM_VERSION = "2.2.0"
     const val ARCH_ROOM_RUNTIME = "androidx.room:room-runtime:$ROOM_VERSION"
     const val ARCH_ROOM_KTX = "androidx.room:room-ktx:$ROOM_VERSION"
     const val ARCH_ROOM_COMPILER = "androidx.room:room-compiler:$ROOM_VERSION"
@@ -55,7 +55,7 @@ object Deps {
     const val TEST_RUNNER = "androidx.test:runner:1.2.0"
     const val TEST_RULES = "androidx.test:rules:1.2.0"
     const val TEST_ANDROIDX_JUNIT = "androidx.test.ext:junit:1.1.1"
-    const val TEST_MOCKITO_CORE = "org.mockito:mockito-core:3.0.0"
+    const val TEST_MOCKITO_CORE = "org.mockito:mockito-core:3.1.0"
     const val TEST_THREETENBP = "org.threeten:threetenbp:1.4.0"
     const val TEST_XERIAL_SQLITE = "org.xerial:sqlite-jdbc:3.27.2.1"
     const val TEST_ARCH_ROOM_TESTING = "androidx.room:room-testing:$ROOM_VERSION"

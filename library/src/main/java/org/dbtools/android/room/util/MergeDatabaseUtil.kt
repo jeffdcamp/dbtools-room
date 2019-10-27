@@ -52,7 +52,7 @@ object MergeDatabaseUtil {
             }
     ): Boolean {
         if (!sourceDatabaseFile.exists()) {
-            Timber.e("Failed to merged [${sourceDatabaseFile.absolutePath}] into [$targetDatabase] :: sourceDatabaseFile database does not exist")
+            Timber.e("Failed to merged [${sourceDatabaseFile.absolutePath}] into targetDatabase :: sourceDatabaseFile database does not exist")
             return false
         }
 

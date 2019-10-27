@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun insertIndividual() = launch {
-        val count = withContext(Dispatchers.Default) {
+        val count = withContext(Dispatchers.IO) {
             individualRepository.addIndividual("Jeff", "Campbell")
             return@withContext individualRepository.getIndividualCount()
         }
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             return@launch
         }
 
-        val deleteCount = withContext(Dispatchers.Default) {
+        val deleteCount = withContext(Dispatchers.IO) {
             individualRepository.deleteLastIndividual()
         }
 
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             return@launch
         }
 
-        val updated = withContext(Dispatchers.Default) {
+        val updated = withContext(Dispatchers.IO) {
             individualRepository.updateLastIndividualName()
         }
 
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             return@launch
         }
 
-        val firstName = withContext(Dispatchers.Default) {
+        val firstName = withContext(Dispatchers.IO) {
             return@withContext individualRepository.getLastIndividualFirstName()
         }
         Toast.makeText(this@MainActivity, "Last Individual First Name: $firstName", Toast.LENGTH_SHORT).show()
@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
 
     private suspend fun hasRecords(): Boolean {
-        return withContext(Dispatchers.Default) {
+        return withContext(Dispatchers.IO) {
             val count = individualRepository.findCount()
 
             if (count <= 0) {
@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun testDatabaseRepository() = launch {
-        withContext(Dispatchers.Default) {
+        withContext(Dispatchers.IO) {
             individualRepository.validateDatabases()
         }
     }
@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         })
 
         // CHANGE NUMBER
-        withContext(Dispatchers.Default) {
+        withContext(Dispatchers.IO) {
             delay(1000)
             val lastNumber = individualRepository.getLastIndividualNumber()
             individualRepository.updateLastIndividualNumber(1)
@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun testMergeDatabase() = launch {
-        val results = withContext(Dispatchers.Default) {
+        val results = withContext(Dispatchers.IO) {
             individualRepository.mergeDatabases()
         }
 
