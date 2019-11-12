@@ -5,8 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import org.dbtools.android.room.ext.validDatabaseFile
+import org.dbtools.android.room.toFlow
 import org.dbtools.android.room.toLiveData
 import org.dbtools.android.room.util.DatabaseUtil
 import org.dbtools.sample.roomsqlite.model.db.main.MainDatabaseWrapperRepository
@@ -49,10 +52,16 @@ class IndividualRepository(
         }
     }
 
-    fun findNumberByIdLiveData(key: String = DB_A): LiveData<Long> {
+    fun findNumberByIdLiveData(key: String = DB_A): LiveData<Int> {
         return mainDatabaseWrapperRepository.getDatabase(key)?.toLiveData("individual") {
-            getLastIndividualId(key) ?: 0
-        } ?: MutableLiveData<Long>()
+            getLastIndividualNumber(key)
+        } ?: MutableLiveData<Int>()
+    }
+
+    fun findNumberByIdFlow(key: String = DB_A): Flow<Int> {
+        return mainDatabaseWrapperRepository.getDatabase(key)?.toFlow("individual") {
+            getLastIndividualNumber(key)
+        } ?: emptyFlow()
     }
 
     fun getLastIndividualId(key: String = DB_A) = individualDao(key)?.findLastIndividualId()

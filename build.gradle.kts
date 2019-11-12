@@ -19,7 +19,6 @@ allprojects {
         mavenLocal()
         google()
         mavenCentral()
-        maven("https://code.lds.org/nexus/content/groups/mobile/")
         jcenter()
 //        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }

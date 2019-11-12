@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+Version 5.3.0 *(2019-10)*
+-------------------------
+* Added RoomFlow.toFlow(...) - get notified when specific table changes happen
+
+Version 5.2.1 *(2019-10)*
+-------------------------
+* Room 2.2.1
+
 Version 5.2.0 *(2019-10)*
 -------------------------
 * Room 2.2.0

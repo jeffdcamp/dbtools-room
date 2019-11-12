@@ -5,9 +5,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.dbtools.android.room.sqliteorg.SqliteOrgDatabaseUtil
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         binding.showButton.setOnClickListener { showLastIndividualName() }
         binding.testDatabaseRepositoryButton.setOnClickListener { testDatabaseRepository() }
         binding.testRoomLiveDataButton.setOnClickListener { testRoomLiveData() }
+        binding.testRoomFlowButton.setOnClickListener { testRoomFlow() }
         binding.testMergeDatabaseButton.setOnClickListener { testMergeDatabase() }
         binding.logIndividualsButton.setOnClickListener { individualRepository.showAllIndividuals() }
         binding.deleteAllIndividualsButton.setOnClickListener { individualRepository.deleteAllIndividuals() }
@@ -121,6 +124,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     private fun testRoomLiveData() = launch {
         // check to make sure there is individuals
         if (!hasRecords()) {
+            Timber.e("Cannot test.... no individuals")
             return@launch
         }
 
@@ -128,21 +132,65 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         val liveData = individualRepository.findNumberByIdLiveData()
 
         // OBSERVE and show last number
+        Timber.i("testRoomLiveData(): Initial observe ")
         liveData.observe(this@MainActivity, Observer { data ->
             data ?: return@Observer
-            Toast.makeText(this@MainActivity, "Last Number Set: $data", Toast.LENGTH_SHORT).show()
+            val message = "Last Number Set: $data"
+            Timber.i("testRoomLiveData(): $message ")
+            Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
         })
 
         // CHANGE NUMBER
         withContext(Dispatchers.IO) {
             delay(1000)
+            Timber.i("testRoomLiveData(): change #1 ")
             val lastNumber = individualRepository.getLastIndividualNumber()
-            individualRepository.updateLastIndividualNumber(1)
+            individualRepository.updateLastIndividualNumber(500)
 
             // RESTORE
             delay(1000)
+            Timber.i("testRoomLiveData(): change #2 ")
             individualRepository.updateLastIndividualNumber(lastNumber)
         }
+    }
+
+    private fun testRoomFlow() = launch {
+        // check to make sure there is individuals
+        if (!hasRecords()) {
+            Timber.e("Cannot test.... no individuals")
+            return@launch
+        }
+
+        // Create LiveData
+        val flow = individualRepository.findNumberByIdFlow()
+
+        // OBSERVE and show last number
+        Timber.i("testRoomFlow(): Initial collect ")
+        val job = lifecycleScope.launch {
+            flow.collect { data ->
+                val message = "COLLECT / Last Number Set: $data"
+                Timber.i("testRoomFlow(): $message ")
+                Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // CHANGE NUMBER
+        withContext(Dispatchers.IO) {
+            delay(1000)
+            Timber.i("testRoomFlow(): change #1 ")
+            val lastNumber = individualRepository.getLastIndividualNumber()
+            individualRepository.updateLastIndividualNumber(500)
+
+            // RESTORE
+            delay(1000)
+            Timber.i("testRoomFlow(): change #2 ")
+            individualRepository.updateLastIndividualNumber(lastNumber)
+        }
+
+        delay(1000) // allow time for change #2 show
+
+        // cleanup
+        job.cancel()
     }
 
     private fun testMergeDatabase() = launch {

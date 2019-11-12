@@ -57,6 +57,13 @@
             />
 
         <Button
+            android:id="@+id/testRoomFlowButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Test Room.toFlow()"
+            />
+
+        <Button
             android:id="@+id/testMergeDatabaseButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
