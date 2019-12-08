@@ -66,12 +66,21 @@ object SqliteOrgDatabaseUtil {
      * @param tableName table for columnName
      * @param columnName column to from tableName to be checked
      * @param alterSql SQL to be run if the column does not exits. Example: alterTableIfColumnDoesNotExist(database, "individual", "middle_name", "ALTER TABLE individual ADD `middle_name` TEXT DEFAULT '' NOT NULL")
+     *
+     * @return true if there were no failures
      */
-    fun alterTableIfColumnDoesNotExist(database: SQLiteDatabase, tableName: String, columnName: String, alterSql: String) {
+    fun alterTableIfColumnDoesNotExist(database: SQLiteDatabase, tableName: String, columnName: String, alterSql: String): Boolean {
+        if (!tableExists(database, tableName)) {
+            Timber.e("Cannot ALTER table [$tableName] that does not exist in database [${database.path}]")
+            return false
+        }
+
         if (!columnExists(database, tableName, columnName)) {
             Timber.i("Adding column [$columnName] to table [$tableName]")
             database.execSQL(alterSql)
         }
+
+        return true
     }
 
     /**

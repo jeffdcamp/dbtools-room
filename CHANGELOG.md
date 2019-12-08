@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 5.4.0 *(2019-12)*
+-------------------------
+* Room 2.2.2
+* Added table exist check to SQLiteDatabase.alterTableIfColumnDoesNotExist(...)
+
 Version 5.3.0 *(2019-10)*
 -------------------------
 * Added RoomFlow.toFlow(...) - get notified when specific table changes happen

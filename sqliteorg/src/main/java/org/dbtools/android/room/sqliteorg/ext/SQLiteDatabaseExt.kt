@@ -11,8 +11,8 @@ import org.sqlite.database.sqlite.SQLiteDatabase
  * @param columnName column to from tableName to be checked
  * @param alterSql SQL to be run if the column does not exits. Example: alterTableIfColumnDoesNotExist(database, "individual", "middle_name", "ALTER TABLE individual ADD `middle_name` TEXT DEFAULT '' NOT NULL")
  */
-fun SQLiteDatabase.alterTableIfColumnDoesNotExist(tableName: String, columnName: String, alterSql: String) {
-    SqliteOrgDatabaseUtil.alterTableIfColumnDoesNotExist(this, tableName, columnName, alterSql)
+fun SQLiteDatabase.alterTableIfColumnDoesNotExist(tableName: String, columnName: String, alterSql: String): Boolean {
+    return SqliteOrgDatabaseUtil.alterTableIfColumnDoesNotExist(this, tableName, columnName, alterSql)
 }
 
 /**
