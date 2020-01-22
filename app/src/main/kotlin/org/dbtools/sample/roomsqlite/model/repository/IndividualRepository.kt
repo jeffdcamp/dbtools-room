@@ -8,7 +8,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
-import org.dbtools.android.room.ext.validDatabaseFile
+import org.dbtools.android.room.ext.validateDatabaseFile
 import org.dbtools.android.room.toFlow
 import org.dbtools.android.room.toLiveData
 import org.dbtools.android.room.util.DatabaseUtil
@@ -124,7 +124,7 @@ class IndividualRepository(
         val mainDatabaseA = mainDatabaseWrapperRepository.getDatabase(DB_A)
         val mainDatabaseB = mainDatabaseWrapperRepository.getDatabase(DB_B)
 
-        if (mainDatabaseA?.validDatabaseFile(DB_A) == false) {
+        if (mainDatabaseA?.validateDatabaseFile(DB_A) == false) {
             Timber.e("Database validation failed.... exiting")
             return
         }

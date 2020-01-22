@@ -210,7 +210,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     private fun testValidateDatabase() {
         val database1 = DatabaseUtil.copyDatabaseFromAssets(this@MainActivity, "merge1", true)
 
-        val success = SqliteOrgDatabaseUtil.validDatabaseFile(database1.absolutePath)
+        val success = SqliteOrgDatabaseUtil.validateDatabaseFile(database1.absolutePath)
         Toast.makeText(this, "Database Valid: [$success]", Toast.LENGTH_SHORT).show()
     }
 }
