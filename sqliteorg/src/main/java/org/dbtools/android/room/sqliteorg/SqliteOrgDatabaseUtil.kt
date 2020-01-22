@@ -14,10 +14,11 @@ object SqliteOrgDatabaseUtil {
      * @param path File path to database
      * @param databaseNameTag Optional tag name to help identify database in logging
      * @param tableDataCountCheck Optional check on a table for data. (optional)
+     * @param allowZeroCount Optional tableDataCountCheck if false return false if count is zero
      *
      * @return true if validation check is OK
      */
-    fun validDatabaseFile(path: String, databaseNameTag: String = "", tableDataCountCheck: String = ""): Boolean {
+    fun validateDatabaseFile(path: String, databaseNameTag: String = "", tableDataCountCheck: String = "", allowZeroCount: Boolean = true): Boolean {
         Timber.i("Checking database integrity for [%s]", databaseNameTag)
         val totalTimeMs = measureTimeMillis {
             try {
@@ -40,10 +41,10 @@ object SqliteOrgDatabaseUtil {
                             val count = if (cursor.moveToFirst()) {
                                 cursor.getInt(0)
                             } else {
-                                0
+                                null
                             }
 
-                            if (count == 0) {
+                            if (count == null || (!allowZeroCount && count == 0)) {
                                 Timber.e("validateDatabase - table [%s] is BLANK for database [%s] is blank", tableDataCountCheck, databaseNameTag)
                                 return false
                             }
