@@ -20,16 +20,14 @@ open class SqliteOrgSQLiteOpenHelper(
     private val delegate: OpenHelper
 
     init {
-        val databaseFilepath = if (path.isEmpty()) {
-            context.getDatabasePath(name).absolutePath
+        val databaseFile = if (path.isEmpty()) {
+            context.getDatabasePath(name)
         } else {
-            "$path/$name"
+            File(path, name)
         }
-
-        val databaseFile = File(databaseFilepath)
         databaseFile.parentFile?.mkdirs()
 
-        delegate = OpenHelper(context, libraryLoaderBlock, onDatabaseConfigureBlock, databaseFilepath, callback, password)
+        delegate = OpenHelper(context, libraryLoaderBlock, onDatabaseConfigureBlock, databaseFile.absolutePath, callback, password)
     }
 
     override fun getDatabaseName(): String? {

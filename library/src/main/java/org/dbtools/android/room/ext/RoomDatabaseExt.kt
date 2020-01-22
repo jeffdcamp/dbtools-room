@@ -14,12 +14,13 @@ import java.io.File
  * Preform a PRAGMA check on the database and optionally check a table for existing data
  *
  * @param databaseNameTag Optional check on a table for data. (optional)
- * @param databaseNameTag Optional tag name to help identify database in logging
+ * @param tableDataCountCheck Optional check on a table for data. (optional)
+ * @param allowZeroCount Optional tableDataCountCheck if false return false if count is zero
  *
  * @return true if validation check is OK
  */
-fun RoomDatabase.validDatabaseFile(databaseNameTag: String = "", tableDataCountCheck: String = ""): Boolean {
-    return DatabaseUtil.validDatabaseFile(this, databaseNameTag, tableDataCountCheck)
+fun RoomDatabase.validateDatabaseFile(databaseNameTag: String = "", tableDataCountCheck: String = "", allowZeroCount: Boolean = true): Boolean {
+    return DatabaseUtil.validateDatabaseFile(this, databaseNameTag, tableDataCountCheck, allowZeroCount)
 }
 
 /**
