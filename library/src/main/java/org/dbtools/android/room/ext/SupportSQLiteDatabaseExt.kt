@@ -14,11 +14,12 @@ import java.io.File
  *
  * @param databaseNameTag Optional check on a table for data. (optional)
  * @param databaseNameTag Optional tag name to help identify database in logging
+ * @param allowZeroCount Optional tableDataCountCheck if false return false if count is zero
  *
  * @return true if validation check is OK
  */
-fun SupportSQLiteDatabase.validDatabaseFile(databaseNameTag: String = "", tableDataCountCheck: String = ""): Boolean {
-    return DatabaseUtil.validDatabaseFile(this, databaseNameTag, tableDataCountCheck)
+fun SupportSQLiteDatabase.validateDatabaseFile(databaseNameTag: String = "", tableDataCountCheck: String = "", allowZeroCount: Boolean = true): Boolean {
+    return DatabaseUtil.validateDatabaseFile(this, databaseNameTag, tableDataCountCheck, allowZeroCount)
 }
 
 /**

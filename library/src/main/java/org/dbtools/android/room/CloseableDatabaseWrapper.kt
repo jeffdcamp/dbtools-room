@@ -51,15 +51,18 @@ abstract class CloseableDatabaseWrapper<out T: RoomDatabase>(protected val appli
      */
     @Synchronized
     open fun closeDatabase(deleteFile: Boolean = false) {
-        val database = _database.get()
-        database?.let {
-            val path = it.openHelper.writableDatabase.path
-            it.close()
-            if (deleteFile) {
-                DatabaseUtil.deleteDatabaseFiles(File(path))
+        try {
+            val database = _database.get()
+            database?.let {
+                val path = it.openHelper.writableDatabase.path
+                it.close()
+                if (deleteFile) {
+                    DatabaseUtil.deleteDatabaseFiles(File(path))
+                }
             }
+        } finally {
+            _database.set(null)
         }
-        _database.set(null)
     }
 
     fun dropView(database: SupportSQLiteDatabase, viewName: String) {
