@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-Version 5.5.0 *(2020-01)*
+Version 5.5.1 *(2020-01)*
 -------------------------
 * Room 2.2.3
 * Improved database validation checks (contributed by hansenji)
