@@ -5,6 +5,7 @@ import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import org.dbtools.android.room.CloseableDatabaseWrapperRepository
+import org.dbtools.android.room.sqliteorg.SqliteOrgSQLiteOpenHelperFactory
 
 class MainDatabaseWrapperRepository
 constructor(
@@ -13,6 +14,7 @@ constructor(
 
     override fun createDatabase(filename: String): MainDatabase {
         return Room.databaseBuilder(application, MainDatabase::class.java, filename)
+            .openHelperFactory(SqliteOrgSQLiteOpenHelperFactory())
             .addMigrations(object : Migration(1, 2) {
                 override fun migrate(database: SupportSQLiteDatabase) {
                     // ONLY views are changed

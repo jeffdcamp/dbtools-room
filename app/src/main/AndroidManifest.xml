@@ -14,6 +14,7 @@
         android:theme="@style/AppTheme"
         android:extractNativeLibs="false"
         tools:ignore="UnusedAttribute"
+        tools:replace="android:allowBackup"
         >
         <activity android:name=".ux.MainActivity">
             <intent-filter>
