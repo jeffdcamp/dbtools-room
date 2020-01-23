@@ -68,6 +68,7 @@ dependencies {
     implementation(project(":library"))
     implementation(project(":sqliteorg"))
     implementation(project(":jdbc"))
+    implementation(project(":sqlite-android"))
 
     // Android
     implementation(Deps.ANDROIDX_APPCOMPAT)

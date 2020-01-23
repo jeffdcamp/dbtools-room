@@ -42,7 +42,6 @@ object Deps {
     const val ARCH_ROOM_RUNTIME = "androidx.room:room-runtime:$ROOM_VERSION"
     const val ARCH_ROOM_KTX = "androidx.room:room-ktx:$ROOM_VERSION"
     const val ARCH_ROOM_COMPILER = "androidx.room:room-compiler:$ROOM_VERSION"
-    const val SQLITE = "org.sqlite.sqliteX:sqlite-android:3.15.2"
     const val XERIAL_SQLITE = "org.xerial:sqlite-jdbc:3.30.1"
 
     // Test

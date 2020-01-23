@@ -108,10 +108,9 @@ class SqliteOrgDatabase(
         return query(SimpleSQLiteQuery(query))
     }
 
-    override fun query(query: String, bindArgs: Array<Any>): Cursor {
+    override fun query(query: String, bindArgs: Array<Any?>?): Cursor {
         return query(SimpleSQLiteQuery(query, bindArgs))
     }
-
 
     override fun query(supportQuery: SupportSQLiteQuery): Cursor {
         return delegate.rawQueryWithFactory({ _, masterQuery, editTable, query ->
@@ -126,7 +125,7 @@ class SqliteOrgDatabase(
 //                } else if (supportQuery is SimpleSQLiteQuery) {
 //                    val bindArgs = SimpleSQLiteQuery::class.java.getDeclaredField("mBindArgs")
 //                    bindArgs.isAccessible = true
-//                    val bindArgsValue = bindArgs.get(supportQuery) as Array<Any>?
+//                    val bindArgsValue = bindArgs.get(supportQuery) as Array<Any?>?
 //                    count = bindArgsValue?.size ?: 0
 //                }
 //                val args = SQLiteQuery::class.java.getDeclaredField("mBindArgs")
@@ -153,7 +152,7 @@ class SqliteOrgDatabase(
         return delegate.insertWithOnConflict(table, null, values, conflictAlgorithm)
     }
 
-    override fun delete(table: String, whereClause: String, whereArgs: Array<Any>): Int {
+    override fun delete(table: String, whereClause: String, whereArgs: Array<Any?>?): Int {
         val query = "DELETE FROM " + table + if (isEmpty(whereClause)) "" else " WHERE " + whereClause
         val statement = compileStatement(query)
         SimpleSQLiteQuery.bind(statement, whereArgs)
@@ -161,7 +160,7 @@ class SqliteOrgDatabase(
     }
 
 
-    override fun update(table: String, conflictAlgorithm: Int, values: ContentValues?, whereClause: String, whereArgs: Array<Any>?): Int {
+    override fun update(table: String, conflictAlgorithm: Int, values: ContentValues?, whereClause: String, whereArgs: Array<Any?>?): Int {
         // taken from SQLiteDatabase class.
         if (values == null || values.size() == 0) {
             throw IllegalArgumentException("Empty values")
@@ -206,7 +205,7 @@ class SqliteOrgDatabase(
     }
 
     @Throws(SQLException::class)
-    override fun execSQL(sql: String, bindArgs: Array<Any>) {
+    override fun execSQL(sql: String, bindArgs: Array<Any?>?) {
         delegate.execSQL(sql, bindArgs)
     }
 

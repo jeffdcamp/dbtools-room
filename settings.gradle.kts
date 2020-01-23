@@ -1,1 +1,1 @@
-include(":sqliteorg", ":jdbc", ":library", ":app")
+include(":sqliteorg", ":jdbc", ":library", ":app", ":sqlite-android")
