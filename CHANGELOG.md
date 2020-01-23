@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 5.5.2 *(2020-01)*
+-------------------------
+* Minor patch for SqliteOrg databases (contributed by hansenji)
+
 Version 5.5.1 *(2020-01)*
 -------------------------
 * Room 2.2.3
