@@ -52,7 +52,7 @@ dependencies {
     api(Deps.ARCH_ROOM_RUNTIME)
     api(Deps.KOTLIN_STD_LIB)
     api(Deps.TIMBER)
-    compileOnly(Deps.SQLITE)
+    compileOnly(project(":sqlite-android"))
 
     // Test
     testImplementation(Deps.TEST_JUNIT)
