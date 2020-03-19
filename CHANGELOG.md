@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 5.5.3 *(2020-03)*
+-------------------------
+* Room 2.2.5
+* Kotlin 1.3.70
+
 Version 5.5.2 *(2020-01)*
 -------------------------
 * Minor patch for SqliteOrg databases (contributed by hansenji)

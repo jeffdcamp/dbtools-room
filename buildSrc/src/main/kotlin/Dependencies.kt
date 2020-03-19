@@ -1,4 +1,4 @@
-const val KOTLIN_VERSION = "1.3.61"
+const val KOTLIN_VERSION = "1.3.70"
 
 object Deps {
     // Android (https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-master-dev/buildSrc/src/main/kotlin/androidx/build/dependencies/Dependencies.kt)
@@ -38,7 +38,7 @@ object Deps {
     const val VIEWMODEL_INJECT_PROCESSOR = "com.vikingsen.inject:viewmodel-inject-processor:0.1.1"
 
     // Database
-    private const val ROOM_VERSION = "2.2.3"
+    private const val ROOM_VERSION = "2.2.5"
     const val ARCH_ROOM_RUNTIME = "androidx.room:room-runtime:$ROOM_VERSION"
     const val ARCH_ROOM_KTX = "androidx.room:room-ktx:$ROOM_VERSION"
     const val ARCH_ROOM_COMPILER = "androidx.room:room-compiler:$ROOM_VERSION"
@@ -53,7 +53,7 @@ object Deps {
     const val TEST_RUNNER = "androidx.test:runner:1.2.0"
     const val TEST_RULES = "androidx.test:rules:1.2.0"
     const val TEST_ANDROIDX_JUNIT = "androidx.test.ext:junit:1.1.1"
-    const val TEST_MOCKITO_CORE = "org.mockito:mockito-core:3.2.4"
+    const val TEST_MOCKITO_CORE = "org.mockito:mockito-core:3.3.3"
     const val TEST_THREETENBP = "org.threeten:threetenbp:1.4.0"
     const val TEST_XERIAL_SQLITE = "org.xerial:sqlite-jdbc:3.27.2.1"
     const val TEST_ARCH_ROOM_TESTING = "androidx.room:room-testing:$ROOM_VERSION"
