@@ -205,6 +205,11 @@ class IndividualRepository(
         }
     }
 
+    fun testViews(): Boolean {
+        mainDatabase(DB_A)?.viewTests() ?: return false
+        return true
+    }
+
     fun findCount(key: String = DB_A) = individualDao(key)?.findCount() ?: 0
 
     companion object {

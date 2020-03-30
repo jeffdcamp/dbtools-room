@@ -4,6 +4,7 @@ package org.dbtools.android.room.ext
 
 import android.util.Pair
 import androidx.sqlite.db.SupportSQLiteDatabase
+import org.dbtools.android.room.DatabaseViewQuery
 import org.dbtools.android.room.util.DatabaseUtil
 import org.dbtools.android.room.util.MergeDatabaseUtil
 import timber.log.Timber
@@ -112,6 +113,110 @@ fun SupportSQLiteDatabase.tablesExists(tableNames: List<String>, databaseName: S
     }
 
     return tableCount == tableNames.size
+}
+
+/**
+ * Find names of views in this database
+ * @param databaseName Alias name for database (such as an attached database) (optional)
+ */
+fun SupportSQLiteDatabase.findViewNames(databaseName: String = ""): List<String> {
+    val viewNamesCursor = if (databaseName.isNotBlank()) {
+        query("SELECT tbl_name FROM $databaseName.sqlite_master where type='view'")
+    } else {
+        query("SELECT tbl_name FROM sqlite_master where type='view'")
+    }
+
+    val viewNames = ArrayList<String>(viewNamesCursor.count)
+    viewNamesCursor.use {
+        if (it.moveToFirst()) {
+            do {
+                viewNames.add(it.getString(0))
+            } while (it.moveToNext())
+        }
+    }
+
+    return viewNames
+}
+
+/**
+ * Determines if view exist
+ *
+ * @param viewName View name to check for
+ * @param databaseName Alias name for database (such as an attached database) (optional)
+ *
+ * @return true If viewName exist
+ */
+fun SupportSQLiteDatabase.viewExists(viewName: String, databaseName: String = ""): Boolean {
+    return viewExists(listOf(viewName), databaseName)
+}
+
+/**
+ * Determines if views exist
+ * @param viewNames View names to check for
+ * @param databaseName Alias name for database (such as an attached database) (optional)
+ *
+ * @return true If ALL viewNames exist
+ */
+fun SupportSQLiteDatabase.viewExists(viewNames: List<String>, databaseName: String = ""): Boolean {
+    val inClaus = viewNames.joinToString(",", prefix = "(", postfix = ")") { "'$it'" }
+
+    val viewNamesCursor = if (databaseName.isNotBlank()) {
+        query("SELECT count(1) FROM $databaseName.sqlite_master WHERE type='view' AND tbl_name IN $inClaus")
+    } else {
+        query("SELECT count(1) FROM sqlite_master WHERE type='view' AND tbl_name IN $inClaus")
+    }
+
+    var viewCount = 0
+    viewNamesCursor.use {
+        if (it.moveToFirst()) {
+            do {
+                viewCount = it.getInt(0)
+            } while (it.moveToNext())
+        }
+    }
+
+    return viewCount == viewNames.size
+}
+
+/**
+ * Drops view in a database
+ *
+ * @param database Database to drop the views from
+ * @param viewsName Name of view to drop
+ */
+fun SupportSQLiteDatabase.dropView(viewName: String) {
+    DatabaseUtil.dropView(this, viewName)
+}
+
+/**
+ * Drops all views in a database
+ *
+ * @param views List of view names... if this list is empty then all views in the database will be dropped
+ */
+fun SupportSQLiteDatabase.dropAllViews(views: List<String> = emptyList()) {
+    DatabaseUtil.dropAllViews(this, views)
+}
+
+fun SupportSQLiteDatabase.createView(viewName: String, viewQuery: String) {
+    DatabaseUtil.createView(this, viewName, viewQuery)
+}
+
+fun SupportSQLiteDatabase.createAllViews(views: List<DatabaseViewQuery>) {
+    DatabaseUtil.createAllViews(this, views)
+}
+
+fun SupportSQLiteDatabase.recreateView(viewName: String, viewQuery: String) {
+    DatabaseUtil.recreateView(this, viewName, viewQuery)
+}
+
+/**
+ * Drops all existing views and then recreates them in a database
+ *
+ * @param database Database to recreate the views from
+ * @param views List of Views to recreate
+ */
+fun SupportSQLiteDatabase.recreateAllViews(views: List<DatabaseViewQuery>) {
+    DatabaseUtil.recreateAllViews(this, views)
 }
 
 /**

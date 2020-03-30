@@ -64,28 +64,4 @@ abstract class CloseableDatabaseWrapper<out T: RoomDatabase>(protected val appli
             _database.set(null)
         }
     }
-
-    fun dropView(database: SupportSQLiteDatabase, viewName: String) {
-        DatabaseUtil.dropView(database, viewName)
-    }
-
-    fun dropAllViews(database: SupportSQLiteDatabase, views: List<DatabaseViewQuery>) {
-        DatabaseUtil.dropAllViews(database, views)
-    }
-
-    fun createView(database: SupportSQLiteDatabase, viewName: String, viewQuery: String) {
-        DatabaseUtil.createView(database, viewName, viewQuery)
-    }
-
-    fun createAllViews(database: SupportSQLiteDatabase, views: List<DatabaseViewQuery>) {
-        DatabaseUtil.createAllViews(database, views)
-    }
-
-    fun recreateView(database: SupportSQLiteDatabase, viewName: String, viewQuery: String) {
-        DatabaseUtil.recreateView(database, viewName, viewQuery)
-    }
-
-    fun recreateAllViews(database: SupportSQLiteDatabase, views: List<DatabaseViewQuery>) {
-        DatabaseUtil.recreateAllViews(database, views)
-    }
 }

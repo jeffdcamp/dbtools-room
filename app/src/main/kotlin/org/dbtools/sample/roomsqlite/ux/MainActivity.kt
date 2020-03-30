@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         binding.logIndividualsButton.setOnClickListener { individualRepository.showAllIndividuals() }
         binding.deleteAllIndividualsButton.setOnClickListener { individualRepository.deleteAllIndividuals() }
         binding.validateDatabaseButton.setOnClickListener { testValidateDatabase() }
+        binding.testViewsDatabaseButton.setOnClickListener { testViewsDatabase() }
     }
 
     private fun insertIndividual() = launch {
@@ -212,5 +213,10 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
         val success = SqliteOrgDatabaseUtil.validateDatabaseFile(database1.absolutePath)
         Toast.makeText(this, "Database Valid: [$success]", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun testViewsDatabase() {
+        val results = individualRepository.testViews()
+        Toast.makeText(this@MainActivity, "Views test complete. Success = $results", Toast.LENGTH_LONG).show()
     }
 }

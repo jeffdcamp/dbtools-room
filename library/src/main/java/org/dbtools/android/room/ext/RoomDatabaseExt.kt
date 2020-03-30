@@ -147,6 +147,66 @@ fun RoomDatabase.tablesExists(tableNames: List<String>, databaseName: String = "
 }
 
 /**
+ * Find names of view in this database
+ */
+fun RoomDatabase.findViewNames(): List<String> {
+    val viewNamesCursor = query("SELECT tbl_name FROM sqlite_master where type='view'", null)
+
+    val viewNames = ArrayList<String>(viewNamesCursor.count)
+
+    viewNamesCursor.use {
+        if (it.moveToFirst()) {
+            do {
+                viewNames.add(it.getString(0))
+            } while (it.moveToNext())
+        }
+    }
+
+    return viewNames
+}
+
+/**
+ * Determines if view exist
+ *
+ * @param viewName View name to check for
+ * @param databaseName Alias name for database (such as an attached database) (optional)
+ *
+ * @return true If viewName exist
+ */
+fun RoomDatabase.viewExists(viewName: String, databaseName: String = ""): Boolean {
+    return viewExists(listOf(viewName), databaseName)
+}
+
+/**
+ * Determines if views exist
+ *
+ * @param viewName View names to check for
+ * @param databaseName Alias name for database (such as an attached database) (optional)
+ *
+ * @return true If ALL viewNames exist
+ */
+fun RoomDatabase.viewExists(viewName: List<String>, databaseName: String = ""): Boolean {
+    val inClaus = viewName.joinToString(",", prefix = "(", postfix = ")") { "'$it'" }
+
+    val viewNamesCursor = if (databaseName.isNotBlank()) {
+        query("SELECT count(1) FROM $databaseName.sqlite_master WHERE type='view' AND tbl_name IN $inClaus", null)
+    } else {
+        query("SELECT count(1) FROM sqlite_master WHERE type='view' AND tbl_name IN $inClaus", null)
+    }
+
+    var viewCount = 0
+    viewNamesCursor.use {
+        if (it.moveToFirst()) {
+            do {
+                viewCount = it.getInt(0)
+            } while (it.moveToNext())
+        }
+    }
+
+    return viewCount == viewName.size
+}
+
+/**
  * Merge database tables from other databases.
  *
  * By default all tables (except Room system tables) will be merged)

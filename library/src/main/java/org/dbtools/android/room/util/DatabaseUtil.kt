@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import org.dbtools.android.room.DatabaseViewQuery
+import org.dbtools.android.room.ext.findViewNames
 import timber.log.Timber
 import java.io.File
 import java.io.FileFilter
@@ -367,12 +368,25 @@ object DatabaseUtil {
         return newDatabaseFile
     }
 
+    /**
+     * Drops view in a database
+     *
+     * @param database Database to drop the views from
+     * @param viewsName Name of view to drop
+     */
     fun dropView(database: SupportSQLiteDatabase, viewName: String) {
         database.execSQL("DROP VIEW IF EXISTS $viewName")
     }
 
-    fun dropAllViews(database: SupportSQLiteDatabase, views: List<DatabaseViewQuery>) {
-        views.forEach { dropView(database, it.viewName) }
+    /**
+     * Drops all views in a database
+     *
+     * @param database Database to drop the views from
+     * @param views List of view names... if this list is empty then all views in the database will be dropped
+     */
+    fun dropAllViews(database: SupportSQLiteDatabase, views: List<String> = emptyList()) {
+        val viewNames: List<String> = if (views.isNotEmpty()) views else database.findViewNames()
+        viewNames.forEach { dropView(database, it) }
     }
 
     fun createView(database: SupportSQLiteDatabase, viewName: String, viewQuery: String) {
@@ -388,6 +402,12 @@ object DatabaseUtil {
         createView(database, viewName, viewQuery)
     }
 
+    /**
+     * Drops all existing views and then recreates them in a database
+     *
+     * @param database Database to recreate the views from
+     * @param views List of Views to recreate
+     */
     fun recreateAllViews(database: SupportSQLiteDatabase, views: List<DatabaseViewQuery>) {
         views.forEach { recreateView(database, it.viewName, it.viewQuery) }
     }

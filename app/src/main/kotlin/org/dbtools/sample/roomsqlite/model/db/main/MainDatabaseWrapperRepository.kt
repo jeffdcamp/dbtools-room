@@ -6,6 +6,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import org.dbtools.android.room.CloseableDatabaseWrapperRepository
 import org.dbtools.android.room.sqliteorg.SqliteOrgSQLiteOpenHelperFactory
+import org.dbtools.android.room.util.DatabaseUtil
 
 class MainDatabaseWrapperRepository
 constructor(
@@ -20,7 +21,7 @@ constructor(
                     // ONLY views are changed
 
                     // drop and recreate views
-                    recreateAllViews(database, MainDatabase.DATABASE_VIEW_QUERIES)
+                    DatabaseUtil.recreateAllViews(database, MainDatabase.DATABASE_VIEW_QUERIES)
                 }
             })
             .addMigrations(object : Migration(2, 3) {
@@ -28,12 +29,12 @@ constructor(
                     // BOTH views and tables are changed
 
                     // drop views
-                    dropAllViews(database, MainDatabase.DATABASE_VIEW_QUERIES)
+                    DatabaseUtil.dropAllViews(database)
 
                     // do other database migrations here
 
                     // recreate views
-                    createAllViews(database, MainDatabase.DATABASE_VIEW_QUERIES)
+                    DatabaseUtil.createAllViews(database, MainDatabase.DATABASE_VIEW_QUERIES)
                 }
             })
 

@@ -90,5 +90,12 @@
             android:text="Validate Database"
             />
 
+        <Button
+            android:id="@+id/testViewsDatabaseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Test Views"
+            />
+
     </LinearLayout>
 </layout>

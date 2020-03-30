@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 5.6.0 *(2020-03)*
+-------------------------
+* Improved view create/drop functions and extension functions
+* Added support for dropping ALL views from a database
+
 Version 5.5.3 *(2020-03)*
 -------------------------
 * Room 2.2.5
