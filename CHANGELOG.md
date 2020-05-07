@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 5.6.1 *(2020-05)*
+-------------------------
+* Changed dependency Xerial dependency to be compileOnly (to allow substitution of different jdbc driver... each app will need to include Xerial or other jdbc library in their projects)
+
 Version 5.6.0 *(2020-03)*
 -------------------------
 * Improved view create/drop functions and extension functions

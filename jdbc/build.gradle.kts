@@ -51,7 +51,7 @@ dependencies {
     api(Deps.ARCH_LIFECYCLE_EXT)
     api(Deps.ARCH_ROOM_RUNTIME)
     api(Deps.KOTLIN_STD_LIB)
-    api(Deps.XERIAL_SQLITE)
+    compileOnly(Deps.XERIAL_SQLITE)
 
     // Test
     testImplementation(Deps.TEST_JUNIT)
