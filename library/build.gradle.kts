@@ -56,6 +56,7 @@ dependencies {
 
     // Test
     testImplementation(project(":jdbc"))
+    testImplementation(Deps.XERIAL_SQLITE)
     testImplementation(Deps.ARCH_ROOM_KTX)
     testImplementation(Deps.TEST_JUNIT)
     testImplementation(Deps.TEST_JUNIT_API)

@@ -28,12 +28,15 @@ android {
     }
 
     compileOptions {
+        // Flag to enable support for the new language APIs
+        isCoreLibraryDesugaringEnabled = true
+
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    dataBinding {
-        isEnabled = true
+    buildFeatures {
+        viewBinding = true
     }
 
     lintOptions {
@@ -71,12 +74,12 @@ dependencies {
     implementation(project(":sqlite-android"))
 
     // Android
+    coreLibraryDesugaring(Deps.ANDROID_DESUGAR_JDK_LIBS)
     implementation(Deps.ANDROIDX_APPCOMPAT)
 
     // Code
     implementation(Deps.KOTLIN_STD_LIB)
     implementation(Deps.COROUTINES)
-    implementation(Deps.THREETEN_ABP)
     implementation(Deps.TIMBER)
 
     // UI
@@ -88,6 +91,9 @@ dependencies {
     // Database
     implementation(Deps.ARCH_ROOM_RUNTIME)
     kapt(Deps.ARCH_ROOM_COMPILER)
+
+    // Test
+    testImplementation(Deps.XERIAL_SQLITE)
 }
 
 // ===== TEST TASKS =====

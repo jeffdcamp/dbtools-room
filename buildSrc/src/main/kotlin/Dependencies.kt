@@ -1,7 +1,8 @@
-const val KOTLIN_VERSION = "1.3.71"
+const val KOTLIN_VERSION = "1.3.72"
 
 object Deps {
     // Android (https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-master-dev/buildSrc/src/main/kotlin/androidx/build/dependencies/Dependencies.kt)
+    const val ANDROID_DESUGAR_JDK_LIBS = "com.android.tools:desugar_jdk_libs:1.0.5"
     const val ANDROIDX_APPCOMPAT = "androidx.appcompat:appcompat:1.1.0"
     private const val LIFECYCLE_VERSION = "2.2.0"
     const val ARCH_LIFECYCLE_EXT = "androidx.lifecycle:lifecycle-extensions:$LIFECYCLE_VERSION"
@@ -11,7 +12,6 @@ object Deps {
     const val KOTLIN_STD_LIB = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$KOTLIN_VERSION"
     private const val COROUTINES_VERSION = "1.3.3"
     const val COROUTINES = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$COROUTINES_VERSION"
-    const val THREETEN_ABP = "com.jakewharton.threetenabp:threetenabp:1.2.3"
     const val TIMBER = "com.jakewharton.timber:timber:4.7.1"
 
     // Database
@@ -19,7 +19,7 @@ object Deps {
     const val ARCH_ROOM_RUNTIME = "androidx.room:room-runtime:$ROOM_VERSION"
     const val ARCH_ROOM_KTX = "androidx.room:room-ktx:$ROOM_VERSION"
     const val ARCH_ROOM_COMPILER = "androidx.room:room-compiler:$ROOM_VERSION"
-    const val XERIAL_SQLITE = "org.xerial:sqlite-jdbc:3.30.1"
+    const val XERIAL_SQLITE = "org.xerial:sqlite-jdbc:3.31.1"
 
     // Test
     private const val JUNIT_VERSION = "5.6.1"

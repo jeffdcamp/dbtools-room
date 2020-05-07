@@ -14,8 +14,8 @@ import org.dbtools.android.room.toLiveData
 import org.dbtools.android.room.util.DatabaseUtil
 import org.dbtools.sample.roomsqlite.model.db.main.MainDatabaseWrapperRepository
 import org.dbtools.sample.roomsqlite.model.db.main.individual.Individual
-import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime
+import java.time.LocalDate
+import java.time.LocalDateTime
 import timber.log.Timber
 
 class IndividualRepository(

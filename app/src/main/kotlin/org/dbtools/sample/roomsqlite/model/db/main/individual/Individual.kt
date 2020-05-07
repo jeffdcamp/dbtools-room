@@ -4,8 +4,8 @@ package org.dbtools.sample.roomsqlite.model.db.main.individual
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import org.dbtools.sample.roomsqlite.model.db.main.type.IndividualType
-import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 
 @Entity(tableName = "individual")

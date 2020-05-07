@@ -19,7 +19,11 @@ DBTools Room for Android is an library that makes it even easier to work with Go
 
 Usage
 =====
-See sample app for examples
+See sample app for examples.
+
+NOTE:
+
+Apps using the "dbtools-room-jdbc" dependency MUST include Xerial (or Xerial similar test dependency), Example: testImplementation("org.xerial:sqlite-jdbc:<latest version of xerial>")
 
 License
 =======

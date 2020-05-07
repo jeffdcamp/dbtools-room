@@ -3,7 +3,6 @@ package org.dbtools.sample.roomsqlite.ux
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
@@ -14,7 +13,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.dbtools.android.room.sqliteorg.SqliteOrgDatabaseUtil
 import org.dbtools.android.room.util.DatabaseUtil
-import org.dbtools.sample.roomsqlite.R
 import org.dbtools.sample.roomsqlite.databinding.ActivityMainBinding
 import org.dbtools.sample.roomsqlite.model.repository.IndividualRepository
 import timber.log.Timber
@@ -30,7 +28,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         individualRepository.init()
 
 
