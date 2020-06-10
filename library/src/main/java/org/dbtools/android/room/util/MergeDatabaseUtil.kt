@@ -22,6 +22,7 @@ object MergeDatabaseUtil {
      * @param includeTables Only table names in this list will be merged. Table names are source database table names.  default: emptyList()
      * @param excludeTables All tables except the table names in this list will be merged. Table names are source database table names.  default: emptyList()
      * @param sourceTableNameMap Map of name changes from sourceTable to targetTable (Example: copy table data from sourceDatabase.foo to targetDatabase.bar).  Key is the source table name, value is the target table name
+     * @param ignoreMissingTargetTables If a source table does not exist in target table, ignore (merge will not fail if true AND table is not be added in target table) (default = true)
      * @param mergeBlock Code to execute to perform merge.  default: database.execSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
      *
      * @return true if merge was successful
@@ -47,6 +48,7 @@ object MergeDatabaseUtil {
             includeTables: List<String> = emptyList(),
             excludeTables: List<String> = emptyList(),
             sourceTableNameMap: Map<String, String> = emptyMap(),
+            ignoreMissingTargetTables: Boolean = true,
             mergeBlock: (database: SupportSQLiteDatabase, sourceTableName: String, targetTableName: String) -> Unit = { db, sourceTableName, targetTableName ->
                 defaultMerge(db, sourceTableName, targetTableName)
             }
@@ -71,7 +73,15 @@ object MergeDatabaseUtil {
             val sourceTableNames = targetDatabase.findTableNames(mergeDbName)
             val targetTableNames = targetDatabase.findTableNames()
 
-            val tableNamesToMerge = createTableNamesToMerge(sourceTableNames, includeTables, excludeTables, sourceTableNameMap)
+            // check to see if we need to remove source tables (add more to the excludeTables list)
+            val allTablesNamesToExclude = excludeTables + if (ignoreMissingTargetTables) {
+                // find diff
+                sourceTableNames - targetTableNames
+            } else {
+                emptyList()
+            }
+
+            val tableNamesToMerge = createTableNamesToMerge(sourceTableNames, includeTables, allTablesNamesToExclude, sourceTableNameMap)
 
             // verify the remaining tables actually exist in the target database
             tableNamesToMerge.forEach {
