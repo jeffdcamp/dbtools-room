@@ -238,12 +238,11 @@ fun RoomDatabase.mergeDatabase(
     includeTables: List<String> = emptyList(),
     excludeTables: List<String> = emptyList(),
     tableNameMap: Map<String, String> = emptyMap(),
-    ignoreMissingTargetTables: Boolean = true,
     mergeBlock: (database: SupportSQLiteDatabase, sourceTableName: String, targetTableName: String) -> Unit = { database, sourceTableName, targetTableName ->
         MergeDatabaseUtil.defaultMerge(database, sourceTableName, targetTableName)
     }
 ): Boolean {
-    return MergeDatabaseUtil.mergeDatabase(openHelper.writableDatabase, fromDatabaseFile, includeTables, excludeTables, tableNameMap, ignoreMissingTargetTables, mergeBlock)
+    return MergeDatabaseUtil.mergeDatabase(openHelper.writableDatabase, fromDatabaseFile, includeTables, excludeTables, tableNameMap, mergeBlock)
 }
 
 /**
