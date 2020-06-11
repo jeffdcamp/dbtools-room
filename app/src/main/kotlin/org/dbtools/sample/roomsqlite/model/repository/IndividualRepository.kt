@@ -1,6 +1,6 @@
 package org.dbtools.sample.roomsqlite.model.repository
 
-import android.app.Application
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.Dispatchers
@@ -14,15 +14,15 @@ import org.dbtools.android.room.toLiveData
 import org.dbtools.android.room.util.DatabaseUtil
 import org.dbtools.sample.roomsqlite.model.db.main.MainDatabaseWrapperRepository
 import org.dbtools.sample.roomsqlite.model.db.main.individual.Individual
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalDateTime
-import timber.log.Timber
 
 class IndividualRepository(
-    private val application: Application
+    private val context: Context
 ) {
 
-    private val mainDatabaseWrapperRepository by lazy { MainDatabaseWrapperRepository(application) }
+    private val mainDatabaseWrapperRepository by lazy { MainDatabaseWrapperRepository(context) }
     private fun mainDatabase(key: String) = mainDatabaseWrapperRepository.getDatabase(key)
     private fun individualDao(key: String) = mainDatabase(key)?.individualDao
     private fun individualDaoDatabaseA() = mainDatabase(DB_A)?.individualDao
@@ -163,9 +163,9 @@ class IndividualRepository(
         }
 
         // copy the test database from assets
-        val mergeDatabase1 = DatabaseUtil.copyDatabaseFromAssets(application, "merge1", true)
-        val mergeDatabase2 = DatabaseUtil.copyDatabaseFromAssets(application, "merge2", true)
-        val mergeDatabase3 = DatabaseUtil.copyDatabaseFromAssets(application, "merge3", true)
+        val mergeDatabase1 = DatabaseUtil.copyDatabaseFromAssets(context, "merge1", true)
+        val mergeDatabase2 = DatabaseUtil.copyDatabaseFromAssets(context, "merge2", true)
+        val mergeDatabase3 = DatabaseUtil.copyDatabaseFromAssets(context, "merge3", true)
 
 
         // Test1 Database 2 names

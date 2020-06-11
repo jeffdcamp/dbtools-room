@@ -1,6 +1,6 @@
 package org.dbtools.android.room
 
-import android.app.Application
+import android.content.Context
 import androidx.lifecycle.Observer
 import androidx.room.Room
 import com.nhaarman.mockitokotlin2.whenever
@@ -13,11 +13,8 @@ import org.dbtools.android.room.database.Foo
 import org.dbtools.android.room.database.TestDatabase
 import org.dbtools.android.room.jdbc.JdbcSQLiteOpenHelperFactory
 import org.dbtools.android.room.util.TestFilesystem
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.mockito.Mock
 import org.mockito.Mockito
@@ -31,7 +28,7 @@ internal class RoomLiveDataTest {
     val instantTaskExecutorExtension = InstantTaskExecutorExtension()
 
     @Mock
-    lateinit var application: Application
+    lateinit var context: Context
 
     @BeforeEach
     fun setUp() {
@@ -50,7 +47,7 @@ internal class RoomLiveDataTest {
 
         TestFilesystem.deleteFilesystem()
 
-        Mockito.doReturn(TestFilesystem.INTERNAL_FILES_DIR).whenever(application).filesDir
+        Mockito.doReturn(TestFilesystem.INTERNAL_FILES_DIR).whenever(context).filesDir
 
 
     }
@@ -58,7 +55,7 @@ internal class RoomLiveDataTest {
     @Test
     fun toLiveData() = runBlocking {
         withTimeout(10000L) {
-            val database = Room.databaseBuilder(application, TestDatabase::class.java, "test.db")
+            val database = Room.databaseBuilder(context, TestDatabase::class.java, "test.db")
                 .allowMainThreadQueries()
                 .setTransactionExecutor(TestDatabase.transactionExecutor)
                 .openHelperFactory(JdbcSQLiteOpenHelperFactory(TestFilesystem.INTERNAL_DATABASES_DIR_PATH))

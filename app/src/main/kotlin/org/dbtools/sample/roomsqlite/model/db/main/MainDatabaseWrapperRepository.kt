@@ -1,6 +1,6 @@
 package org.dbtools.sample.roomsqlite.model.db.main
 
-import android.app.Application
+import android.content.Context
 import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
@@ -10,11 +10,11 @@ import org.dbtools.android.room.util.DatabaseUtil
 
 class MainDatabaseWrapperRepository
 constructor(
-    application: Application
-) : CloseableDatabaseWrapperRepository<MainDatabase>(application) {
+    context: Context
+) : CloseableDatabaseWrapperRepository<MainDatabase>(context) {
 
     override fun createDatabase(filename: String): MainDatabase {
-        return Room.databaseBuilder(application, MainDatabase::class.java, filename)
+        return Room.databaseBuilder(context, MainDatabase::class.java, filename)
             .openHelperFactory(SqliteOrgSQLiteOpenHelperFactory())
             .addMigrations(object : Migration(1, 2) {
                 override fun migrate(database: SupportSQLiteDatabase) {

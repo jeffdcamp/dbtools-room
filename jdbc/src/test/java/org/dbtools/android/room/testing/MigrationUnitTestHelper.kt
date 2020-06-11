@@ -15,7 +15,7 @@
  */
 package org.dbtools.android.room.testing
 
-import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.arch.core.executor.ArchTaskExecutor
 import androidx.room.DatabaseConfiguration
@@ -47,14 +47,14 @@ import java.util.HashSet
  * MigrationUnitTestHelper is a replica of [android.arch.persistence.room.testing.MigrationTestHelper]
  * altered to be run in the JVM as a Unit Test.
  *
- * @param application May be passed as a Mock
+ * @param context May be passed as a Mock
  * @param testDatabasePath Directory path relative to the project root where the database will be generated
  * @param schemaLocation Directory path relative to the project root where the Room schema definitions are located
  */
 class MigrationUnitTestHelper(
-        private val application: Application,
-        private val testDatabasePath: String,
-        schemaLocation: String
+    private val context: Context,
+    private val testDatabasePath: String,
+    schemaLocation: String
 ) : TestWatcher() {
 
     private val schemaLocation: String
@@ -89,7 +89,7 @@ class MigrationUnitTestHelper(
         val schemaBundle = loadSchema(version)
         val container = RoomDatabase.MigrationContainer()
         val configuration = DatabaseConfiguration(
-                application,
+                context,
                 name,
                 jdbcOpenHelperFactory,
                 container,
@@ -143,7 +143,7 @@ class MigrationUnitTestHelper(
 
     private fun openDatabase(name: String, roomOpenHelper: RoomOpenHelper): SupportSQLiteDatabase {
         val config = SupportSQLiteOpenHelper.Configuration
-                .builder(application)
+                .builder(context)
                 .callback(roomOpenHelper)
                 .name(name)
                 .build()
@@ -163,7 +163,7 @@ class MigrationUnitTestHelper(
         val container = RoomDatabase.MigrationContainer()
         container.addMigrations(*migrations)
         val configuration = DatabaseConfiguration(
-                application,
+                context,
                 name,
                 jdbcOpenHelperFactory,
                 container,

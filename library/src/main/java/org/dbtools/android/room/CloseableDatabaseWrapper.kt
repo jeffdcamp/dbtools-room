@@ -2,9 +2,8 @@
 
 package org.dbtools.android.room
 
-import android.app.Application
+import android.content.Context
 import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import org.dbtools.android.room.util.DatabaseUtil
 import java.io.File
 import java.util.concurrent.atomic.AtomicReference
@@ -17,20 +16,20 @@ import java.util.concurrent.atomic.AtomicReference
  * ```
      * @Singleton
      * class ShopDatabaseManager
-     * @Inject constructor(application: Application): CloseableDatabaseWrapper<ShopDatabase>(application) {
+     * @Inject constructor(@ApplicationContext context: Context): CloseableDatabaseWrapper<ShopDatabase>(context) {
      *
      *   fun getCheeseDao() = getDatabase().cheeseDao()
      *   fun getCommentDao() = getDatabase().commentDao()
      *
-     *   override fun createDatabase(application: Application): ShopDatabase {
-     *     return Room.databaseBuilder(application, ShopDatabase::class.java, ShopDatabase.DATABASE_NAME)
+     *   override fun createDatabase(context: Context): ShopDatabase {
+     *     return Room.databaseBuilder(context, ShopDatabase::class.java, ShopDatabase.DATABASE_NAME)
      *       .fallbackToDestructiveMigration()
      *       .build()
      *   }
      * }
  * ```
  */
-abstract class CloseableDatabaseWrapper<out T: RoomDatabase>(protected val application: Application) {
+abstract class CloseableDatabaseWrapper<out T: RoomDatabase>(protected val context: Context) {
     private var _database = AtomicReference<T?>()
 
     @Synchronized

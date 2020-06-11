@@ -1,8 +1,7 @@
 package org.dbtools.android.room
 
-import android.app.Application
+import android.content.Context
 import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import org.dbtools.android.room.util.DatabaseUtil
 import timber.log.Timber
 import java.io.File
@@ -16,17 +15,17 @@ import java.io.File
  * ```
      * @Singleton
      * class BookDatabaseRepository
-     * @Inject constructor(application: Application): CloseableDatabaseWrapperRepository<ShopDatabase>(application) {
+     * @Inject constructor(context: Context): CloseableDatabaseWrapperRepository<ShopDatabase>(context) {
      *
-     *   override fun createDatabase(application: Application, filename: String): BookDatabase {
-     *     return Room.databaseBuilder(application, BookDatabase::class.java, filename)
+     *   override fun createDatabase(context: Context, filename: String): BookDatabase {
+     *     return Room.databaseBuilder(context, BookDatabase::class.java, filename)
      *       .fallbackToDestructiveMigration()
      *       .build()
      *   }
      * }
  * ```
  * // Initialize (one time)
- * bookDatabaseRepository.registerDatabase(application, "book-a", "/sdcard/Downloads/booka")
+ * bookDatabaseRepository.registerDatabase(context, "book-a", "/sdcard/Downloads/booka")
  *
  * ...
  *
@@ -40,7 +39,7 @@ import java.io.File
  * ```
      * @Singleton
      * class BookDatabaseRepository
-     * @Inject constructor(application: Application): CloseableDatabaseWrapperRepository<ShopDatabase>(application) {
+     * @Inject constructor(context: Context): CloseableDatabaseWrapperRepository<ShopDatabase>(context) {
      *
      *  override fun autoRegisterDatabase(key: String): Boolean {
      *      val databaseFile = fileUtil.getBookDatabase(key)
@@ -48,8 +47,8 @@ import java.io.File
      *      return true
      *  }
      *
-     *   override fun createDatabase(application: Application, filename: String): BookDatabase {
-     *     return Room.databaseBuilder(application, BookDatabase::class.java, filename)
+     *   override fun createDatabase(context: Context, filename: String): BookDatabase {
+     *     return Room.databaseBuilder(context, BookDatabase::class.java, filename)
      *       .fallbackToDestructiveMigration()
      *       .build()
      *   }
@@ -61,7 +60,7 @@ import java.io.File
  * bookDatabase.getAuthorDao().findNameById(123)
  *
  */
-abstract class CloseableDatabaseWrapperRepository<out T: RoomDatabase>(protected val application: Application) {
+abstract class CloseableDatabaseWrapperRepository<out T: RoomDatabase>(protected val context: Context) {
     private var databaseList = HashMap<String, T>()
 
     /**
