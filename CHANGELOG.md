@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 5.7.0 *(2020-06)*
+-------------------------
+* Changed parameters from "application: Application" to "context: Context" to better support JetPack Android Hilt
+* Added "ignoreMissingTargetTables = true" when merging databases
+
 Version 5.6.1 *(2020-05)*
 -------------------------
 * Changed dependency Xerial dependency to be compileOnly (to allow substitution of different jdbc driver... each app will need to include Xerial or other jdbc library in their projects)
