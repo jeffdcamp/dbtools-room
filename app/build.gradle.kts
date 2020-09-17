@@ -14,12 +14,10 @@ android {
         versionCode = 1000
         versionName = "1.0.0"
 
-        multiDexEnabled = true
-
         // used by Room, to test migrations
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = mapOf("room.schemaLocation" to "$projectDir/schema")
+                argument("room.schemaLocation", "$projectDir/schema")
             }
         }
 
@@ -29,7 +27,7 @@ android {
 
     compileOptions {
         // Flag to enable support for the new language APIs
-        coreLibraryDesugaringEnabled = true
+        isCoreLibraryDesugaringEnabled = true
 
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8

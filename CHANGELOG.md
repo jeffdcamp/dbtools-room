@@ -1,10 +1,13 @@
 Change Log
 ==========
 
-Version 5.7.0 *(2020-06)*
+Version 5.7.2 *(2020-09)*
+-------------------------
+* Bug fixes
+
+Version 5.7.1 *(2020-06)*
 -------------------------
 * Changed parameters from "application: Application" to "context: Context" to better support JetPack Android Hilt
-* Added "ignoreMissingTargetTables = true" when merging databases
 
 Version 5.6.1 *(2020-05)*
 -------------------------
