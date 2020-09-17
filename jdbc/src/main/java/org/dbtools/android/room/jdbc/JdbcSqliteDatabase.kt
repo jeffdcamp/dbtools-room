@@ -36,10 +36,10 @@ class JdbcSqliteDatabase(
         conn?.let {
             println("Connected to the database")
             val dm = it.metaData
-            System.out.println("Driver name: " + dm.driverName)
-            System.out.println("Driver version: " + dm.driverVersion)
-            System.out.println("Product name: " + dm.databaseProductName)
-            System.out.println("Product version: " + dm.databaseProductVersion)
+            println("Driver name: " + dm.driverName)
+            println("Driver version: " + dm.driverVersion)
+            println("Product name: " + dm.databaseProductName)
+            println("Product version: " + dm.databaseProductVersion)
         }
     }
 
@@ -156,12 +156,9 @@ class JdbcSqliteDatabase(
             }
             append(')')
         }
-        val statement = JdbcSQLiteStatement(conn, sql)
-        try {
+        return JdbcSQLiteStatement(conn, sql).use {statement ->
             statement.bindArguments(bindArgs)
-            return statement.executeInsert()
-        } finally {
-            statement.close()
+            statement.executeInsert()
         }
     }
 
@@ -316,6 +313,27 @@ class JdbcSqliteDatabase(
     private fun compileJdbcStatement(sql: String?): JdbcSQLiteStatement {
         val safeSql = checkNotNull(sql) { "sql must not be null" }
         return JdbcSQLiteStatement(conn, safeSql)
+    }
+
+    private inline fun <T : AutoCloseable?, R> T.use(block: (T) -> R): R {
+        var exception: Throwable? = null
+        try {
+            return block(this)
+        } catch (e: Throwable) {
+            exception = e
+            throw e
+        } finally {
+            when {
+                this == null -> {}
+                exception == null -> close()
+                else ->
+                    try {
+                        close()
+                    } catch (closeException: Throwable) {
+                        // cause.addSuppressed(closeException) // ignored here
+                    }
+            }
+        }
     }
 
     companion object {
