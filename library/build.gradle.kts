@@ -52,7 +52,6 @@ dependencies {
     api(Deps.ARCH_ROOM_RUNTIME)
     api(Deps.COROUTINES)
     api(Deps.TIMBER)
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
 
     // Test
     testImplementation(project(":jdbc"))
