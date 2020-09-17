@@ -78,14 +78,12 @@ dependencies {
     implementation(Deps.ANDROIDX_APPCOMPAT)
 
     // Code
-    implementation(Deps.KOTLIN_STD_LIB)
     implementation(Deps.COROUTINES)
     implementation(Deps.TIMBER)
 
     // UI
 
     // === Android Architecture Components ===
-    implementation(Deps.ARCH_LIFECYCLE_EXT)
     implementation(Deps.ARCH_LIFECYCLE_RUNTIME)
 
     // Database
