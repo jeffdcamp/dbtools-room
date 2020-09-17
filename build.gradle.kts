@@ -10,7 +10,7 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle:4.0.0") // leave at alpha05 till Google fixes issue with supporting kotlin function extensions https://issuetracker.google.com/issues/154797810
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION")
-        classpath("com.github.ben-manes:gradle-versions-plugin:0.28.0") // version plugin support
+        classpath("com.github.ben-manes:gradle-versions-plugin:0.33.0") // version plugin support
     }
 }
 

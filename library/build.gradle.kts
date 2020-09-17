@@ -48,11 +48,11 @@ tasks.withType<KotlinCompile> {
 
 dependencies {
     api(Deps.ARCH_LIFECYCLE_RUNTIME)
-    api(Deps.ARCH_LIFECYCLE_EXT)
+    api(Deps.ARCH_LIFECYCLE_LIVEDATA_KTX)
     api(Deps.ARCH_ROOM_RUNTIME)
-    api(Deps.KOTLIN_STD_LIB)
     api(Deps.COROUTINES)
     api(Deps.TIMBER)
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
 
     // Test
     testImplementation(project(":jdbc"))
