@@ -5,7 +5,7 @@ import org.sqlite.database.sqlite.SQLiteDatabase
 
 /**
  * @param path Custom path to database
- * @param password Passord field if using Sqlite SEE or other encryption library
+ * @param password Password field if using Sqlite SEE or other encryption library
  * @param libraryLoaderBlock Load custom libraries here.  Default: System.loadLibrary("sqliteX")
  * @param onDatabaseConfigureBlock After creation of the org.sqlite.database.sqlite.SQLiteDatabase object, this block will be called with the created instance, allowing further customizations
  */

@@ -26,7 +26,7 @@ object Deps {
     const val TEST_JUNIT_API = "org.junit.jupiter:junit-jupiter-api:$JUNIT_VERSION"
     const val TEST_JUNIT_ENGINE = "org.junit.jupiter:junit-jupiter-engine:$JUNIT_VERSION"
 
-    const val TEST_MOCKITO_CORE = "org.mockito:mockito-core:3.5.10"
+    const val TEST_MOCKITO_CORE = "org.mockito:mockito-core:3.5.13"
     const val TEST_ARCH_ROOM_TESTING = "androidx.room:room-testing:$ROOM_VERSION"
     const val TEST_MOCKITO_KOTLIN = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
 }

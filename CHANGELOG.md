@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 5.8.0 *(2020-09)*
+-------------------------
+* Added AndroidSQLiteDatabase to support extended database functionality on default Android databases (AndroidSQLiteOpenHelperFactory onDatabaseConfigureBlock)
+
 Version 5.7.2 *(2020-09)*
 -------------------------
 * Bug fixes
