@@ -5,6 +5,7 @@ import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import org.dbtools.android.room.CloseableDatabaseWrapperRepository
+import org.dbtools.android.room.log.setLoggingQueryCallback
 import org.dbtools.android.room.sqliteorg.SqliteOrgSQLiteOpenHelperFactory
 import org.dbtools.android.room.util.DatabaseUtil
 
@@ -37,8 +38,13 @@ constructor(
                     DatabaseUtil.createAllViews(database, MainDatabase.DATABASE_VIEW_QUERIES)
                 }
             })
-
             .fallbackToDestructiveMigration()
+
+            // Add Logging (via function extension)
+            .setLoggingQueryCallback(MainDatabase.DATABASE_NAME)
+
+            // Add Logging (via Class)
+//            .setQueryCallback(LoggingQueryCallback(MainDatabase.DATABASE_NAME), LoggingExecutor)
             .build()
     }
 }
