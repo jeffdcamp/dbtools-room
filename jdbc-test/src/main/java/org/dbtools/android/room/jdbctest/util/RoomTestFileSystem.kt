@@ -2,7 +2,7 @@ package org.dbtools.android.room.jdbctest.util
 
 import java.io.File
 
-object TestFileSystem {
+object RoomTestFileSystem {
 
     private const val FILESYSTEM_DIR_PATH = "build/room-test-filesystem"
     private val FILESYSTEM_DIR = File(FILESYSTEM_DIR_PATH)

@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import org.dbtools.android.room.jdbc.JdbcSQLiteOpenHelperFactory
-import org.dbtools.android.room.jdbctest.util.TestFileSystem
+import org.dbtools.android.room.jdbctest.util.RoomTestFileSystem
 import org.junit.jupiter.api.extension.AfterEachCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
@@ -46,7 +46,7 @@ class RoomDatabaseExtension<T : RoomDatabase>(
     override fun beforeEach(context: ExtensionContext?) {
         context ?: error("ExtensionContext was null...")
         val dbFileName = formatTestMethodDisplayName(context.displayName)
-        File(TestFileSystem.getDatabasePath(dbFileName)).delete()
+        File(RoomTestFileSystem.getDatabasePath(dbFileName)).delete()
         testDatabase = createTestDatabase(dbFileName)
     }
 
@@ -63,7 +63,7 @@ class RoomDatabaseExtension<T : RoomDatabase>(
     private fun createTestDatabase(filename: String): T {
         return Room.databaseBuilder(mockApplication, databaseClass, filename)
             .allowMainThreadQueries()
-            .openHelperFactory(JdbcSQLiteOpenHelperFactory(TestFileSystem.INTERNAL_DATABASES_DIR_PATH))
+            .openHelperFactory(JdbcSQLiteOpenHelperFactory(RoomTestFileSystem.INTERNAL_DATABASES_DIR_PATH))
             .fallbackToDestructiveMigration()
             .build()
     }
