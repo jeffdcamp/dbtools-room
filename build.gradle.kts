@@ -8,9 +8,9 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:4.1.0-rc03") // leave at alpha05 till Google fixes issue with supporting kotlin function extensions https://issuetracker.google.com/issues/154797810
+        classpath("com.android.tools.build:gradle:4.1.2")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION")
-        classpath("com.github.ben-manes:gradle-versions-plugin:0.33.0") // version plugin support
+        classpath("com.github.ben-manes:gradle-versions-plugin:0.36.0") // version plugin support
     }
 }
 
@@ -26,7 +26,7 @@ allprojects {
     // Gradle Dependency Check
     apply(plugin = "com.github.ben-manes.versions") // ./gradlew dependencyUpdates -Drevision=release
     val excludeVersionContaining = listOf("alpha", "eap") // example: "alpha", "beta"
-    val ignoreArtifacts = emptyList<String>() // some artifacts may be OK to check for "alpha"... add these exceptions here
+    val ignoreArtifacts = listOf("room-compiler", "room-runtime", "room-testing", "room-ktx") // some artifacts may be OK to check for "alpha"... add these exceptions here
 
     tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
         resolutionStrategy {

@@ -9,12 +9,28 @@ plugins {
     kotlin("kapt")
 }
 
+// Kotlin Libraries targeting Java8 bytecode can cause the following error (such as okHttp 4.x):
+// "Cannot inline bytecode built with JVM target 1.8 into bytecode that is being built with JVM target 1.6. Please specify proper '-jvm-target' option"
+// The following is added to allow the Kotlin Compiler to compile properly
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
 android {
     compileSdkVersion(AndroidSdk.COMPILE)
 
     defaultConfig {
         minSdkVersion(AndroidSdk.MIN)
         targetSdkVersion(AndroidSdk.TARGET)
+
+        buildConfigField("String", "SCHEMA_PATH", "\"schemas\"")
+
+        // used by Room, to test migrations
+        javaCompileOptions {
+            annotationProcessorOptions {
+                argument("room.schemaLocation", "$projectDir/schemas")
+            }
+        }
     }
 
     compileOptions {
@@ -25,20 +41,8 @@ android {
     lintOptions {
         isAbortOnError = true
         disable("InvalidPackage")
-        disable("NullSafeMutableLiveData") // this rule is crashing lint check for RoomLiveData file
     }
 
-    sourceSets {
-        getByName("main") {
-            java.srcDir("src/main/kotlin")
-        }
-        getByName("test") {
-            java.srcDir("src/test/kotlin")
-        }
-        getByName("androidTest") {
-            assets.srcDir("$projectDir/schemas")
-        }
-    }
 }
 
 tasks.withType<KotlinCompile> {
@@ -48,22 +52,26 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
-    api(Deps.ARCH_LIFECYCLE_RUNTIME)
-    api(Deps.ARCH_LIFECYCLE_LIVEDATA_KTX)
-    api(Deps.ARCH_ROOM_RUNTIME)
-    api(Deps.COROUTINES)
-    api(Deps.TIMBER)
+    implementation(project(":jdbc")) // NOTE: for pom.xml publishing, this type of dependency needs to be set manually in the <publishing> section (below)
+
+    // Android
+    implementation(Deps.ARCH_LIFECYCLE_LIVEDATA_KTX)
+
+    // Code
+    implementation(Deps.COROUTINES)
+    implementation(Deps.TIMBER)
 
     // Test
-    testImplementation(project(":jdbc"))
-    testImplementation(Deps.XERIAL_SQLITE)
-    testImplementation(Deps.ARCH_ROOM_KTX)
-    testImplementation(Deps.TEST_JUNIT)
-    testImplementation(Deps.TEST_JUNIT_API)
-    testImplementation(Deps.TEST_JUNIT_ENGINE)
-    testImplementation(Deps.TEST_MOCKITO_CORE)
-    testImplementation(Deps.TEST_MOCKITO_KOTLIN)
+    implementation(Deps.TEST_JUNIT_API)
+    implementation(Deps.TEST_JUNIT_ENGINE)
+    implementation(Deps.TEST_MOCKITO_CORE)
+    implementation(Deps.TEST_KOTLIN_COROUTINES_TEST)
+    implementation(Deps.ARCH_ROOM_KTX)
+    implementation(Deps.TEST_ARCH_ROOM_TESTING)
+
+    // Test (internal only)
     kaptTest(Deps.ARCH_ROOM_COMPILER)
+    testImplementation(Deps.XERIAL_SQLITE)
 }
 
 // ===== TEST TASKS =====
@@ -75,8 +83,8 @@ tasks.withType<Test> {
 
 // ===== Maven Deploy =====
 
-// ./gradlew clean check assembleRelease publishMavenPublicationToMavenLocal
-// ./gradlew clean check assembleRelease publishMavenPublicationToMavenCentralRepository
+// ./gradlew clean assembleRelease publishMavenPublicationToMavenLocal
+// ./gradlew clean assembleRelease publishMavenPublicationToMavenCentralRepository
 
 tasks.register<Jar>("sourcesJar") {
     //    from(android.sourceSets.getByName("main").java.sourceFiles)
@@ -88,12 +96,12 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = Pom.GROUP_ID
-            artifactId = Pom.LIBRARY_ARTIFACT_ID
+            artifactId = Pom.LIBRARY_JDBC_TEST_ARTIFACT_ID
             version = Pom.VERSION_NAME
             artifact(tasks["sourcesJar"])
             afterEvaluate { artifact(tasks.getByName("bundleReleaseAar")) }
             pom {
-                name.set(Pom.LIBRARY_NAME)
+                name.set(Pom.LIBRARY_JDBC_TEST_NAME)
                 description.set(Pom.POM_DESCRIPTION)
                 url.set(Pom.URL)
                 licenses {
@@ -120,10 +128,18 @@ publishing {
             pom.withXml {
                 val dependenciesNode = asNode().appendNode("dependencies")
                 configurations.implementation.get().allDependencies.forEach {
-                    val dependencyNode = dependenciesNode.appendNode("dependency")
-                    dependencyNode.appendNode("groupId", it.group)
-                    dependencyNode.appendNode("artifactId", it.name)
-                    dependencyNode.appendNode("version", it.version)
+                    // fix local dependency (
+                    if (it.name == "jdbc" && it.version == "unspecified") {
+                        val dependencyNode = dependenciesNode.appendNode("dependency")
+                        dependencyNode.appendNode("groupId", Pom.GROUP_ID)
+                        dependencyNode.appendNode("artifactId", Pom.LIBRARY_JDBC_ARTIFACT_ID)
+                        dependencyNode.appendNode("version", Pom.VERSION_NAME)
+                    } else {
+                        val dependencyNode = dependenciesNode.appendNode("dependency")
+                        dependencyNode.appendNode("groupId", it.group)
+                        dependencyNode.appendNode("artifactId", it.name)
+                        dependencyNode.appendNode("version", it.version)
+                    }
                 }
             }
         }

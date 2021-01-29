@@ -113,6 +113,7 @@ class IndividualRepository(
             amount1 = 19.95f
             amount2 = 1000000000.25
             enabled = true
+            data = ByteArray(2) { 7 }
         }
     }
 

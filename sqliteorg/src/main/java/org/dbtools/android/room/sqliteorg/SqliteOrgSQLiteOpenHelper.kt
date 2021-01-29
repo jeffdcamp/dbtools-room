@@ -1,8 +1,8 @@
 package org.dbtools.android.room.sqliteorg
 
+import android.content.Context
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
-import android.content.Context
 import org.sqlite.database.sqlite.SQLiteDatabase
 import org.sqlite.database.sqlite.SQLiteOpenHelper
 import java.io.File
@@ -68,7 +68,8 @@ open class SqliteOrgSQLiteOpenHelper(
         }
 
         override fun onCreate(sqLiteDatabase: SQLiteDatabase) {
-            wrappedDb = SqliteOrgDatabase(sqLiteDatabase)
+            val wrappedDb = SqliteOrgDatabase(sqLiteDatabase)
+            this.wrappedDb = wrappedDb
             callback.onCreate(wrappedDb)
         }
 

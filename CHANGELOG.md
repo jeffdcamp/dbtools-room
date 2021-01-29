@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 6.0.0-beta01 *(2021-01)*
+-------------------------
+* Room 2.3.0-beta01
+* Added the ability to test Room migrations in JUnit tests (added RoomDatabaseMigrationExtension and BaseMigrationTest)
+* Added LoggingQueryCallback (simple sql logger to support new Room 2.3.0 se
+
 Version 5.8.0 *(2020-09)*
 -------------------------
 * Added AndroidSQLiteDatabase to support extended database functionality on default Android databases (AndroidSQLiteOpenHelperFactory onDatabaseConfigureBlock)

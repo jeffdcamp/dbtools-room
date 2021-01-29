@@ -1,7 +1,2 @@
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.dbtools.android.room.jdbc"
-    >
+<manifest package="org.dbtools.android.room.jdbc" />
 
-    <application />
-</manifest>

@@ -60,7 +60,8 @@ open class AndroidSQLiteOpenHelper(
         private var wrappedDb: AndroidSQLiteDatabase? = null
 
         override fun onCreate(sqLiteDatabase: SQLiteDatabase) {
-            wrappedDb = AndroidSQLiteDatabase(sqLiteDatabase)
+            val wrappedDb = AndroidSQLiteDatabase(sqLiteDatabase)
+            this.wrappedDb = wrappedDb
             callback.onCreate(wrappedDb)
         }
 

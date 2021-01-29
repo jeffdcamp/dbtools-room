@@ -9,6 +9,7 @@ DBTools Room for Android is an library that makes it even easier to work with Go
 
 * Sqlite.org database support (including custom extensions)
 * JDBC database support (for Unit Tests against real sqlite databases using Room)
+* Room Migration testing using JDBC databases in Unit Tests (RoomDatabaseMigrationExtension and BaseMigrationTest)
 * Swap database files using the same Entities and Doa's (CloseableDatabaseWrapper and CloseableDatabaseWrapperRepository)
 * Flow support for bulk work that fires Flow events when specific database tables change (RoomFlow)
 * Room ComputableLiveData for bulk work that fires LiveData events when specific database tables change (RoomLiveData)
@@ -29,7 +30,7 @@ Apps using the "dbtools-room-jdbc" dependency MUST include Xerial (or Xerial sim
 License
 =======
 
-    Copyright 2020 Jeff Campbell
+    Copyright 2021 Jeff Campbell
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
