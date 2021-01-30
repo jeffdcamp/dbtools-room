@@ -34,7 +34,10 @@ class LoggingQueryCallback(
     private val combineSqlAndArgs: Boolean = true,
     private val useTimber: Boolean = true
 ) : RoomDatabase.QueryCallback {
-    override fun onQuery(sqlQuery: String, bindArgs: MutableList<Any?>) {
+    var lastLog = ""
+        private set
+
+    override fun onQuery(sqlQuery: String, bindArgs: List<Any?>) {
         if (!enabled) {
             return
         }
@@ -57,14 +60,18 @@ class LoggingQueryCallback(
             }
         }
 
-        val formattedQuery = sqlQuery.replace("?", "%s")
-        val formattedSql = String.format(formattedQuery, *formattedArgs.toTypedArray())
+        var formattedSql = sqlQuery
+        formattedArgs.forEach { arg ->
+            formattedSql = formattedSql.replaceFirst("?", arg)
+        }
 
         log("$queryContext Query: [$formattedSql]")
     }
 
     @SuppressLint("LogNotTimber")
     private fun log(message: String) {
+        lastLog = message
+
         if (useTimber) {
             Timber.d(message)
         } else {
