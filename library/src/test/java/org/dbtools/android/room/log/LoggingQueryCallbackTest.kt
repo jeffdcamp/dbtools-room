@@ -30,11 +30,11 @@ internal class LoggingQueryCallbackTest {
 
     @Test
     fun testSingleFloatArgQuery() {
-        val bindingArgs = listOf<Any>(10.50f)
+        val bindingArgs = listOf<Any>(10.5f)
         val sqlQuery = "SELECT * FROM Individual WHERE cost > ?"
 
         loggingQueryCallback.onQuery(sqlQuery, bindingArgs)
-        Assertions.assertEquals(formatOutput("SELECT * FROM Individual WHERE cost > 10.50"), loggingQueryCallback.lastLog)
+        Assertions.assertEquals(formatOutput("SELECT * FROM Individual WHERE cost > 10.5"), loggingQueryCallback.lastLog)
     }
 
     @Test

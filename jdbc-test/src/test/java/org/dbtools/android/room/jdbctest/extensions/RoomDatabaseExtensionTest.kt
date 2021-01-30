@@ -3,7 +3,7 @@ package org.dbtools.android.room.jdbctest.extensions
 import android.app.Application
 import org.dbtools.android.room.jdbctest.extensions.testdata.TestDatabase
 import org.dbtools.android.room.jdbctest.extensions.testdata.TestEntity
-import org.dbtools.android.room.jdbctest.util.TestFileSystem
+import org.dbtools.android.room.jdbctest.util.RoomTestFileSystem
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -30,7 +30,7 @@ class RoomDatabaseExtensionTest {
         assertNotNull(results.find { it.name == "Name2" })
 
         // Verify the extension created the proper database file...
-        val databaseFile = File(TestFileSystem.INTERNAL_DATABASES_DIR_PATH, "insert_rows.db")
+        val databaseFile = File(RoomTestFileSystem.INTERNAL_DATABASES_DIR_PATH, "insert_rows.db")
         assertTrue(databaseFile.exists())
         assertTrue(databaseFile.isFile)
     }
