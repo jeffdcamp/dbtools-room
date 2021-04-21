@@ -76,6 +76,7 @@ tasks.withType<Test> {
 // ===== Maven Deploy =====
 
 // ./gradlew clean check assembleRelease publishMavenPublicationToMavenLocal
+// ./gradlew clean check assembleRelease publishMavenPublicationToSoupbowlRepository
 // ./gradlew clean check assembleRelease publishMavenPublicationToMavenCentralRepository
 
 tasks.register<Jar>("sourcesJar") {
@@ -138,6 +139,19 @@ publishing {
                 username = sonatypeNexusUsername ?: ""
                 password = sonatypeNexusPassword ?: ""
             }
+        }
+    }
+    repositories {
+        maven {
+            name = "Soupbowl"
+            url = uri("http://192.168.86.5:8082/nexus/content/repositories/releases/")
+            credentials {
+                val soupbowlNexusUsername: String? by project
+                val soupbowlNexusPassword: String? by project
+                username = soupbowlNexusUsername ?: ""
+                password = soupbowlNexusPassword ?: ""
+            }
+            isAllowInsecureProtocol = true
         }
     }
 }
