@@ -14,7 +14,7 @@ object Deps {
     const val TIMBER = "com.jakewharton.timber:timber:4.7.1"
 
     // Database
-    private const val ROOM_VERSION = "2.3.0-rc01"
+    private const val ROOM_VERSION = "2.3.0"
     const val ARCH_ROOM_RUNTIME = "androidx.room:room-runtime:$ROOM_VERSION"
     const val ARCH_ROOM_KTX = "androidx.room:room-ktx:$ROOM_VERSION"
     const val ARCH_ROOM_COMPILER = "androidx.room:room-compiler:$ROOM_VERSION"
@@ -27,7 +27,7 @@ object Deps {
     const val TEST_JUNIT_ENGINE = "org.junit.jupiter:junit-jupiter-engine:$JUNIT_VERSION"
     const val TEST_KOTLIN_COROUTINES_TEST = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$COROUTINES_VERSION"
 
-    const val TEST_MOCKITO_CORE = "org.mockito:mockito-core:3.8.0"
+    const val TEST_MOCKITO_CORE = "org.mockito:mockito-core:3.9.0"
     const val TEST_ARCH_ROOM_TESTING = "androidx.room:room-testing:$ROOM_VERSION"
     const val TEST_MOCKITO_KOTLIN = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
 }
