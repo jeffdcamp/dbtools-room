@@ -1,22 +1,19 @@
 package org.dbtools.android.room.jdbctest.extensions
 
-import android.app.Application
+import com.google.common.truth.Truth.assertThat
+import io.mockk.mockk
 import org.dbtools.android.room.jdbctest.extensions.testdata.TestDatabase
 import org.dbtools.android.room.jdbctest.extensions.testdata.TestEntity
 import org.dbtools.android.room.jdbctest.util.RoomTestFileSystem
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
-import org.mockito.Mockito.mock
 import java.io.File
 
 class RoomDatabaseExtensionTest {
 
     @JvmField
     @RegisterExtension
-    val roomDatabaseExtensionDefaultPath = RoomDatabaseExtension(mock(Application::class.java), TestDatabase::class.java)
+    val roomDatabaseExtensionDefaultPath = RoomDatabaseExtension(mockk(), TestDatabase::class.java)
 
     @Test
     fun `insert rows`() {
@@ -25,13 +22,13 @@ class RoomDatabaseExtensionTest {
         roomDatabaseExtensionDefaultPath.testDatabase.testDao.insert(TestEntity(2L, "Name2", 31, "Cool Fact 2"))
 
         val results = roomDatabaseExtensionDefaultPath.testDatabase.testDao.findAllTestEntities()
-        assertEquals(2, results.size)
-        assertNotNull(results.find { it.name == "Name1" })
-        assertNotNull(results.find { it.name == "Name2" })
+        assertThat(results.size).isEqualTo(2)
+        assertThat(results.find { it.name == "Name1" }).isNotNull()
+        assertThat(results.find { it.name == "Name2" }).isNotNull()
 
         // Verify the extension created the proper database file...
         val databaseFile = File(RoomTestFileSystem.INTERNAL_DATABASES_DIR_PATH, "insert_rows.db")
-        assertTrue(databaseFile.exists())
-        assertTrue(databaseFile.isFile)
+        assertThat(databaseFile.exists()).isTrue()
+        assertThat(databaseFile.isFile).isTrue()
     }
 }

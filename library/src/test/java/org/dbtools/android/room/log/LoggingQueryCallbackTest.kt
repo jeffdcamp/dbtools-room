@@ -1,6 +1,6 @@
 package org.dbtools.android.room.log
 
-import org.junit.jupiter.api.Assertions
+import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Test
 
 internal class LoggingQueryCallbackTest {
@@ -16,7 +16,7 @@ internal class LoggingQueryCallbackTest {
         val sqlQuery = "SELECT * FROM Individual"
 
         loggingQueryCallback.onQuery(sqlQuery, bindingArgs)
-        Assertions.assertEquals(formatOutput("SELECT * FROM Individual"), loggingQueryCallback.lastLog)
+        assertThat(loggingQueryCallback.lastLog).isEqualTo(formatOutput("SELECT * FROM Individual"))
     }
 
     @Test
@@ -25,7 +25,7 @@ internal class LoggingQueryCallbackTest {
         val sqlQuery = "SELECT * FROM Individual WHERE id = ?"
 
         loggingQueryCallback.onQuery(sqlQuery, bindingArgs)
-        Assertions.assertEquals(formatOutput("SELECT * FROM Individual WHERE id = 1234"), loggingQueryCallback.lastLog)
+        assertThat(loggingQueryCallback.lastLog).isEqualTo(formatOutput("SELECT * FROM Individual WHERE id = 1234"))
     }
 
     @Test
@@ -34,7 +34,7 @@ internal class LoggingQueryCallbackTest {
         val sqlQuery = "SELECT * FROM Individual WHERE cost > ?"
 
         loggingQueryCallback.onQuery(sqlQuery, bindingArgs)
-        Assertions.assertEquals(formatOutput("SELECT * FROM Individual WHERE cost > 10.5"), loggingQueryCallback.lastLog)
+        assertThat(loggingQueryCallback.lastLog).isEqualTo(formatOutput("SELECT * FROM Individual WHERE cost > 10.5"))
     }
 
     @Test
@@ -43,7 +43,7 @@ internal class LoggingQueryCallbackTest {
         val sqlQuery = "SELECT * FROM Individual WHERE id = ?"
 
         loggingQueryCallback.onQuery(sqlQuery, bindingArgs)
-        Assertions.assertEquals(formatOutput("SELECT * FROM Individual WHERE id = '1234'"), loggingQueryCallback.lastLog)
+        assertThat(loggingQueryCallback.lastLog).isEqualTo(formatOutput("SELECT * FROM Individual WHERE id = '1234'"))
     }
 
     @Test
@@ -52,7 +52,7 @@ internal class LoggingQueryCallbackTest {
         val sqlQuery = "SELECT * FROM Individual WHERE enabled = ?"
 
         loggingQueryCallback.onQuery(sqlQuery, bindingArgs)
-        Assertions.assertEquals(formatOutput("SELECT * FROM Individual WHERE enabled = 1"), loggingQueryCallback.lastLog)
+        assertThat(loggingQueryCallback.lastLog).isEqualTo(formatOutput("SELECT * FROM Individual WHERE enabled = 1"))
     }
 
     @Test
@@ -61,7 +61,7 @@ internal class LoggingQueryCallbackTest {
         val sqlQuery = "SELECT * FROM Individual WHERE data = ?"
 
         loggingQueryCallback.onQuery(sqlQuery, bindingArgs)
-        Assertions.assertEquals(formatOutput("SELECT * FROM Individual WHERE data = BLOB"), loggingQueryCallback.lastLog)
+        assertThat(loggingQueryCallback.lastLog).isEqualTo(formatOutput("SELECT * FROM Individual WHERE data = BLOB"))
     }
 
     @Test
@@ -70,7 +70,7 @@ internal class LoggingQueryCallbackTest {
         val sqlQuery = "SELECT * FROM Individual WHERE id = ? LIMIT ?"
 
         loggingQueryCallback.onQuery(sqlQuery, bindingArgs)
-        Assertions.assertEquals(formatOutput("SELECT * FROM Individual WHERE id = '1234' LIMIT 10"), loggingQueryCallback.lastLog)
+        assertThat(loggingQueryCallback.lastLog).isEqualTo(formatOutput("SELECT * FROM Individual WHERE id = '1234' LIMIT 10"))
     }
 
     @Test
@@ -81,6 +81,6 @@ internal class LoggingQueryCallbackTest {
         val sqlQuery = "SELECT * FROM Individual WHERE name LIKE '%' AND age > ?"
 
         loggingQueryCallback.onQuery(sqlQuery, bindingArgs)
-        Assertions.assertEquals(formatOutput("SELECT * FROM Individual WHERE name LIKE '%' AND age > 10"), loggingQueryCallback.lastLog)
+        assertThat(loggingQueryCallback.lastLog).isEqualTo(formatOutput("SELECT * FROM Individual WHERE name LIKE '%' AND age > 10"))
     }
 }

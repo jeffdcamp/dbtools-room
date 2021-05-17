@@ -10,11 +10,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion(AndroidSdk.COMPILE)
+    compileSdk = AndroidSdk.COMPILE
 
     defaultConfig {
-        minSdkVersion(AndroidSdk.MIN)
-        targetSdkVersion(AndroidSdk.TARGET)
+        minSdk = AndroidSdk.MIN
+        targetSdk = AndroidSdk.TARGET
     }
 
     compileOptions {
@@ -22,7 +22,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    lintOptions {
+    lint {
         isAbortOnError = true
         disable("InvalidPackage")
     }
@@ -47,17 +47,18 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
-    api(Deps.ARCH_LIFECYCLE_RUNTIME)
-    api(Deps.ARCH_ROOM_RUNTIME)
-    api(Deps.TIMBER)
+    api(libs.androidx.lifecycle.runtime)
+    api(libs.androidx.room.runtime)
+    api(libs.timber)
     compileOnly(project(":sqlite-android"))
 
     // Test
-    testImplementation(Deps.TEST_JUNIT)
-    testImplementation(Deps.TEST_JUNIT_ENGINE)
-    testImplementation(Deps.TEST_MOCKITO_CORE)
-    testImplementation(Deps.TEST_MOCKITO_KOTLIN)
-    testImplementation(Deps.TEST_ARCH_ROOM_TESTING)
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.junit.engine)
+    testImplementation(libs.mockK)
+    testImplementation(libs.truth)
+    testImplementation(libs.androidx.room.testing)
 }
 
 // ===== TEST TASKS =====

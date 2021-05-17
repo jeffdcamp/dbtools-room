@@ -1,8 +1,7 @@
 package org.dbtools.android.room.util
 
+import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 
 internal class MergeDatabaseUtilTest {
 
@@ -64,13 +63,13 @@ internal class MergeDatabaseUtilTest {
         println("Actual: $actualMergeTables")
         println("") // newline
 
-        assertEquals(expectedMergeTables.size, actualMergeTables.size, "Same number of tables")
+        assertThat(expectedMergeTables.size).isEqualTo(actualMergeTables.size)
 
         expectedMergeTables.forEachIndexed { index, expectedMergeTable ->
             val actualMergeTable = actualMergeTables[index]
 
-            assertEquals(expectedMergeTable.sourceTableName, actualMergeTable.sourceTableName, "Source Table Name")
-            assertEquals(expectedMergeTable.targetTableName, actualMergeTable.targetTableName, "Target Table Name")
+            assertThat(expectedMergeTable.sourceTableName).isEqualTo(actualMergeTable.sourceTableName)
+            assertThat(actualMergeTable.targetTableName).isEqualTo(expectedMergeTable.targetTableName)
         }
     }
 

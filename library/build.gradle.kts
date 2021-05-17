@@ -10,11 +10,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion(AndroidSdk.COMPILE)
+    compileSdk = AndroidSdk.COMPILE
 
     defaultConfig {
-        minSdkVersion(AndroidSdk.MIN)
-        targetSdkVersion(AndroidSdk.TARGET)
+        minSdk = AndroidSdk.MIN
+        targetSdk = AndroidSdk.TARGET
     }
 
     compileOptions {
@@ -22,7 +22,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    lintOptions {
+    lint {
         isAbortOnError = true
         disable("InvalidPackage")
         disable("NullSafeMutableLiveData") // this rule is crashing lint check for RoomLiveData file
@@ -48,22 +48,23 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
-    api(Deps.ARCH_LIFECYCLE_RUNTIME)
-    api(Deps.ARCH_LIFECYCLE_LIVEDATA_KTX)
-    api(Deps.ARCH_ROOM_RUNTIME)
-    api(Deps.COROUTINES)
-    api(Deps.TIMBER)
+    api(libs.androidx.lifecycle.runtime)
+    api(libs.androidx.lifecycle.livedata)
+    api(libs.androidx.room.runtime)
+    api(libs.kotlin.coroutines.android)
+    api(libs.timber)
 
     // Test
     testImplementation(project(":jdbc"))
-    testImplementation(Deps.XERIAL_SQLITE)
-    testImplementation(Deps.ARCH_ROOM_KTX)
-    testImplementation(Deps.TEST_JUNIT)
-    testImplementation(Deps.TEST_JUNIT_API)
-    testImplementation(Deps.TEST_JUNIT_ENGINE)
-    testImplementation(Deps.TEST_MOCKITO_CORE)
-    testImplementation(Deps.TEST_MOCKITO_KOTLIN)
-    kaptTest(Deps.ARCH_ROOM_COMPILER)
+    testImplementation(libs.xerial.sqlite)
+    testImplementation(libs.androidx.room.ktx)
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.junit.engine)
+    testImplementation(libs.mockK)
+    testImplementation(libs.truth)
+    testImplementation(libs.androidx.room.testing)
+    kaptTest(libs.androidx.room.compiler)
 }
 
 // ===== TEST TASKS =====

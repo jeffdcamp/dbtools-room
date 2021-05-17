@@ -22,11 +22,11 @@ import androidx.room.util.FtsTableInfo
 import androidx.room.util.TableInfo
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
+import io.mockk.mockk
 import org.dbtools.android.room.jdbc.JdbcSQLiteOpenHelperFactory
 import org.junit.jupiter.api.extension.AfterEachCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
-import org.mockito.Mockito.mock
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
@@ -72,7 +72,7 @@ class RoomDatabaseMigrationExtension(
     private val managedRoomDatabases = ArrayList<WeakReference<RoomDatabase>>()
     private var testStarted = false
 
-    private val mockContext = mock(Context::class.java)
+    private val mockContext = mockk<Context>()
 
     override fun beforeEach(context: ExtensionContext?) {
         testStarted = true

@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion(AndroidSdk.COMPILE)
+    compileSdk = AndroidSdk.COMPILE
 
     defaultConfig {
-        minSdkVersion(AndroidSdk.MIN)
-        targetSdkVersion(AndroidSdk.TARGET)
+        minSdk = AndroidSdk.MIN
+        targetSdk = AndroidSdk.TARGET
 
         versionCode = 1000
         versionName = "1.0.0"
@@ -37,17 +37,17 @@ android {
         viewBinding = true
     }
 
-    lintOptions {
+    lint {
         isAbortOnError = true
         disable("InvalidPackage")
     }
 
     buildTypes {
-        getByName("debug") {
+        debug {
             versionNameSuffix = " DEV"
             applicationIdSuffix = ".dev"
         }
-        getByName("release") {
+        release {
             versionNameSuffix = ""
         }
     }
@@ -72,24 +72,25 @@ dependencies {
     implementation(project(":sqlite-android"))
 
     // Android
-    coreLibraryDesugaring(Deps.ANDROID_DESUGAR_JDK_LIBS)
-    implementation(Deps.ANDROIDX_APPCOMPAT)
+    coreLibraryDesugaring(libs.android.desugar)
+    implementation(libs.androidx.appcompat)
 
     // Code
-    implementation(Deps.COROUTINES)
-    implementation(Deps.TIMBER)
+    implementation(libs.kotlin.coroutines.android)
+    implementation(libs.timber)
 
     // UI
 
     // === Android Architecture Components ===
-    implementation(Deps.ARCH_LIFECYCLE_RUNTIME)
+    implementation(libs.androidx.lifecycle.runtime)
 
     // Database
-    implementation(Deps.ARCH_ROOM_RUNTIME)
-    kapt(Deps.ARCH_ROOM_COMPILER)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
 
     // Test
-    testImplementation(Deps.XERIAL_SQLITE)
+    testImplementation(libs.xerial.sqlite)
 }
 
 // ===== TEST TASKS =====

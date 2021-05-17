@@ -17,11 +17,11 @@ tasks.withType<KotlinCompile> {
 }
 
 android {
-    compileSdkVersion(AndroidSdk.COMPILE)
+    compileSdk = AndroidSdk.COMPILE
 
     defaultConfig {
-        minSdkVersion(AndroidSdk.MIN)
-        targetSdkVersion(AndroidSdk.TARGET)
+        minSdk = AndroidSdk.MIN
+        targetSdk = AndroidSdk.TARGET
 
         buildConfigField("String", "SCHEMA_PATH", "\"schemas\"")
 
@@ -38,7 +38,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    lintOptions {
+    lint {
         isAbortOnError = true
         disable("InvalidPackage")
     }
@@ -55,23 +55,23 @@ dependencies {
     implementation(project(":jdbc")) // NOTE: for pom.xml publishing, this type of dependency needs to be set manually in the <publishing> section (below)
 
     // Android
-    implementation(Deps.ARCH_LIFECYCLE_LIVEDATA_KTX)
+    implementation(libs.androidx.lifecycle.livedata)
 
     // Code
-    implementation(Deps.COROUTINES)
-    implementation(Deps.TIMBER)
+    implementation(libs.kotlin.coroutines.android)
+    implementation(libs.timber)
 
     // Test
-    implementation(Deps.TEST_JUNIT_API)
-    implementation(Deps.TEST_JUNIT_ENGINE)
-    implementation(Deps.TEST_MOCKITO_CORE)
-    implementation(Deps.TEST_KOTLIN_COROUTINES_TEST)
-    implementation(Deps.ARCH_ROOM_KTX)
-    implementation(Deps.TEST_ARCH_ROOM_TESTING)
+    implementation(platform(libs.junit.bom))
+    implementation(libs.junit.jupiter)
+    implementation(libs.junit.engine)
+    implementation(libs.mockK)
+    testImplementation(libs.truth)
+    implementation(libs.androidx.room.testing)
 
     // Test (internal only)
-    kaptTest(Deps.ARCH_ROOM_COMPILER)
-    testImplementation(Deps.XERIAL_SQLITE)
+    kaptTest(libs.androidx.room.compiler)
+    testImplementation(libs.xerial.sqlite)
 }
 
 // ===== TEST TASKS =====

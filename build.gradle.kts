@@ -5,13 +5,15 @@ buildscript {
         mavenLocal()
         google()
         mavenCentral()
-        jcenter()
-//        gradlePluginPortal()
+        gradlePluginPortal()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:4.1.3")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION")
-        classpath("com.github.ben-manes:gradle-versions-plugin:0.36.0") // version plugin support
+        // workaround for no support of "libs" in buildscript (https://github.com/gradle/gradle/issues/16958#issuecomment-827140071) (https://discuss.gradle.org/t/trouble-using-centralized-dependency-versions-in-buildsrc-plugins-and-buildscript-classpath/39421)
+        val libs = project.extensions.getByType<VersionCatalogsExtension>().named("libs") as org.gradle.accessors.dm.LibrariesForLibs
+
+        classpath(libs.android.gradlePlugin)
+        classpath(libs.kotlin.gradlePlugin)
+        classpath(libs.gradleVersions.gradlePlugin)
     }
 }
 
@@ -20,7 +22,6 @@ allprojects {
         mavenLocal()
         google()
         mavenCentral()
-        jcenter()
 //        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
 

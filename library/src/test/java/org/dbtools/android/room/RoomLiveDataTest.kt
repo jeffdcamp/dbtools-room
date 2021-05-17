@@ -3,7 +3,9 @@ package org.dbtools.android.room
 import android.content.Context
 import androidx.lifecycle.Observer
 import androidx.room.Room
-import com.nhaarman.mockitokotlin2.whenever
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
@@ -15,19 +17,18 @@ import org.dbtools.android.room.jdbc.JdbcSQLiteOpenHelperFactory
 import org.dbtools.android.room.util.TestFilesystem
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.RegisterExtension
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
 import timber.log.Timber
 
+@ExtendWith(MockKExtension::class)
 internal class RoomLiveDataTest {
 
     @JvmField
     @RegisterExtension
     val instantTaskExecutorExtension = InstantTaskExecutorExtension()
 
-    @Mock
+    @MockK
     lateinit var context: Context
 
     @BeforeEach
@@ -43,13 +44,10 @@ internal class RoomLiveDataTest {
             }
 
         })
-        MockitoAnnotations.initMocks(this)
 
         TestFilesystem.deleteFilesystem()
 
-        Mockito.doReturn(TestFilesystem.INTERNAL_FILES_DIR).whenever(context).filesDir
-
-
+        every { context.filesDir } returns TestFilesystem.INTERNAL_FILES_DIR
     }
 
     @Test
