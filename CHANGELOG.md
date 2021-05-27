@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 6.1.0 *(2021-05)*
+-------------------------
+* Changed validateDatabaseFile(...) to use Room isDatabaseIntegrityOk()
+* Added LoggingCallback - from hansenji
+
 Version 6.0.0 *(2021-04)*
 -------------------------
 * Room 2.3.0
