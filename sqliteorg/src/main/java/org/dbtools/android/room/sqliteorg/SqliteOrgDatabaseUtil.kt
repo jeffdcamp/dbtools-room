@@ -24,15 +24,9 @@ object SqliteOrgDatabaseUtil {
             try {
                 SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY).use { database ->
                     // pragma check
-                    database.rawQuery("pragma quick_check", null).use { pragmaCheckCursor ->
-                        if (!pragmaCheckCursor!!.moveToFirst()) {
-                            Timber.e("validateDatabase - database [%s] pragma check returned no results", databaseNameTag)
-                            return false
-                        }
-                        if (pragmaCheckCursor.getString(0) != CORRUPTION_CHECK_PASSED) {
-                            Timber.e("validateDatabase - database [%s] pragma check failed", databaseNameTag)
-                            return false
-                        }
+                    if (!database.isDatabaseIntegrityOk) {
+                        Timber.e("validateDatabase - database [%s] isDatabaseIntegrityOk check failed", databaseNameTag)
+                        return false
                     }
 
                     // make sure there is data in the database

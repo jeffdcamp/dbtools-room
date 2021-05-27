@@ -43,7 +43,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         binding.testMergeDatabaseButton.setOnClickListener { testMergeDatabase() }
         binding.logIndividualsButton.setOnClickListener { individualRepository.showAllIndividuals() }
         binding.deleteAllIndividualsButton.setOnClickListener { individualRepository.deleteAllIndividuals() }
-        binding.validateDatabaseButton.setOnClickListener { testValidateDatabase() }
+        binding.validateGoodDatabaseButton.setOnClickListener { testValidateGoodDatabase() }
+        binding.validateBadDatabaseButton.setOnClickListener { testValidateBadDatabase() }
         binding.testViewsDatabaseButton.setOnClickListener { testViewsDatabase() }
     }
 
@@ -207,8 +208,15 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    private fun testValidateDatabase() {
+    private fun testValidateGoodDatabase() {
         val database1 = DatabaseUtil.copyDatabaseFromAssets(this@MainActivity, "merge1", true)
+
+        val success = SqliteOrgDatabaseUtil.validateDatabaseFile(database1.absolutePath)
+        Toast.makeText(this, "Database Valid: [$success]", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun testValidateBadDatabase() {
+        val database1 = DatabaseUtil.copyDatabaseFromAssets(this@MainActivity, "baddb", true)
 
         val success = SqliteOrgDatabaseUtil.validateDatabaseFile(database1.absolutePath)
         Toast.makeText(this, "Database Valid: [$success]", Toast.LENGTH_SHORT).show()

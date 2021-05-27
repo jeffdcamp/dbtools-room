@@ -83,10 +83,17 @@
         />
 
     <Button
-        android:id="@+id/validateDatabaseButton"
+        android:id="@+id/validateGoodDatabaseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Validate Database"
+        android:text="Validate Good Database"
+        />
+
+    <Button
+        android:id="@+id/validateBadDatabaseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Validate Bad Database"
         />
 
     <Button
