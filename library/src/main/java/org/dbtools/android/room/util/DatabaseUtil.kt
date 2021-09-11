@@ -32,7 +32,7 @@ object DatabaseUtil {
         Timber.i("Checking database integrity for [%s]", databaseNameTag)
         val totalTimeMs = measureTimeMillis {
             try {
-                SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY).use { database ->
+                SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY, { Timber.e("Corrupt database [$path]") }).use { database ->
                     // pragma check
                     if (!database.isDatabaseIntegrityOk) {
                         Timber.e("validateDatabase - database [%s] isDatabaseIntegrityOk check failed", databaseNameTag)

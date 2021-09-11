@@ -1,6 +1,7 @@
 package org.dbtools.android.room.sqliteorg
 
 import androidx.sqlite.db.SupportSQLiteOpenHelper
+import org.sqlite.database.DatabaseErrorHandler
 import org.sqlite.database.sqlite.SQLiteDatabase
 
 /**
@@ -14,11 +15,12 @@ class SqliteOrgSQLiteOpenHelperFactory(
     private val path: String = "",
     private val password: String = "",
     private val libraryLoaderBlock: () -> Unit = loadSqliteLibrary,
+    private val databaseErrorHandler: DatabaseErrorHandler? = SqliteOrgDefaultDatabaseErrorHandler,
     private val onDatabaseConfigureBlock: (sqliteDatabase: SQLiteDatabase) -> Unit = {}
 ) : SupportSQLiteOpenHelper.Factory {
 
     override fun create(configuration: SupportSQLiteOpenHelper.Configuration): SupportSQLiteOpenHelper {
-        return SqliteOrgSQLiteOpenHelper(configuration.context, path, configuration.name, configuration.callback, password, libraryLoaderBlock, onDatabaseConfigureBlock)
+        return SqliteOrgSQLiteOpenHelper(configuration.context, path, configuration.name, configuration.callback, password, libraryLoaderBlock, databaseErrorHandler, onDatabaseConfigureBlock)
     }
 
     companion object {

@@ -2,6 +2,7 @@
 package org.dbtools.android.room.android
 
 import android.content.Context
+import android.database.DatabaseErrorHandler
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import androidx.sqlite.db.SupportSQLiteOpenHelper
@@ -12,6 +13,7 @@ open class AndroidSQLiteOpenHelper(
     path: String,
     name: String?,
     callback: SupportSQLiteOpenHelper.Callback,
+    databaseErrorHandler: DatabaseErrorHandler? = null,
     onDatabaseConfigureBlock: (sqliteDatabase: SQLiteDatabase) -> Unit = {}
 ) : SupportSQLiteOpenHelper {
 
@@ -25,7 +27,7 @@ open class AndroidSQLiteOpenHelper(
         }
         databaseFile.parentFile?.mkdirs()
 
-        delegate = OpenHelper(context, onDatabaseConfigureBlock, databaseFile.absolutePath, callback)
+        delegate = OpenHelper(context, onDatabaseConfigureBlock, databaseFile.absolutePath, callback, databaseErrorHandler)
     }
 
     override fun getDatabaseName(): String? {
@@ -52,9 +54,14 @@ open class AndroidSQLiteOpenHelper(
         context: Context,
         private val onDatabaseConfigureBlock: (sqliteDatabase: SQLiteDatabase) -> Unit = {},
         private val name: String?,
-        private val callback: SupportSQLiteOpenHelper.Callback
+        private val callback: SupportSQLiteOpenHelper.Callback,
+        databaseErrorHandler: DatabaseErrorHandler? = null
     ) : SQLiteOpenHelper(
-        context, name, null, callback.version
+        context,
+        name,
+        null,
+        callback.version,
+        databaseErrorHandler ?: DatabaseErrorHandler { dbObj -> callback.onCorruption(AndroidSQLiteDatabase(dbObj)) }
     ) {
 
         private var wrappedDb: AndroidSQLiteDatabase? = null

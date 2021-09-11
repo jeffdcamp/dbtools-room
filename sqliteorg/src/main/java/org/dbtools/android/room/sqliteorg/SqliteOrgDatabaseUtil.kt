@@ -2,6 +2,8 @@ package org.dbtools.android.room.sqliteorg
 
 import org.sqlite.database.sqlite.SQLiteDatabase
 import timber.log.Timber
+import java.io.File
+import java.io.FileFilter
 import kotlin.system.measureTimeMillis
 
 object SqliteOrgDatabaseUtil {
@@ -200,6 +202,32 @@ object SqliteOrgDatabaseUtil {
         }
 
         return identityHash
+    }
+
+    /**
+     * Deletes a database including its journal file and other auxiliary files
+     * that may have been created by the database engine.
+     *
+     * @param file The database file path.
+     * @return true if the database was successfully deleted.
+     */
+    fun deleteDatabaseFiles(file: File): Boolean {
+        var deleted: Boolean
+        deleted = file.delete()
+        deleted = deleted or File("${file.path}-journal").delete()
+        deleted = deleted or File("${file.path}-shm").delete()
+        deleted = deleted or File("${file.path}-wal").delete()
+
+        val dir = file.parentFile
+        if (dir != null && dir.exists()) {
+            val prefix = "${file.name}-mj"
+            val filter = FileFilter { candidate -> candidate.name.startsWith(prefix) }
+            val files = dir.listFiles(filter) ?: emptyArray()
+            for (masterJournal in files) {
+                deleted = deleted or masterJournal.delete()
+            }
+        }
+        return deleted
     }
 
     private const val CORRUPTION_CHECK_PASSED = "ok"

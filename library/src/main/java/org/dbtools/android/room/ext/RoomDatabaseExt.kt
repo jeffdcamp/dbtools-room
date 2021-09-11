@@ -242,7 +242,14 @@ fun RoomDatabase.mergeDatabase(
         MergeDatabaseUtil.defaultMerge(database, sourceTableName, targetTableName)
     }
 ): Boolean {
-    return MergeDatabaseUtil.mergeDatabase(openHelper.writableDatabase, fromDatabaseFile, includeTables, excludeTables, tableNameMap, mergeBlock)
+    return MergeDatabaseUtil.mergeDatabase(
+        openHelper.writableDatabase,
+        sourceDatabaseFile = fromDatabaseFile,
+        includeTables = includeTables,
+        excludeTables = excludeTables,
+        sourceTableNameMap = tableNameMap,
+        onFailBlock = null,
+        mergeBlock)
 }
 
 /**

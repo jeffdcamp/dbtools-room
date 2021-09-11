@@ -16,7 +16,7 @@
         tools:ignore="UnusedAttribute"
         tools:replace="android:allowBackup"
         >
-        <activity android:name=".ux.MainActivity">
+        <activity android:name=".ux.MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

@@ -1,14 +1,14 @@
 package org.dbtools.android.room.jdbc
 
-import androidx.sqlite.db.SimpleSQLiteQuery
-import androidx.sqlite.db.SupportSQLiteDatabase
-import androidx.sqlite.db.SupportSQLiteQuery
-import androidx.sqlite.db.SupportSQLiteStatement
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteTransactionListener
 import android.os.CancellationSignal
 import android.util.Pair
+import androidx.sqlite.db.SimpleSQLiteQuery
+import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.sqlite.db.SupportSQLiteQuery
+import androidx.sqlite.db.SupportSQLiteStatement
 import org.sqlite.JDBC
 import java.sql.Connection
 import java.sql.DriverManager

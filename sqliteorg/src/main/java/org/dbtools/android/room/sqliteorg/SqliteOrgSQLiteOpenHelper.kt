@@ -3,6 +3,7 @@ package org.dbtools.android.room.sqliteorg
 import android.content.Context
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
+import org.sqlite.database.DatabaseErrorHandler
 import org.sqlite.database.sqlite.SQLiteDatabase
 import org.sqlite.database.sqlite.SQLiteOpenHelper
 import java.io.File
@@ -14,6 +15,7 @@ open class SqliteOrgSQLiteOpenHelper(
     callback: SupportSQLiteOpenHelper.Callback,
     password: String,
     libraryLoaderBlock: () -> Unit = SqliteOrgSQLiteOpenHelperFactory.loadSqliteLibrary,
+    databaseErrorHandler: DatabaseErrorHandler? = null,
     onDatabaseConfigureBlock: (sqliteDatabase: SQLiteDatabase) -> Unit = {}
 ) : SupportSQLiteOpenHelper {
 
@@ -27,7 +29,14 @@ open class SqliteOrgSQLiteOpenHelper(
         }
         databaseFile.parentFile?.mkdirs()
 
-        delegate = OpenHelper(context, libraryLoaderBlock, onDatabaseConfigureBlock, databaseFile.absolutePath, callback, password)
+        delegate = OpenHelper(
+            context = context,
+            libraryLoaderBlock = libraryLoaderBlock,
+            onDatabaseConfigureBlock = onDatabaseConfigureBlock,
+            name = databaseFile.absolutePath,
+            callback = callback,
+            password = password,
+            errorHandler = databaseErrorHandler ?: DatabaseErrorHandler { dbObj -> callback.onCorruption(SqliteOrgDatabase(dbObj)) })
     }
 
     override fun getDatabaseName(): String? {
@@ -56,9 +65,10 @@ open class SqliteOrgSQLiteOpenHelper(
         private val onDatabaseConfigureBlock: (sqliteDatabase: SQLiteDatabase) -> Unit = {},
         private val name: String?,
         private val callback: SupportSQLiteOpenHelper.Callback,
-        private val password: String
+        private val password: String,
+        errorHandler: DatabaseErrorHandler? = null
     ) : SQLiteOpenHelper(
-        context, name, null, callback.version
+        context, name, null, callback.version, errorHandler
     ) {
 
         var wrappedDb: SqliteOrgDatabase? = null

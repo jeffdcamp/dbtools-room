@@ -1,2 +1,2 @@
 configurations.maybeCreate("default")
-artifacts.add("default", file("sqlite-android-3310000.aar"))
+artifacts.add("default", file("sqlite-android-3360000.aar"))

@@ -42,12 +42,13 @@ object MergeDatabaseUtil {
      *
      */
     fun mergeDatabase(
-            targetDatabase: SupportSQLiteDatabase,
-            sourceDatabaseFile: File,
-            includeTables: List<String> = emptyList(),
-            excludeTables: List<String> = emptyList(),
-            sourceTableNameMap: Map<String, String> = emptyMap(),
-            mergeBlock: (database: SupportSQLiteDatabase, sourceTableName: String, targetTableName: String) -> Unit = { db, sourceTableName, targetTableName ->
+        targetDatabase: SupportSQLiteDatabase,
+        sourceDatabaseFile: File,
+        includeTables: List<String> = emptyList(),
+        excludeTables: List<String> = emptyList(),
+        sourceTableNameMap: Map<String, String> = emptyMap(),
+        onFailBlock: ((e: Exception, targetDatabase: SupportSQLiteDatabase, sourceDatabaseFile: File) -> Unit)? = null,
+        mergeBlock: (database: SupportSQLiteDatabase, sourceTableName: String, targetTableName: String) -> Unit = { db, sourceTableName, targetTableName ->
                 defaultMerge(db, sourceTableName, targetTableName)
             }
     ): Boolean {
@@ -98,13 +99,15 @@ object MergeDatabaseUtil {
 
                 targetDatabase.setTransactionSuccessful()
             } catch (e: Exception) {
-                Timber.e(e, "Failed to merge database tables")
+                Timber.e(e, "Failed to merge database tables (inner) (sourceDatabaseFile: [${sourceDatabaseFile.name}] targetDatabase: [${targetDatabase.path}]")
+                onFailBlock?.invoke(e, targetDatabase, sourceDatabaseFile)
                 return false
             } finally {
                 targetDatabase.endTransaction()
             }
         } catch (e: Exception) {
-            Timber.e(e, "Failed to merge database tables")
+            Timber.e(e, "Failed to merge database tables (outer) (sourceDatabaseFile: [${sourceDatabaseFile.name}] targetDatabase: [${targetDatabase.path}]")
+            onFailBlock?.invoke(e, targetDatabase, sourceDatabaseFile)
             return false
         } finally {
             try {
@@ -112,6 +115,7 @@ object MergeDatabaseUtil {
                 targetDatabase.detachDatabase(mergeDbName)
             } catch (e: Exception) {
                 Timber.e(e, "Failed detach database (merge database tables)... may have never been attached")
+                onFailBlock?.invoke(e, targetDatabase, sourceDatabaseFile)
             }
         }
 

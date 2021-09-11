@@ -251,11 +251,12 @@ fun SupportSQLiteDatabase.mergeDatabase(
     includeTables: List<String> = emptyList(),
     excludeTables: List<String> = emptyList(),
     tableNameMap: Map<String, String> = emptyMap(),
+    onFailBlock: ((e: Exception, targetDatabase: SupportSQLiteDatabase, sourceDatabaseFile: File) -> Unit)? = null,
     mergeBlock: (database: SupportSQLiteDatabase, sourceTableName: String, targetTableName: String) -> Unit = { database, sourceTableName, targetTableName ->
         MergeDatabaseUtil.defaultMerge(database, sourceTableName, targetTableName)
     }
 ): Boolean {
-    return MergeDatabaseUtil.mergeDatabase(this, fromDatabaseFile, includeTables, excludeTables, tableNameMap, mergeBlock)
+    return MergeDatabaseUtil.mergeDatabase(this, fromDatabaseFile, includeTables, excludeTables, tableNameMap, onFailBlock, mergeBlock)
 }
 
 /**

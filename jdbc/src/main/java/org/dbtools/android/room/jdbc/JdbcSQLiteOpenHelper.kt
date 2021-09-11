@@ -1,15 +1,17 @@
 package org.dbtools.android.room.jdbc
 
+import android.database.DatabaseErrorHandler
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import java.io.File
 
 open class JdbcSQLiteOpenHelper(
-        val path: String,
-        val name: String?,
-        val callback: SupportSQLiteOpenHelper.Callback,
-        val password: String,
-        val onDatabaseConfigureBlock: (sqliteDatabase: JdbcSqliteDatabase) -> Unit = {}
+    val path: String,
+    val name: String?,
+    val callback: SupportSQLiteOpenHelper.Callback,
+    val password: String,
+    val databaseErrorHandler: DatabaseErrorHandler? = null, // TODO Implement
+    val onDatabaseConfigureBlock: (sqliteDatabase: JdbcSqliteDatabase) -> Unit = {}
 ) : SupportSQLiteOpenHelper {
 
     private val dbPath: String
