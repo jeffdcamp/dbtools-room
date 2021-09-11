@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 7.0.0-alpha01 *(2021-09)*
+-------------------------
+* Room 2.4.0-alpha04
+* Improved logging when database corruption occurs
+
 Version 6.1.0 *(2021-05)*
 -------------------------
 * Changed validateDatabaseFile(...) to use Room isDatabaseIntegrityOk()

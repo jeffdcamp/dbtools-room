@@ -5,7 +5,7 @@ coroutines = "1.5.2"
 
 androidxhilt = "1.0.0"
 androidxlifecycle = "2.3.1"
-room = "2.3.0"
+room = "2.4.0-alpha04"
 
 [libraries]
 android-gradlePluginClasspath = { module = "com.android.tools.build:gradle", version.ref = "agp" }

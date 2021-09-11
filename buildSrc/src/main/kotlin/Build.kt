@@ -2,13 +2,13 @@
 
 object AndroidSdk {
     const val MIN = 21
-    const val COMPILE = 30
+    const val COMPILE = 31
     const val TARGET = COMPILE
 }
 
 object Pom {
     const val GROUP_ID = "org.dbtools"
-    const val VERSION_NAME = "6.1.0"
+    const val VERSION_NAME = "7.0.0-alpha01"
     const val POM_DESCRIPTION = "DBTools for Room"
 
     const val URL = "https://github.com/jeffdcamp/dbtools-room/"
