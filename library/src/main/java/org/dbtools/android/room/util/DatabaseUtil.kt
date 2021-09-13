@@ -358,7 +358,7 @@ object DatabaseUtil {
      * Drops view in a database
      *
      * @param database Database to drop the views from
-     * @param viewsName Name of view to drop
+     * @param viewName Name of view to drop
      */
     fun dropView(database: SupportSQLiteDatabase, viewName: String) {
         database.execSQL("DROP VIEW IF EXISTS $viewName")
@@ -380,7 +380,7 @@ object DatabaseUtil {
     }
 
     fun createAllViews(database: SupportSQLiteDatabase, views: List<DatabaseViewQuery>) {
-        views.forEach { createView(database, it.viewName, it.viewQuery) }
+        views.forEach { createView(database, it.viewName, it.viewQuery.trim()) }
     }
 
     fun recreateView(database: SupportSQLiteDatabase, viewName: String, viewQuery: String) {
@@ -395,6 +395,6 @@ object DatabaseUtil {
      * @param views List of Views to recreate
      */
     fun recreateAllViews(database: SupportSQLiteDatabase, views: List<DatabaseViewQuery>) {
-        views.forEach { recreateView(database, it.viewName, it.viewQuery) }
+        views.forEach { recreateView(database, it.viewName, it.viewQuery.trim()) }
     }
 }
