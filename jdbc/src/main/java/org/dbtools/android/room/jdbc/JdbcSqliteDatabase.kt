@@ -16,7 +16,7 @@ import java.util.Locale
 import java.util.concurrent.atomic.AtomicInteger
 
 class JdbcSqliteDatabase(
-        private val dbPath: String
+    private val dbPath: String
 ) : SupportSQLiteDatabase {
 
     private val dbUrl = "jdbc:sqlite:$dbPath"
@@ -61,18 +61,22 @@ class JdbcSqliteDatabase(
     }
 
     override fun beginTransaction() {
-        beginTransactionWithListenerNonExclusive(null)
+        beginTransaction(null, true)
     }
 
     override fun beginTransactionNonExclusive() {
-        beginTransactionWithListenerNonExclusive(null)
+        beginTransaction(null, false)
     }
 
     override fun beginTransactionWithListener(transactionListener: SQLiteTransactionListener?) {
-        beginTransactionWithListenerNonExclusive(transactionListener)
+        beginTransaction(transactionListener, true)
     }
 
     override fun beginTransactionWithListenerNonExclusive(transactionListener: SQLiteTransactionListener?) {
+        beginTransaction(transactionListener, false)
+    }
+
+    private fun beginTransaction(transactionListener: SQLiteTransactionListener?, exclusive: Boolean) {
         if (conn.autoCommit) {
             this.transactionListener = transactionListener
             commitTransaction = false
@@ -149,14 +153,16 @@ class JdbcSqliteDatabase(
             append(')')
             append(" VALUES (")
             repeat(size) {
-                append(when (it) {
-                    0 -> "?"
-                    else -> ",?"
-                })
+                append(
+                    when (it) {
+                        0 -> "?"
+                        else -> ",?"
+                    }
+                )
             }
             append(')')
         }
-        return JdbcSQLiteStatement(conn, sql).use {statement ->
+        return JdbcSQLiteStatement(conn, sql).use { statement ->
             statement.bindArguments(bindArgs)
             statement.executeInsert()
         }
@@ -186,7 +192,7 @@ class JdbcSqliteDatabase(
         val initialValues = checkNotNull(values) { "Values must not be null" }
         check(initialValues.size() > 0) { "Values must not be empty" }
         val setValuesSize = initialValues.size()
-        val bindArgSize = when(whereArgs) {
+        val bindArgSize = when (whereArgs) {
             null -> setValuesSize
             else -> setValuesSize + whereArgs.size
         }
@@ -224,10 +230,12 @@ class JdbcSqliteDatabase(
     }
 
     override fun delete(table: String?, whereClause: String?, whereArgs: Array<out Any?>?): Int {
-        val query = "DELETE FROM $table ${when {
-            whereClause.isNullOrBlank() -> ""
-            else -> "WHERE $whereClause"
-        }}"
+        val query = "DELETE FROM $table ${
+            when {
+                whereClause.isNullOrBlank() -> ""
+                else -> "WHERE $whereClause"
+            }
+        }"
         val statement = compileStatement(query)
         SimpleSQLiteQuery.bind(statement, whereArgs)
         return statement.executeUpdateDelete()
@@ -254,10 +262,12 @@ class JdbcSqliteDatabase(
     }
 
     override fun setForeignKeyConstraintsEnabled(enable: Boolean) {
-        conn.createStatement().execute(when {
-            enable -> "PRAGMA foreign_keys = ON"
-            else -> "PRAGMA foreign_keys = OFF"
-        })
+        conn.createStatement().execute(
+            when {
+                enable -> "PRAGMA foreign_keys = ON"
+                else -> "PRAGMA foreign_keys = OFF"
+            }
+        )
     }
 
     override fun getVersion(): Int {
@@ -324,7 +334,8 @@ class JdbcSqliteDatabase(
             throw e
         } finally {
             when {
-                this == null -> {}
+                this == null -> {
+                }
                 exception == null -> close()
                 else ->
                     try {

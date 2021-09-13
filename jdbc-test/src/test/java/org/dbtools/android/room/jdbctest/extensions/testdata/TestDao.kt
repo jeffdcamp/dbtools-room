@@ -6,15 +6,15 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 // Sample dao to test database extensions
-@Dao
-interface TestDao {
+    @Dao
+    interface TestDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(entity: TestEntity)
+        @Insert(onConflict = OnConflictStrategy.REPLACE)
+        fun insert(entity: TestEntity)
 
-    @Query("SELECT * FROM testEntity")
-    fun findAllTestEntities(): List<TestEntity>
+        @Query("SELECT * FROM testEntity")
+        fun findAllTestEntities(): List<TestEntity>
 
-    @Query("DELETE FROM testEntity")
-    fun deleteAllTestEntities()
-}
+        @Query("DELETE FROM testEntity")
+        fun deleteAllTestEntities()
+    }

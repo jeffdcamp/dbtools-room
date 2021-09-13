@@ -58,6 +58,10 @@ dependencies {
     testImplementation(libs.mockK)
     testImplementation(libs.truth)
     testImplementation(libs.androidx.room.testing)
+    testImplementation(libs.androidx.room.ktx)
+    testImplementation(libs.androidx.lifecycle.livedata)
+    kaptTest(libs.androidx.room.compiler)
+    testImplementation(libs.xerial.sqlite)
 }
 
 // ===== TEST TASKS =====
