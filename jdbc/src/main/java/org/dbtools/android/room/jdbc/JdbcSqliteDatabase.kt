@@ -15,8 +15,15 @@ import java.sql.DriverManager
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicInteger
 
+/**
+ * JdbcSqliteDatabase - JDBC Implementation of SupportSQLiteDatabase
+ *
+ * @param dbPath Path to database
+ * @param enableJdbcTransactionSupport Enable/Disable jdbc support via autoCommit (default = true).  NOTE: known issue as of Room 2.4.0 - bulk insert needs to be fixed (because inserts get put into multiple threads, this sometimes causes the jdbc driver to throw: "database in auto-commit mode")
+ */
 class JdbcSqliteDatabase(
-    private val dbPath: String
+    private val dbPath: String,
+    private val enableJdbcTransactionSupport: Boolean = true
 ) : SupportSQLiteDatabase {
 
     private val dbUrl = "jdbc:sqlite:$dbPath"
@@ -77,52 +84,71 @@ class JdbcSqliteDatabase(
     }
 
     private fun beginTransaction(transactionListener: SQLiteTransactionListener?, exclusive: Boolean) {
-        if (conn.autoCommit) {
+        if (enableJdbcTransactionSupport) {
+            if (conn.autoCommit) {
+                this.transactionListener = transactionListener
+                commitTransaction = false
+                conn.autoCommit = false
+                this.transactionListener?.onBegin()
+                transactionCounter.set(0)
+            }
+        } else {
             this.transactionListener = transactionListener
-            commitTransaction = false
-            conn.autoCommit = false
             this.transactionListener?.onBegin()
-            transactionCounter.set(0)
         }
         transactionCounter.incrementAndGet()
+
+//        println("incremented counter to: ${transactionCounter.get()}")
     }
 
     override fun inTransaction(): Boolean {
-        return !conn.autoCommit
+        return transactionCounter.get() > 0
+//        return !conn.autoCommit
     }
 
     override fun endTransaction() {
-        if (transactionCounter.decrementAndGet() == 0) {
-            try {
-                when {
-                    commitTransaction -> {
-                        conn.commit()
-                        transactionListener?.onCommit()
+//        println("endTransaction().transactionCounter = ${transactionCounter.get()} START")
+        if (enableJdbcTransactionSupport) {
+            if (transactionCounter.decrementAndGet() == 0) {
+                try {
+                    when {
+                        commitTransaction -> {
+                            conn.commit()
+                            transactionListener?.onCommit()
+                        }
+                        else -> {
+                            conn.rollback()
+                            transactionListener?.onCommit()
+                        }
                     }
-                    else -> {
-                        conn.rollback()
-                        transactionListener?.onCommit()
-                    }
+                } finally {
+                    conn.autoCommit = true
+                    commitTransaction = false
+                    transactionListener = null
                 }
-            } finally {
-                conn.autoCommit = true
-                commitTransaction = false
-                transactionListener = null
             }
+        } else {
+            transactionCounter.decrementAndGet()
+            transactionListener?.onCommit()
         }
+
+//        println("endTransaction().transactionCounter = ${transactionCounter.get()} FINISH\n\n")
     }
 
     override fun setTransactionSuccessful() {
+//        println("setTransactionSuccessful().transactionCounter = ${transactionCounter.get()}")
         if (transactionCounter.get() == 1) {
             commitTransaction = true
         }
     }
 
     override fun yieldIfContendedSafely(): Boolean {
+//        println("yieldIfContendedSafely()")
         return false
     }
 
     override fun yieldIfContendedSafely(sleepAfterYieldDelay: Long): Boolean {
+//        println("yieldIfContendedSafely(sleepAfterYieldDelay)")
         return false
     }
 

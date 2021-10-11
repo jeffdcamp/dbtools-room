@@ -22,7 +22,7 @@ class JdbcRoomTest {
         itemDatabase = Room.databaseBuilder(mockk<Application>(), ItemDatabase::class.java, databaseFile.name)
             .allowMainThreadQueries()
             .setTransactionExecutor(Executors.newSingleThreadExecutor())
-            .openHelperFactory(JdbcSQLiteOpenHelperFactory(databaseFile.parentFile.path))
+            .openHelperFactory(JdbcSQLiteOpenHelperFactory(databaseFile.parentFile.path, enableJdbcTransactionSupport = false))
 //            .setQueryCallback({ sql, args -> println("Query: [$sql]  Args: $args") }) { it.run() }
             .build()
     }
@@ -34,6 +34,7 @@ class JdbcRoomTest {
         testRange(itemDatabase, 10, true)
         testRange(itemDatabase, 25, true)
         testRange(itemDatabase, 100, true)
+//        testRange(itemDatabase, 1000, true)
     }
 
     @Test
@@ -41,10 +42,11 @@ class JdbcRoomTest {
         // single insert works just fine with
         testRange(itemDatabase, 1, false)
 
-        // todo: known issue - bulk insert needs to be fixed (because inserts get put into multiple threads, this sometimes causes the jdbc driver to throw: "database in auto-commit mode")
-//        testRange(itemDatabase, 10, false)
-//        testRange(itemDatabase, 25, false)
-//        testRange(itemDatabase, 100, false)
+        // known issue as of Room 2.4.0 - bulk insert needs to be fixed (because inserts get put into multiple threads, this sometimes causes the jdbc driver to throw: "database in auto-commit mode")
+        testRange(itemDatabase, 10, false)
+        testRange(itemDatabase, 25, false)
+        testRange(itemDatabase, 100, false)
+//        testRange(itemDatabase, 1000, false)
     }
 
     private suspend fun testRange(itemDatabase: ItemDatabase, numItems: Int, withTransaction: Boolean) {

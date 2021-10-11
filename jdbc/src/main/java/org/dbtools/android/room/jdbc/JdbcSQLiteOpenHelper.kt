@@ -5,11 +5,23 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import java.io.File
 
+/**
+ * JdbcSQLiteOpenHelper - JDBC implementation of SupportSQLiteOpenHelper
+ *
+ * @param path Path to database
+ * @param name Name of database.  If null then in memory database
+ * @param callback SupportSQLiteOpenHelper.Callback
+ * @param password Database password
+ * @param databaseErrorHandler Not yet implemented
+ * @param enableJdbcTransactionSupport Enable/Disable jdbc support via autoCommit (default = true).  NOTE: known issue as of Room 2.4.0 - bulk insert needs to be fixed (because inserts get put into multiple threads, this sometimes causes the jdbc driver to throw: "database in auto-commit mode")
+ * @param onDatabaseConfigureBlock Block of code that is executed AFTER initial database connection and BEFORE database validation
+ */
 open class JdbcSQLiteOpenHelper(
     val path: String,
     val name: String?,
     val callback: SupportSQLiteOpenHelper.Callback,
     val password: String,
+    val enableJdbcTransactionSupport: Boolean = true,
     val databaseErrorHandler: DatabaseErrorHandler? = null, // TODO Implement
     val onDatabaseConfigureBlock: (sqliteDatabase: JdbcSqliteDatabase) -> Unit = {}
 ) : SupportSQLiteOpenHelper {
@@ -78,7 +90,7 @@ open class JdbcSQLiteOpenHelper(
         var db: JdbcSqliteDatabase? = null
         try {
             initializing = true
-            db = JdbcSqliteDatabase(dbPath)
+            db = JdbcSqliteDatabase(dbPath, enableJdbcTransactionSupport)
             if (password.isNotBlank()) {
                 db.execSQL("PRAGMA key = '$password'")
             }
