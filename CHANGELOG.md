@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 7.0.0-alpha02 *(2021-09)*
+-------------------------
+* Added coded to fix/prevent issues with leading newline characters in DatabaseViewQuery.viewQuery
+* Added unit tests to core JDBC library
+* Added ability to disable JDBC transactions (known issue as of Room 2.4.0 - bulk insert needs to be fixed (because inserts get put into multiple threads, this sometimes causes the jdbc driver to throw: "database in auto-commit mode"))
+
 Version 7.0.0-alpha01 *(2021-09)*
 -------------------------
 * Room 2.4.0-alpha04
