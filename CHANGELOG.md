@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 7.0.0-beta01 *(2021-10)*
+-------------------------
+* Room 2.4.0-beta01
+
 Version 7.0.0-alpha02 *(2021-09)*
 -------------------------
 * Added coded to fix/prevent issues with leading newline characters in DatabaseViewQuery.viewQuery
