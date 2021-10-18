@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 7.0.0-beta02 *(2021-10)*
+-------------------------
+* Added CursorExt.kt (Set of extension functions on Cursor to make it simpler to get and test data)
+
 Version 7.0.0-beta01 *(2021-10)*
 -------------------------
 * Room 2.4.0-beta01
