@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 7.0.0-beta03 *(2021-11)*
+-------------------------
+* Added RoomDatabaseExtension enableJdbcTransactionSupport 
+
 Version 7.0.0-beta02 *(2021-10)*
 -------------------------
 * Added CursorExt.kt (Set of extension functions on Cursor to make it simpler to get and test data)

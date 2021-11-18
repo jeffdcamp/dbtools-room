@@ -35,10 +35,12 @@ import java.io.File
  *
  * @param mockApplication Mocked application instance, required for this extension to use the Room.databaseBuilder
  * @param databaseClass The class for the database that should be instantiated by this extension for testing
+ * @param enableJdbcTransactionSupport Enable/Disable jdbc support via autoCommit (default = true).  NOTE: known issue as of Room 2.4.0 - bulk insert needs to be fixed (because inserts get put into multiple threads, this sometimes causes the jdbc driver to throw: "database in auto-commit mode")
  */
 class RoomDatabaseExtension<T : RoomDatabase>(
     private val mockApplication: Application,
-    private val databaseClass: Class<T>
+    private val databaseClass: Class<T>,
+    private val enableJdbcTransactionSupport: Boolean = true
 ) : BeforeEachCallback, AfterEachCallback {
 
     lateinit var testDatabase: T
@@ -63,7 +65,7 @@ class RoomDatabaseExtension<T : RoomDatabase>(
     private fun createTestDatabase(filename: String): T {
         return Room.databaseBuilder(mockApplication, databaseClass, filename)
             .allowMainThreadQueries()
-            .openHelperFactory(JdbcSQLiteOpenHelperFactory(RoomTestFileSystem.INTERNAL_DATABASES_DIR_PATH))
+            .openHelperFactory(JdbcSQLiteOpenHelperFactory(RoomTestFileSystem.INTERNAL_DATABASES_DIR_PATH, enableJdbcTransactionSupport = enableJdbcTransactionSupport))
             .fallbackToDestructiveMigration()
             .build()
     }
