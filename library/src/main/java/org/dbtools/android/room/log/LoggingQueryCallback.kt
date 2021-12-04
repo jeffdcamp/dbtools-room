@@ -62,10 +62,37 @@ class LoggingQueryCallback(
 
         var formattedSql = sqlQuery
         formattedArgs.forEach { arg ->
-            formattedSql = formattedSql.replaceFirst("?", arg)
+            formattedSql = replaceNextArg(formattedSql, arg)
         }
 
         log("$queryContext Query: [$formattedSql]")
+    }
+
+    private fun replaceNextArg(sqlQuery: String, arg: String): String {
+        var inText = false
+        var foundIndex = -1
+
+        // find the index of the next ? that is NOT in text
+        val chars = sqlQuery.toCharArray()
+        for(index in 0..chars.size) {
+            val c = chars[index]
+            when {
+                c == '?' && !inText -> {
+                    foundIndex = index
+                    break
+                }
+                c == '\'' -> inText = !inText
+                else -> {
+                    // continue
+                }
+            }
+        }
+
+        return if (foundIndex == -1) {
+            sqlQuery
+        } else {
+            sqlQuery.replaceRange(foundIndex, foundIndex + 1, arg)
+        }
     }
 
     @SuppressLint("LogNotTimber")

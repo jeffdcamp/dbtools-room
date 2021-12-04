@@ -83,4 +83,13 @@ internal class LoggingQueryCallbackTest {
         loggingQueryCallback.onQuery(sqlQuery, bindingArgs)
         assertThat(loggingQueryCallback.lastLog).isEqualTo(formatOutput("SELECT * FROM Individual WHERE name LIKE '%' AND age > 10"))
     }
+
+    @Test
+    fun testQueryWithQuestionMarkInString() {
+        val bindingArgs = listOf<Any>("1234", "Joe", "individual/1234?lang=eng", "ACTIVE")
+        val sqlQuery = "INSERT OR REPLACE INTO `Individual` (`id`,`name`,`uri`,`status`) VALUES (?,?,?,?)"
+
+        loggingQueryCallback.onQuery(sqlQuery, bindingArgs)
+        assertThat(loggingQueryCallback.lastLog).isEqualTo(formatOutput("INSERT OR REPLACE INTO `Individual` (`id`,`name`,`uri`,`status`) VALUES ('1234','Joe','individual/1234?lang=eng','ACTIVE')"))
+    }
 }

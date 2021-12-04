@@ -65,11 +65,11 @@ object RoomFlow {
 
             val observer = object : InvalidationTracker.Observer(tableNames) {
                 override fun onInvalidated(tables: MutableSet<String>) {
-                    observerChannel.offer(Unit)
+                    observerChannel.trySend(Unit).isSuccess
                 }
             }
 
-            observerChannel.offer(Unit) // Initial signal to perform first query.
+            observerChannel.trySend(Unit).isSuccess // Initial signal to perform first query.
 
             val flowContext = kotlin.coroutines.coroutineContext
             val queryContext = if (inTransaction) db.transactionExecutor.asCoroutineDispatcher() else db.queryExecutor.asCoroutineDispatcher()

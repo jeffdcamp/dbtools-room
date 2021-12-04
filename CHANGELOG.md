@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 7.0.0-beta04 *(2021-12)*
+-------------------------
+* Added Room 2.4.0-rc01
+* Kotlin 1.6
+* Improved LoggingQueryCallback to better support ? in args
+
 Version 7.0.0-beta03 *(2021-11)*
 -------------------------
 * Added RoomDatabaseExtension enableJdbcTransactionSupport 
