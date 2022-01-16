@@ -5,7 +5,7 @@ coroutines = "1.6.0"
 
 androidxhilt = "1.0.0"
 androidxlifecycle = "2.4.0"
-room = "2.4.0"
+room = "2.4.1"
 
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version = "1.6.10-1.0.2" }
@@ -15,7 +15,7 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.19.0" }
 android-gradlePluginClasspath = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 android-desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
 
-androidx-appcompat = "androidx.appcompat:appcompat:1.4.0"
+androidx-appcompat = "androidx.appcompat:appcompat:1.4.1"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.0.4"
 
 androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxlifecycle" }
