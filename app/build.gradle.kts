@@ -38,8 +38,8 @@ android {
     }
 
     lint {
-        isAbortOnError = true
-        disable("InvalidPackage")
+        abortOnError = true
+        disable.addAll(listOf("InvalidPackage"))
     }
 
     buildTypes {

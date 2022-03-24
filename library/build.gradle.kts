@@ -23,9 +23,11 @@ android {
     }
 
     lint {
-        isAbortOnError = true
-        disable("InvalidPackage")
-        disable("NullSafeMutableLiveData") // this rule is crashing lint check for RoomLiveData file
+        abortOnError = true
+        disable.addAll(listOf(
+            "InvalidPackage",
+            "NullSafeMutableLiveData" // this rule is crashing lint check for RoomLiveData file
+        ))
     }
 
     sourceSets {
