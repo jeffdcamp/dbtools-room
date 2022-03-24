@@ -33,8 +33,8 @@ jobs:
     - name: Lint
       run: ./gradlew lintDebug
 
-    - name: Detekt
-      run: ./gradlew downloadDetektConfig detekt
+#    - name: Detekt
+#      run: ./gradlew downloadDetektConfig detekt
 
     - name: Upload artifact
       uses: actions/upload-artifact@v3
