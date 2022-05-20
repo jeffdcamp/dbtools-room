@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+Version 7.1.0 *(2022-05)*
+-------------------------
+* Fix for isDatabaseIntegrityOk() to call prepareStatement
+* Updated publishing in build.gradle.kts
+* Kotlin 1.6.21
+
+NOTE: If using "dbtools-room-jdbc-test", migrating to 7.1.0 will require you to add "dbtools-room-jdbc" dependency 
+
 Version 7.0.1 *(2022-01)*
 -------------------------
 * Added Room 2.4.1

@@ -51,8 +51,9 @@ class JdbcSqliteDatabase(
     }
 
     override fun isDatabaseIntegrityOk(): Boolean {
-        val rs = conn.prepareCall("PRAGMA integrity_check(1)").executeQuery()
-        return rs.getString(1).equals("ok", ignoreCase = true)
+        return conn.prepareStatement("PRAGMA integrity_check(1)").executeQuery().use { rs ->
+            rs.getString(1).equals("ok", ignoreCase = true)
+        }
     }
 
     override fun isDbLockedByCurrentThread(): Boolean {

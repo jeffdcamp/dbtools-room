@@ -1,6 +1,3 @@
-import com.android.build.gradle.BaseExtension
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("com.android.library")
     `maven-publish`
@@ -17,9 +14,9 @@ android {
         targetSdk = AndroidSdk.TARGET
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs = listOf("-module-name", Pom.LIBRARY_ARTIFACT_ID)
     }
 
     lint {
@@ -41,11 +38,12 @@ android {
             assets.srcDir("$projectDir/schemas")
         }
     }
-}
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-module-name", Pom.LIBRARY_ARTIFACT_ID)
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
     }
 }
 
@@ -60,7 +58,6 @@ dependencies {
     testImplementation(project(":jdbc"))
     testImplementation(libs.xerial.sqlite)
     testImplementation(libs.androidx.room.ktx)
-    testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly(libs.junit.engine)
     testImplementation(libs.mockK)
@@ -78,24 +75,20 @@ tasks.withType<Test> {
 
 // ===== Maven Deploy =====
 
-// ./gradlew clean check assembleRelease publishMavenPublicationToMavenLocal
-// ./gradlew clean check assembleRelease publishMavenPublicationToSoupbowlRepository
-// ./gradlew clean check assembleRelease publishMavenPublicationToMavenCentralRepository
-
-tasks.register<Jar>("sourcesJar") {
-    //    from(android.sourceSets.getByName("main").java.sourceFiles)
-    from(project.the<BaseExtension>().sourceSets["main"].java.srcDirs)
-    archiveClassifier.set("sources")
-}
-
+// ./gradlew clean check assembleRelease publishReleasePublicationToMavenLocal
+// ./gradlew clean check assembleRelease publishReleasePublicationToSoupbowlRepository
+// ./gradlew clean check assembleRelease publishReleasePublicationToMavenCentralRepository
 publishing {
     publications {
-        create<MavenPublication>("maven") {
+        register<MavenPublication>("release") {
             groupId = Pom.GROUP_ID
             artifactId = Pom.LIBRARY_ARTIFACT_ID
             version = Pom.VERSION_NAME
-            artifact(tasks["sourcesJar"])
-            afterEvaluate { artifact(tasks.getByName("bundleReleaseAar")) }
+
+            afterEvaluate {
+                from(components["release"])
+            }
+
             pom {
                 name.set(Pom.LIBRARY_NAME)
                 description.set(Pom.POM_DESCRIPTION)
@@ -119,17 +112,6 @@ publishing {
                     developerConnection.set(Pom.SCM_DEV_CONNECTION)
                 }
             }
-
-            // add dependencies to pom.xml
-            pom.withXml {
-                val dependenciesNode = asNode().appendNode("dependencies")
-                configurations.implementation.get().allDependencies.forEach {
-                    val dependencyNode = dependenciesNode.appendNode("dependency")
-                    dependencyNode.appendNode("groupId", it.group)
-                    dependencyNode.appendNode("artifactId", it.name)
-                    dependencyNode.appendNode("version", it.version)
-                }
-            }
         }
     }
     repositories {
@@ -147,7 +129,7 @@ publishing {
     repositories {
         maven {
             name = "Soupbowl"
-            url = uri("http://192.168.86.5:8082/nexus/content/repositories/releases/")
+            url = uri("http://192.168.0.5:8082/nexus/content/repositories/releases/")
             credentials {
                 val soupbowlNexusUsername: String? by project
                 val soupbowlNexusPassword: String? by project
@@ -160,5 +142,5 @@ publishing {
 }
 
 signing {
-    sign(publishing.publications["maven"])
+    sign(publishing.publications["release"])
 }

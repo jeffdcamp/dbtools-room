@@ -1,19 +1,9 @@
-import com.android.build.gradle.BaseExtension
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("com.android.library")
     `maven-publish`
     signing
     kotlin("android")
     kotlin("kapt")
-}
-
-// Kotlin Libraries targeting Java8 bytecode can cause the following error (such as okHttp 4.x):
-// "Cannot inline bytecode built with JVM target 1.8 into bytecode that is being built with JVM target 1.6. Please specify proper '-jvm-target' option"
-// The following is added to allow the Kotlin Compiler to compile properly
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
 }
 
 android {
@@ -33,21 +23,14 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs = listOf("-module-name", Pom.LIBRARY_JDBC_TEST_ARTIFACT_ID)
     }
 
     lint {
         abortOnError = true
         disable.addAll(listOf("InvalidPackage"))
-    }
-
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-module-name", Pom.LIBRARY_ARTIFACT_ID)
     }
 }
 
@@ -62,7 +45,6 @@ dependencies {
     implementation(libs.timber)
 
     // Test
-    implementation(platform(libs.junit.bom))
     implementation(libs.junit.jupiter)
     implementation(libs.junit.engine)
     implementation(libs.mockK)
@@ -83,23 +65,19 @@ tasks.withType<Test> {
 
 // ===== Maven Deploy =====
 
-// ./gradlew clean assembleRelease publishMavenPublicationToMavenLocal
-// ./gradlew clean assembleRelease publishMavenPublicationToMavenCentralRepository
-
-tasks.register<Jar>("sourcesJar") {
-    //    from(android.sourceSets.getByName("main").java.sourceFiles)
-    from(project.the<BaseExtension>().sourceSets["main"].java.srcDirs)
-    archiveClassifier.set("sources")
-}
-
+// ./gradlew clean assembleRelease publishReleasePublicationToMavenLocal
+// ./gradlew clean assembleRelease publishReleasePublicationToMavenCentralRepository
 publishing {
     publications {
-        create<MavenPublication>("maven") {
+        register<MavenPublication>("release") {
             groupId = Pom.GROUP_ID
             artifactId = Pom.LIBRARY_JDBC_TEST_ARTIFACT_ID
             version = Pom.VERSION_NAME
-            artifact(tasks["sourcesJar"])
-            afterEvaluate { artifact(tasks.getByName("bundleReleaseAar")) }
+
+            afterEvaluate {
+                from(components["release"])
+            }
+
             pom {
                 name.set(Pom.LIBRARY_JDBC_TEST_NAME)
                 description.set(Pom.POM_DESCRIPTION)
@@ -123,25 +101,6 @@ publishing {
                     developerConnection.set(Pom.SCM_DEV_CONNECTION)
                 }
             }
-
-            // add dependencies to pom.xml
-            pom.withXml {
-                val dependenciesNode = asNode().appendNode("dependencies")
-                configurations.implementation.get().allDependencies.forEach {
-                    // fix local dependency (
-                    if (it.name == "jdbc" && it.version == "unspecified") {
-                        val dependencyNode = dependenciesNode.appendNode("dependency")
-                        dependencyNode.appendNode("groupId", Pom.GROUP_ID)
-                        dependencyNode.appendNode("artifactId", Pom.LIBRARY_JDBC_ARTIFACT_ID)
-                        dependencyNode.appendNode("version", Pom.VERSION_NAME)
-                    } else {
-                        val dependencyNode = dependenciesNode.appendNode("dependency")
-                        dependencyNode.appendNode("groupId", it.group)
-                        dependencyNode.appendNode("artifactId", it.name)
-                        dependencyNode.appendNode("version", it.version)
-                    }
-                }
-            }
         }
     }
     repositories {
@@ -159,5 +118,5 @@ publishing {
 }
 
 signing {
-    sign(publishing.publications["maven"])
+    sign(publishing.publications["release"])
 }
