@@ -42,12 +42,12 @@ abstract class MainDatabase : RoomDatabase() {
             tableNameMap: Map<String, String> = emptyMap()
     ) {
         // merge database
-        val database = openHelper.writableDatabase
+        val database = getOpenHelper().writableDatabase
         database.mergeDatabase(fromDatabaseFile, includeTables, excludeTables, tableNameMap)
     }
 
     fun viewTests() {
-        val database = openHelper.writableDatabase
+        val database = getOpenHelper().writableDatabase
         val viewName1 = "TestView1"
         val viewName2 = "TestView2"
 

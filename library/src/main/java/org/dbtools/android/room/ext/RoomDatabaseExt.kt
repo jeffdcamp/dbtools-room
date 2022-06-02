@@ -29,7 +29,7 @@ fun RoomDatabase.validateDatabaseFile(databaseNameTag: String = "", tableDataCou
  * @param toDatabaseName Alias name for attached database
  */
 fun RoomDatabase.attachDatabase(toDatabasePath: String, toDatabaseName: String) {
-    val database = openHelper.readableDatabase
+    val database = getOpenHelper().readableDatabase
     database.attachDatabase(toDatabasePath, toDatabaseName)
 }
 
@@ -38,7 +38,7 @@ fun RoomDatabase.attachDatabase(toDatabasePath: String, toDatabaseName: String) 
  * @param databaseName Alias name for attached database
  */
 fun RoomDatabase.detachDatabase(databaseName: String) {
-    val database = openHelper.readableDatabase
+    val database = getOpenHelper().readableDatabase
     database.detachDatabase(databaseName)
 }
 
@@ -50,7 +50,7 @@ fun RoomDatabase.detachDatabase(databaseName: String) {
  * @return ArrayList of pairs of (database name, database file path) or null if the database is not open.
  */
 fun RoomDatabase.getAttachedDatabases(): MutableList<Pair<String, String>>? {
-    return openHelper.readableDatabase.attachedDbs
+    return getOpenHelper().readableDatabase.attachedDbs
 }
 
 private fun RoomDatabase.getSqliteVersion(): String {
@@ -66,7 +66,7 @@ private fun RoomDatabase.getSqliteVersion(): String {
 }
 
 private fun RoomDatabase.getVersion(): Int {
-    return openHelper.readableDatabase.version
+    return getOpenHelper().readableDatabase.version
 }
 
 /**
@@ -243,7 +243,7 @@ fun RoomDatabase.mergeDatabase(
     }
 ): Boolean {
     return MergeDatabaseUtil.mergeDatabase(
-        openHelper.writableDatabase,
+        getOpenHelper().writableDatabase,
         sourceDatabaseFile = fromDatabaseFile,
         includeTables = includeTables,
         excludeTables = excludeTables,
@@ -268,7 +268,7 @@ fun RoomDatabase.applySqlFile(sqlFile: File): Boolean {
     }
 
     // get the SupportSQLiteDatabase so that execSQL(statement) may be called
-    val database = openHelper.writableDatabase
+    val database = getOpenHelper().writableDatabase
 
     try {
         @Suppress("DEPRECATION") // mirroring RoomDatabase.kt

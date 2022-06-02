@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 8.0.0-alpha01 *(2022-06)*
+-------------------------
+* Initial support for Room 2.5.0-alpha02
+
 Version 7.1.0 *(2022-05)*
 -------------------------
 * Fix for isDatabaseIntegrityOk() to call prepareStatement

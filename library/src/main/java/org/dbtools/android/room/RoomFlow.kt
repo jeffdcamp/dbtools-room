@@ -61,10 +61,10 @@ object RoomFlow {
 
         tableChangeReferences?.forEach { tableChangeManager ->
             val db = tableChangeManager.database
-            val tableNames = tableChangeManager.tableNames
+            val tableNames: Array<String> = tableChangeManager.tableNames.toTypedArray()
 
             val observer = object : InvalidationTracker.Observer(tableNames) {
-                override fun onInvalidated(tables: MutableSet<String>) {
+                override fun onInvalidated(tables: Set<String>) {
                     observerChannel.trySend(Unit).isSuccess
                 }
             }
@@ -72,7 +72,7 @@ object RoomFlow {
             observerChannel.trySend(Unit).isSuccess // Initial signal to perform first query.
 
             val flowContext = kotlin.coroutines.coroutineContext
-            val queryContext = if (inTransaction) db.transactionExecutor.asCoroutineDispatcher() else db.queryExecutor.asCoroutineDispatcher()
+            val queryContext = if (inTransaction) db.getTransactionExecutor().asCoroutineDispatcher() else db.getQueryExecutor().asCoroutineDispatcher()
             withContext(queryContext) {
                 db.invalidationTracker.addObserver(observer)
                 try {
@@ -91,6 +91,6 @@ object RoomFlow {
 }
 
 fun <T> RoomDatabase.toFlow(vararg tableNames: String, inTransaction: Boolean = false, block: suspend () -> T): Flow<T> {
-    return RoomFlow.toFlow(listOf(TableChangeReference(this, tableNames)), inTransaction) { block() }
+    return RoomFlow.toFlow(listOf(TableChangeReference(this, tableNames.toList())), inTransaction) { block() }
 }
 

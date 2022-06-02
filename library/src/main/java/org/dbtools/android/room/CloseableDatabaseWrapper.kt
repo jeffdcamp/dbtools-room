@@ -53,7 +53,7 @@ abstract class CloseableDatabaseWrapper<out T: RoomDatabase>(protected val conte
         try {
             val database = _database.get()
             database?.let {
-                val path = it.openHelper.writableDatabase.path
+                val path = it.getOpenHelper().writableDatabase.path
                 it.close()
                 if (deleteFile) {
                     DatabaseUtil.deleteDatabaseFiles(File(path))

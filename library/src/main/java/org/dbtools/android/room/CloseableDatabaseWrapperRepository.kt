@@ -157,7 +157,7 @@ abstract class CloseableDatabaseWrapperRepository<out T: RoomDatabase>(protected
         try {
             val database = databaseList[key]
             database?.let {
-                val path = it.openHelper.writableDatabase.path
+                val path = it.getOpenHelper().writableDatabase.path
                 it.close()
                 if (deleteFile) {
                     DatabaseUtil.deleteDatabaseFiles(File(path))

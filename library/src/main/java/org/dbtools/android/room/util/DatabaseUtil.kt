@@ -77,7 +77,7 @@ object DatabaseUtil {
      */
     fun validateDatabaseFile(roomDatabase: RoomDatabase, databaseNameTag: String = "", tableDataCountCheck: String = "", allowZeroCount: Boolean = true): Boolean {
         try {
-            val database = roomDatabase.openHelper.readableDatabase
+            val database = roomDatabase.getOpenHelper().readableDatabase
             return validateDatabaseFile(database, databaseNameTag, tableDataCountCheck, allowZeroCount)
         } catch (e: Exception) {
             Timber.e(e, "Failed to validate database [$databaseNameTag]")

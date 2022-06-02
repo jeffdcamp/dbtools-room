@@ -84,9 +84,9 @@ object RoomLiveData {
                 tableChangeReference ?: return
 
                 // Create Observer
-                val tableNames = tableChangeReference.tableNames
+                val tableNames = tableChangeReference.tableNames.toTypedArray()
                 val observer = object : InvalidationTracker.Observer(tableNames) {
-                    override fun onInvalidated(tables: MutableSet<String>) {
+                    override fun onInvalidated(tables: Set<String>) {
                         onTableChange()
                     }
                 }
@@ -160,7 +160,7 @@ object RoomLiveData {
         private val invalidationTracker: InvalidationTracker,
         delegate: InvalidationTracker.Observer,
         tableNames: Array<out String>
-    ) : InvalidationTracker.Observer(tableNames) {
+    ) : InvalidationTracker.Observer(tableNames.toList().toTypedArray()) {
         private val delegateRef: WeakReference<InvalidationTracker.Observer> = WeakReference(delegate)
 
         override fun onInvalidated(tables: Set<String>) {
@@ -174,13 +174,13 @@ object RoomLiveData {
     }
 }
 
-open class TableChangeReference(val database: RoomDatabase, val tableNames: Array<out String>)
+open class TableChangeReference(val database: RoomDatabase, val tableNames: List<String>)
 
 fun RoomDatabase.tableChangeReferences(vararg tableNames: String): TableChangeReference {
-    return TableChangeReference(this, tableNames)
+    return TableChangeReference(this, tableNames.toList())
 }
 
 fun <T> RoomDatabase.toLiveData(vararg tableNames: String, coroutineContext: CoroutineContext = Dispatchers.IO, block: suspend () -> T): LiveData<T> {
-    return RoomLiveData.toLiveData(listOf(TableChangeReference(this, tableNames)), coroutineContext) { block() }
+    return RoomLiveData.toLiveData(listOf(TableChangeReference(this, tableNames.toList())), coroutineContext) { block() }
 }
 
