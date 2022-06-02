@@ -5,7 +5,7 @@ coroutines = "1.6.0"
 
 androidxhilt = "1.0.0"
 androidxlifecycle = "2.5.0-rc01"
-room = "2.4.1"
+room = "2.5.0-alpha02"
 
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version = "1.6.21-1.0.5" }

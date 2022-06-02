@@ -152,28 +152,29 @@ class RoomDatabaseMigrationExtension(
             }
         }
 
-        openFactory = JdbcSQLiteOpenHelperFactory(dbPath.parent)
+        openFactory = JdbcSQLiteOpenHelperFactory(dbPath.parent.orEmpty())
         val schemaBundle = loadSchema(version)
         val container = RoomDatabase.MigrationContainer()
         val configuration = DatabaseConfiguration(
-            mockContext,
-            name,
-            openFactory,
-            container,
-            null,
-            true,
-            RoomDatabase.JournalMode.TRUNCATE,
-            ArchTaskExecutor.getMainThreadExecutor(),
-            ArchTaskExecutor.getMainThreadExecutor(),
-            true,
-            true,
-            true,
-            emptySet(),
-            null,
-            null,
-            null,
-            null,
-            null
+            context = mockContext,
+            name = name,
+            sqliteOpenHelperFactory = openFactory,
+            migrationContainer = container,
+            callbacks = null,
+            allowMainThreadQueries = true,
+            journalMode = RoomDatabase.JournalMode.TRUNCATE,
+            queryExecutor = ArchTaskExecutor.getMainThreadExecutor(),
+            transactionExecutor = ArchTaskExecutor.getMainThreadExecutor(),
+            multiInstanceInvalidationServiceIntent = null,
+            requireMigration = true,
+            allowDestructiveMigrationOnDowngrade = true,
+            migrationNotRequiredFrom = emptySet(),
+            copyFromAssetPath = null,
+            copyFromFile = null,
+            copyFromInputStream = null,
+            prepackagedDatabaseCallback = null,
+            typeConverters = emptyList(),
+            autoMigrationSpecs = emptyList(),
         )
         val roomOpenHelper = RoomOpenHelper(
             configuration,
@@ -221,24 +222,25 @@ class RoomDatabaseMigrationExtension(
         val container = RoomDatabase.MigrationContainer()
         container.addMigrations(*migrations)
         val configuration = DatabaseConfiguration(
-            mockContext,
-            name,
-            openFactory,
-            container,
-            null,
-            true,
-            RoomDatabase.JournalMode.TRUNCATE,
-            ArchTaskExecutor.getMainThreadExecutor(),
-            ArchTaskExecutor.getMainThreadExecutor(),
-            true,
-            true,
-            true,
-            emptySet(),
-            null,
-            null,
-            null,
-            null,
-            null
+            context = mockContext,
+            name = name,
+            sqliteOpenHelperFactory = openFactory,
+            migrationContainer = container,
+            callbacks = null,
+            allowMainThreadQueries = true,
+            journalMode = RoomDatabase.JournalMode.TRUNCATE,
+            queryExecutor = ArchTaskExecutor.getMainThreadExecutor(),
+            transactionExecutor = ArchTaskExecutor.getMainThreadExecutor(),
+            multiInstanceInvalidationServiceIntent = null,
+            requireMigration = true,
+            allowDestructiveMigrationOnDowngrade = true,
+            migrationNotRequiredFrom = emptySet(),
+            copyFromAssetPath = null,
+            copyFromFile = null,
+            copyFromInputStream = null,
+            prepackagedDatabaseCallback = null,
+            typeConverters = emptyList(),
+            autoMigrationSpecs = emptyList(),
         )
         val roomOpenHelper = RoomOpenHelper(
             configuration,
@@ -292,10 +294,13 @@ class RoomDatabaseMigrationExtension(
             }
             val result = HashSet<TableInfo.Index>()
             for (bundle in indices) {
+                val columnNames = bundle.columnNames.orEmpty()
                 result.add(
                     TableInfo.Index(
-                        bundle.name, bundle.isUnique,
-                        bundle.columnNames
+                        bundle.name,
+                        bundle.isUnique,
+                        columnNames,
+                        List(columnNames.size) { androidx.room.Index.Order.ASC.name }
                     )
                 )
             }
@@ -367,12 +372,12 @@ class RoomDatabaseMigrationExtension(
             throw UnsupportedOperationException("Was expecting to migrate but received create. Make sure you have created the database first.")
         }
 
-        override fun validateMigration(db: SupportSQLiteDatabase) {
+        override fun onValidateSchema(db: SupportSQLiteDatabase): RoomOpenHelper.ValidationResult {
             val tables = mDatabaseBundle.entitiesByTableName
             for (actualTableEntity in tables.values) {
                 if (actualTableEntity is FtsEntityBundle) {
                     val expected = toFtsTableInfo(actualTableEntity)
-                    val found = FtsTableInfo.read(db, actualTableEntity.getTableName())
+                    val found = FtsTableInfo.read(db, actualTableEntity.tableName)
                     if (expected != found) {
                         throw IllegalStateException(
                             "Migration failed. expected:\n$expected\n found:\n$found"
@@ -411,6 +416,7 @@ class RoomDatabaseMigrationExtension(
                     }
                 }
             }
+            return RoomOpenHelper.ValidationResult(isValid = true, expectedFoundMsg = null)
         }
     }
 
@@ -422,7 +428,7 @@ class RoomDatabaseMigrationExtension(
             }
         }
 
-        override fun validateMigration(db: SupportSQLiteDatabase) {
+        override fun onValidateSchema(db: SupportSQLiteDatabase): RoomOpenHelper.ValidationResult {
             throw UnsupportedOperationException("This open helper just creates the database but it received a migration request.")
         }
     }
