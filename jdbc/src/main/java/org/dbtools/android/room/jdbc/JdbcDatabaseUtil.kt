@@ -32,7 +32,7 @@ object JdbcDatabaseUtil {
     fun tableExists(database: JdbcSqliteDatabase, tableName: String): Boolean {
         var tableExists = false
 
-        database.query("SELECT count(1) FROM sqlite_master WHERE type='table' AND name='$tableName'", null).use { cursor ->
+        database.query("SELECT count(1) FROM sqlite_master WHERE type='table' AND name='$tableName'").use { cursor ->
             if (cursor.moveToFirst()) {
                 val count = cursor.getInt(0)
                 if (count > 0) {
@@ -56,7 +56,7 @@ object JdbcDatabaseUtil {
     fun columnExists(database: JdbcSqliteDatabase, tableName: String, columnName: String): Boolean {
         var columnExists = false
 
-        database.query("PRAGMA table_info($tableName)", null).use { cursor ->
+        database.query("PRAGMA table_info($tableName)").use { cursor ->
             if (cursor.moveToFirst()) {
                 do {
                     val currentColumn = cursor.getString(cursor.getColumnIndexOrThrow("name"))
@@ -79,7 +79,7 @@ object JdbcDatabaseUtil {
      * @param newVersion version to be set on database (default to 0)
      */
     fun resetRoom(database: JdbcSqliteDatabase, newVersion: Int = 0) {
-        database.execSQL("DROP TABLE IF EXISTS room_master_table", null)
+        database.execSQL("DROP TABLE IF EXISTS room_master_table")
         database.version = newVersion
     }
 
@@ -129,7 +129,7 @@ object JdbcDatabaseUtil {
         var identityHash: String? = null
 
         // NOTE: the id column for this table always seems to be 42 and there is always only 1 row... so lets just find the first row
-        database.query("SELECT identity_hash FROM room_master_table LIMIT 1", null).use { cursor ->
+        database.query("SELECT identity_hash FROM room_master_table LIMIT 1").use { cursor ->
             if (cursor.moveToFirst()) {
                 val columnIndex = cursor.getColumnIndex("identity_hash")
                 identityHash = if (columnIndex == -1) {

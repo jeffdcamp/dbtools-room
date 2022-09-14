@@ -12,7 +12,7 @@ open class JdbcSQLiteProgram(
 
     protected val statement: PreparedStatement = conn.prepareStatement(sql)
 
-    override fun bindBlob(index: Int, value: ByteArray?) {
+    override fun bindBlob(index: Int, value: ByteArray) {
         statement.setBytes(index, value)
     }
 
@@ -28,7 +28,7 @@ open class JdbcSQLiteProgram(
         statement.setNull(index, Types.VARCHAR)
     }
 
-    override fun bindString(index: Int, value: String?) {
+    override fun bindString(index: Int, value: String) {
         statement.setString(index, value)
     }
 

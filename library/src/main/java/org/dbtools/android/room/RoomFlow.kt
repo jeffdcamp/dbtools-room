@@ -72,7 +72,7 @@ object RoomFlow {
             observerChannel.trySend(Unit).isSuccess // Initial signal to perform first query.
 
             val flowContext = kotlin.coroutines.coroutineContext
-            val queryContext = if (inTransaction) db.getTransactionExecutor().asCoroutineDispatcher() else db.getQueryExecutor().asCoroutineDispatcher()
+            val queryContext = if (inTransaction) db.transactionExecutor.asCoroutineDispatcher() else db.queryExecutor.asCoroutineDispatcher()
             withContext(queryContext) {
                 db.invalidationTracker.addObserver(observer)
                 try {

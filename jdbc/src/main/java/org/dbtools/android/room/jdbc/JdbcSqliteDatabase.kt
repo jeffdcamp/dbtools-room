@@ -76,11 +76,11 @@ class JdbcSqliteDatabase(
         beginTransaction(null, false)
     }
 
-    override fun beginTransactionWithListener(transactionListener: SQLiteTransactionListener?) {
+    override fun beginTransactionWithListener(transactionListener: SQLiteTransactionListener) {
         beginTransaction(transactionListener, true)
     }
 
-    override fun beginTransactionWithListenerNonExclusive(transactionListener: SQLiteTransactionListener?) {
+    override fun beginTransactionWithListenerNonExclusive(transactionListener: SQLiteTransactionListener) {
         beginTransaction(transactionListener, false)
     }
 
@@ -153,11 +153,11 @@ class JdbcSqliteDatabase(
         return false
     }
 
-    override fun compileStatement(sql: String?): SupportSQLiteStatement {
+    override fun compileStatement(sql: String): SupportSQLiteStatement {
         return compileJdbcStatement(sql)
     }
 
-    override fun insert(table: String?, conflictAlgorithm: Int, values: ContentValues?): Long {
+    override fun insert(table: String, conflictAlgorithm: Int, values: ContentValues): Long {
         val initialValues = checkNotNull(values) { "values must not be null" }
         check(initialValues.size() > 0) { "values must not be empty" }
         val tableName = checkNotNull(table) { "table must not be null" }
@@ -195,30 +195,28 @@ class JdbcSqliteDatabase(
         }
     }
 
-    override fun query(query: String?): Cursor {
+    override fun query(query: String): Cursor {
         return query(SimpleSQLiteQuery(query))
     }
 
-    override fun query(query: String?, bindArgs: Array<out Any?>?): Cursor {
+    override fun query(query: String, bindArgs: Array<Any?>): Cursor {
         return query(SimpleSQLiteQuery(query, bindArgs))
     }
 
-    override fun query(query: SupportSQLiteQuery?): Cursor {
-        val sqlQuery = checkNotNull(query) { "Query must not be null" }
-        val sql = checkNotNull(sqlQuery.sql) { "Query SQL must be null" }
+    override fun query(query: SupportSQLiteQuery): Cursor {
+        val sql = checkNotNull(query.sql) { "Query SQL must be null" }
         val statement = compileJdbcStatement(sql)
-        sqlQuery.bindTo(statement)
+        query.bindTo(statement)
         return statement.executeQuery()
     }
 
-    override fun query(query: SupportSQLiteQuery?, cancellationSignal: CancellationSignal?): Cursor {
+    override fun query(query: SupportSQLiteQuery, cancellationSignal: CancellationSignal?): Cursor {
         return query(query)
     }
 
-    override fun update(table: String?, conflictAlgorithm: Int, values: ContentValues?, whereClause: String?, whereArgs: Array<out Any?>?): Int {
-        val initialValues = checkNotNull(values) { "Values must not be null" }
-        check(initialValues.size() > 0) { "Values must not be empty" }
-        val setValuesSize = initialValues.size()
+    override fun update(table: String, conflictAlgorithm: Int, values: ContentValues, whereClause: String?, whereArgs: Array<out Any?>?): Int {
+        check(values.size() > 0) { "Values must not be empty" }
+        val setValuesSize = values.size()
         val bindArgSize = when (whereArgs) {
             null -> setValuesSize
             else -> setValuesSize + whereArgs.size
@@ -231,12 +229,12 @@ class JdbcSqliteDatabase(
             append(table)
             append(" SET ")
 
-            initialValues.keySet().forEachIndexed { i, key ->
+            values.keySet().forEachIndexed { i, key ->
                 if (i > 0) {
                     append(",")
                 }
                 append(key)
-                bindArgs[i] = initialValues.get(key)
+                bindArgs[i] = values.get(key)
             }
             if (whereArgs != null) {
                 var i = setValuesSize
@@ -256,7 +254,7 @@ class JdbcSqliteDatabase(
         return stmt.executeUpdateDelete()
     }
 
-    override fun delete(table: String?, whereClause: String?, whereArgs: Array<out Any?>?): Int {
+    override fun delete(table: String, whereClause: String?, whereArgs: Array<Any?>?): Int {
         val query = "DELETE FROM $table ${
             when {
                 whereClause.isNullOrBlank() -> ""
@@ -268,15 +266,15 @@ class JdbcSqliteDatabase(
         return statement.executeUpdateDelete()
     }
 
-    override fun execSQL(sql: String?) = compileStatement(sql).execute()
+    override fun execSQL(sql: String) = compileStatement(sql).execute()
 
-    override fun execSQL(sql: String?, bindArgs: Array<out Any>?) {
+    override fun execSQL(sql: String, bindArgs: Array<Any?>) {
         val stmt = compileStatement(sql)
         SimpleSQLiteQuery.bind(stmt, bindArgs)
         stmt.execute()
     }
 
-    override fun setLocale(locale: Locale?) {
+    override fun setLocale(locale: Locale) {
         // NO OP
     }
 

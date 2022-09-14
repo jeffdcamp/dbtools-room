@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 8.0.0-alpha02 *(2022-09)*
+-------------------------
+* Room 2.5.0-alpha03
+
 Version 8.0.0-alpha01 *(2022-06)*
 -------------------------
 * Initial support for Room 2.5.0-alpha02

@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package org.dbtools.android.room.util
 
 import android.content.Context
@@ -32,7 +34,7 @@ object DatabaseUtil {
         Timber.i("Checking database integrity for [%s]", databaseNameTag)
         val totalTimeMs = measureTimeMillis {
             try {
-                SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY, { Timber.e("Corrupt database [$path]") }).use { database ->
+                SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY) { Timber.e("Corrupt database [$path]") }.use { database ->
                     // pragma check
                     if (!database.isDatabaseIntegrityOk) {
                         Timber.e("validateDatabase - database [%s] isDatabaseIntegrityOk check failed", databaseNameTag)
@@ -77,7 +79,7 @@ object DatabaseUtil {
      */
     fun validateDatabaseFile(roomDatabase: RoomDatabase, databaseNameTag: String = "", tableDataCountCheck: String = "", allowZeroCount: Boolean = true): Boolean {
         try {
-            val database = roomDatabase.getOpenHelper().readableDatabase
+            val database = roomDatabase.openHelper.readableDatabase
             return validateDatabaseFile(database, databaseNameTag, tableDataCountCheck, allowZeroCount)
         } catch (e: Exception) {
             Timber.e(e, "Failed to validate database [$databaseNameTag]")
@@ -106,7 +108,7 @@ object DatabaseUtil {
 
                 // make sure there is data in the database
                 if (tableDataCountCheck.isNotBlank()) {
-                    database.query("SELECT count(1) FROM $tableDataCountCheck", null).use { cursor ->
+                    database.query("SELECT count(1) FROM $tableDataCountCheck").use { cursor ->
                         val count = if (cursor.moveToFirst()) {
                             cursor.getInt(0)
                         } else {
@@ -371,7 +373,7 @@ object DatabaseUtil {
      * @param views List of view names... if this list is empty then all views in the database will be dropped
      */
     fun dropAllViews(database: SupportSQLiteDatabase, views: List<String> = emptyList()) {
-        val viewNames: List<String> = if (views.isNotEmpty()) views else database.findViewNames()
+        val viewNames: List<String> = views.ifEmpty { database.findViewNames() }
         viewNames.forEach { dropView(database, it) }
     }
 

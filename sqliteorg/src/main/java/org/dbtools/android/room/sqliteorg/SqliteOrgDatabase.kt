@@ -1,16 +1,14 @@
 package org.dbtools.android.room.sqliteorg
 
+import android.content.ContentValues
+import android.database.Cursor
+import android.database.sqlite.SQLiteTransactionListener
+import android.os.CancellationSignal
+import android.util.Pair
 import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteStatement
-import android.content.ContentValues
-import android.database.Cursor
-import android.database.sqlite.SQLiteTransactionListener
-import android.os.Build
-import android.os.CancellationSignal
-import androidx.annotation.RequiresApi
-import android.util.Pair
 import org.sqlite.database.SQLException
 import org.sqlite.database.sqlite.SQLiteCursor
 import org.sqlite.database.sqlite.SQLiteDatabase
@@ -108,7 +106,7 @@ class SqliteOrgDatabase(
         return query(SimpleSQLiteQuery(query))
     }
 
-    override fun query(query: String, bindArgs: Array<Any?>?): Cursor {
+    override fun query(query: String, bindArgs: Array<Any?>): Cursor {
         return query(SimpleSQLiteQuery(query, bindArgs))
     }
 
@@ -142,8 +140,7 @@ class SqliteOrgDatabase(
         }, supportQuery.sql, EMPTY_STRING_ARRAY, null)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    override fun query(supportQuery: SupportSQLiteQuery, cancellationSignal: CancellationSignal): Cursor {
+    override fun query(supportQuery: SupportSQLiteQuery, cancellationSignal: CancellationSignal?): Cursor {
         return query(supportQuery)
     }
 
@@ -152,17 +149,17 @@ class SqliteOrgDatabase(
         return delegate.insertWithOnConflict(table, null, values, conflictAlgorithm)
     }
 
-    override fun delete(table: String, whereClause: String, whereArgs: Array<Any?>?): Int {
-        val query = "DELETE FROM " + table + if (isEmpty(whereClause)) "" else " WHERE " + whereClause
+    override fun delete(table: String, whereClause: String?, whereArgs: Array<Any?>?): Int {
+        val query = "DELETE FROM " + table + if (isEmpty(whereClause)) "" else " WHERE $whereClause"
         val statement = compileStatement(query)
         SimpleSQLiteQuery.bind(statement, whereArgs)
         return statement.executeUpdateDelete()
     }
 
 
-    override fun update(table: String, conflictAlgorithm: Int, values: ContentValues?, whereClause: String, whereArgs: Array<Any?>?): Int {
+    override fun update(table: String, conflictAlgorithm: Int, values: ContentValues, whereClause: String?, whereArgs: Array<Any?>?): Int {
         // taken from SQLiteDatabase class.
-        if (values == null || values.size() == 0) {
+        if (values.size() == 0) {
             throw IllegalArgumentException("Empty values")
         }
 
@@ -204,8 +201,7 @@ class SqliteOrgDatabase(
         delegate.execSQL(sql)
     }
 
-    @Throws(SQLException::class)
-    override fun execSQL(sql: String, bindArgs: Array<Any?>?) {
+    override fun execSQL(sql: String, bindArgs: Array<Any?>) {
         delegate.execSQL(sql, bindArgs)
     }
 
@@ -233,7 +229,6 @@ class SqliteOrgDatabase(
         delegate.setMaxSqlCacheSize(cacheSize)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     override fun setForeignKeyConstraintsEnabled(enable: Boolean) {
         delegate.setForeignKeyConstraintsEnabled(enable)
     }
@@ -242,12 +237,10 @@ class SqliteOrgDatabase(
         return delegate.enableWriteAheadLogging()
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     override fun disableWriteAheadLogging() {
         delegate.disableWriteAheadLogging()
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     override fun isWriteAheadLoggingEnabled(): Boolean {
         return delegate.isWriteAheadLoggingEnabled
     }
