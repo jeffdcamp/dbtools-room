@@ -39,21 +39,24 @@ open class SqliteOrgSQLiteOpenHelper(
             errorHandler = databaseErrorHandler ?: DatabaseErrorHandler { dbObj -> callback.onCorruption(SqliteOrgDatabase(dbObj)) })
     }
 
-    override fun getDatabaseName(): String? {
-        return delegate.databaseName
-    }
+    override val databaseName: String?
+        get() {
+            return delegate.databaseName
+        }
 
     override fun setWriteAheadLoggingEnabled(enabled: Boolean) {
         delegate.setWriteAheadLoggingEnabled(enabled)
     }
 
-    override fun getWritableDatabase(): SupportSQLiteDatabase {
-        return delegate.getWritableSupportDatabase()
-    }
+    override val writableDatabase: SupportSQLiteDatabase
+        get() {
+            return delegate.getWritableSupportDatabase()
+        }
 
-    override fun getReadableDatabase(): SupportSQLiteDatabase {
-        return delegate.getReadableSupportDatabase()
-    }
+    override val readableDatabase: SupportSQLiteDatabase
+        get() {
+            return delegate.getReadableSupportDatabase()
+        }
 
     override fun close() {
         delegate.close()

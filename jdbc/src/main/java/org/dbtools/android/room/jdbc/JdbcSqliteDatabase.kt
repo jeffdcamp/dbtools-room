@@ -50,23 +50,26 @@ class JdbcSqliteDatabase(
         }
     }
 
-    override fun isDatabaseIntegrityOk(): Boolean {
-        return conn.prepareStatement("PRAGMA integrity_check(1)").executeQuery().use { rs ->
-            rs.getString(1).equals("ok", ignoreCase = true)
+    override val isDatabaseIntegrityOk: Boolean
+        get() {
+            return conn.prepareStatement("PRAGMA integrity_check(1)").executeQuery().use { rs ->
+                rs.getString(1).equals("ok", ignoreCase = true)
+            }
         }
-    }
 
-    override fun isDbLockedByCurrentThread(): Boolean {
-        return true
-    }
+    override val isDbLockedByCurrentThread: Boolean
+        get() {
+            return true
+        }
 
     override fun close() {
         conn.close()
     }
 
-    override fun isOpen(): Boolean {
-        return !conn.isClosed
-    }
+    override val isOpen: Boolean
+        get() {
+            return !conn.isClosed
+        }
 
     override fun beginTransaction() {
         beginTransaction(null, true)
@@ -148,7 +151,7 @@ class JdbcSqliteDatabase(
         return false
     }
 
-    override fun yieldIfContendedSafely(sleepAfterYieldDelay: Long): Boolean {
+    override fun yieldIfContendedSafely(sleepAfterYieldDelayMillis: Long): Boolean {
 //        println("yieldIfContendedSafely(sleepAfterYieldDelay)")
         return false
     }
@@ -214,7 +217,7 @@ class JdbcSqliteDatabase(
         return query(query)
     }
 
-    override fun update(table: String, conflictAlgorithm: Int, values: ContentValues, whereClause: String?, whereArgs: Array<out Any?>?): Int {
+    override fun update(table: String, conflictAlgorithm: Int, values: ContentValues, whereClause: String?, whereArgs: Array<Any?>?): Int {
         check(values.size() > 0) { "Values must not be empty" }
         val setValuesSize = values.size()
         val bindArgSize = when (whereArgs) {
@@ -278,68 +281,73 @@ class JdbcSqliteDatabase(
         // NO OP
     }
 
-    override fun getAttachedDbs(): List<Pair<String, String>> {
-        return listOf()
-    }
+    override val attachedDbs: List<Pair<String, String>>
+        get() {
+            return listOf()
+        }
 
     override fun setMaxSqlCacheSize(cacheSize: Int) {
         // NO OP
     }
 
-    override fun setForeignKeyConstraintsEnabled(enable: Boolean) {
+    override fun setForeignKeyConstraintsEnabled(enabled: Boolean) {
         conn.createStatement().execute(
             when {
-                enable -> "PRAGMA foreign_keys = ON"
+                enabled -> "PRAGMA foreign_keys = ON"
                 else -> "PRAGMA foreign_keys = OFF"
             }
         )
     }
 
-    override fun getVersion(): Int {
-        return conn.prepareStatement("PRAGMA user_version").executeQuery().use {
-            it.getInt(1)
+    override var version: Int
+        get() {
+            return conn.prepareStatement("PRAGMA user_version").executeQuery().use {
+                it.getInt(1)
+            }
         }
-    }
-
-    override fun setVersion(version: Int) {
-        execSQL("PRAGMA user_version = $version")
-    }
+        set(value) {
+            execSQL("PRAGMA user_version = $value")
+        }
 
     override fun needUpgrade(newVersion: Int): Boolean {
         return newVersion > version
     }
 
-    override fun isReadOnly(): Boolean {
-        return conn.isReadOnly
-    }
+    override val isReadOnly: Boolean
+        get() {
+            return conn.isReadOnly
+        }
 
-    override fun getPath(): String {
-        return dbPath
-    }
+    override val path: String
+        get() {
+            return dbPath
+        }
 
-    override fun getMaximumSize(): Long {
-        return -1L
-    }
+    override val maximumSize: Long
+        get() {
+            return -1L
+        }
 
     override fun setMaximumSize(numBytes: Long): Long {
         return -1L
     }
 
-    override fun setPageSize(numBytes: Long) {
-        // No Op
-    }
-
-    override fun getPageSize(): Long {
-        return -1L
-    }
+    override var pageSize: Long
+        get() {
+            return -1L
+        }
+        set(_) {
+            // No Op
+        }
 
     override fun enableWriteAheadLogging(): Boolean {
         return false
     }
 
-    override fun isWriteAheadLoggingEnabled(): Boolean {
-        return false
-    }
+    override val isWriteAheadLoggingEnabled: Boolean
+        get() {
+            return false
+        }
 
     override fun disableWriteAheadLogging() {
         // NO OP

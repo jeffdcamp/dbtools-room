@@ -1,14 +1,14 @@
 [versions]
-agp = "7.2.2"
-kotlin = "1.7.0"
+agp = "7.3.0"
+kotlin = "1.7.20"
 coroutines = "1.6.4"
 
 androidxhilt = "1.0.0"
 androidxlifecycle = "2.5.1"
 desugarJdkLibs = "1.1.8"
 detekt = "1.21.0"
-ksp = "1.7.0-1.0.6"
-room = "2.5.0-alpha03"
+ksp = "1.7.20-1.0.6"
+room = "2.5.0-beta01"
 
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
@@ -29,14 +29,14 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 
-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version = "5.9.0" }
-junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version = "5.9.0" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version = "5.9.1" }
+junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version = "5.9.1" }
 
 kotlin-binaryCompatibility = "org.jetbrains.kotlinx:binary-compatibility-validator:0.3.0"
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlin-gradlePluginClasspath = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
-mockK = "io.mockk:mockk:1.12.7"
+mockK = "io.mockk:mockk:1.13.2"
 
 timber = "com.jakewharton.timber:timber:5.0.1"
 

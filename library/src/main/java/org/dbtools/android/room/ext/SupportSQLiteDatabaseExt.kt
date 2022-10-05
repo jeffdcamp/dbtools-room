@@ -48,7 +48,7 @@ fun SupportSQLiteDatabase.detachDatabase(databaseName: String) {
  *      second column (file) - name of the database file itself, or an empty string if the database is not associated with a file.
  * @return ArrayList of pairs of (database name, database file path) or null if the database is not open.
  */
-fun SupportSQLiteDatabase.getAttachedDatabases(): MutableList<Pair<String, String>>? {
+fun SupportSQLiteDatabase.getAttachedDatabases(): List<Pair<String, String>>? {
     return attachedDbs
 }
 

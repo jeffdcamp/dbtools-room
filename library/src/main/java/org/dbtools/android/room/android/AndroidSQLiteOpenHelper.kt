@@ -30,21 +30,24 @@ open class AndroidSQLiteOpenHelper(
         delegate = OpenHelper(context, onDatabaseConfigureBlock, databaseFile.absolutePath, callback, databaseErrorHandler)
     }
 
-    override fun getDatabaseName(): String? {
-        return delegate.databaseName
-    }
+    override val databaseName: String?
+        get() {
+            return delegate.databaseName
+        }
 
     override fun setWriteAheadLoggingEnabled(enabled: Boolean) {
         delegate.setWriteAheadLoggingEnabled(enabled)
     }
 
-    override fun getWritableDatabase(): AndroidSQLiteDatabase {
-        return delegate.getWritableSupportDatabase()
-    }
+    override val writableDatabase: AndroidSQLiteDatabase
+        get() {
+            return delegate.getWritableSupportDatabase()
+        }
 
-    override fun getReadableDatabase(): AndroidSQLiteDatabase {
-        return delegate.getReadableSupportDatabase()
-    }
+    override val readableDatabase: AndroidSQLiteDatabase
+        get() {
+            return delegate.getReadableSupportDatabase()
+        }
 
     override fun close() {
         delegate.close()

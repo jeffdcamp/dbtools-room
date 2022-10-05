@@ -26,44 +26,43 @@ open class JdbcSQLiteOpenHelper(
     val onDatabaseConfigureBlock: (sqliteDatabase: JdbcSqliteDatabase) -> Unit = {}
 ) : SupportSQLiteOpenHelper {
 
-    private val dbPath: String
+    private val dbPath: String = if (name == null) {
+        ":memory:"
+    } else {
+        val databaseFile = if (path.isBlank()) {
+            File(name)
+        } else {
+            File(path, name)
+        }
+        databaseFile.parentFile?.mkdirs()
+        databaseFile.path
+    }
 
     private var database: JdbcSqliteDatabase? = null
     private var initializing = false
 
-    init {
-        dbPath = if (name == null) {
-            ":memory:"
-        } else {
-            val databaseFile = if (path.isBlank()) {
-                File(name)
-            } else {
-                File(path, name)
-            }
-            databaseFile.parentFile?.mkdirs()
-            databaseFile.path
+    override val databaseName: String
+        get() {
+            return name ?: ":memory:"
         }
-    }
-
-    override fun getDatabaseName(): String {
-        return name ?: ":memory:"
-    }
 
     override fun setWriteAheadLoggingEnabled(enabled: Boolean) {
         // Do nothing
     }
 
-    override fun getWritableDatabase(): SupportSQLiteDatabase {
-        synchronized(this) {
-            return getDatabaseLocked()
+    override val writableDatabase: SupportSQLiteDatabase
+        get() {
+            synchronized(this) {
+                return getDatabaseLocked()
+            }
         }
-    }
 
-    override fun getReadableDatabase(): SupportSQLiteDatabase {
-        synchronized(this) {
-            return getDatabaseLocked()
+    override val readableDatabase: SupportSQLiteDatabase
+        get() {
+            synchronized(this) {
+                return getDatabaseLocked()
+            }
         }
-    }
 
     override fun close() {
         check(!initializing) { "Closed during initialization" }

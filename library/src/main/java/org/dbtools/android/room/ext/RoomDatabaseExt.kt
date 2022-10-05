@@ -49,7 +49,7 @@ fun RoomDatabase.detachDatabase(databaseName: String) {
  *
  * @return ArrayList of pairs of (database name, database file path) or null if the database is not open.
  */
-fun RoomDatabase.getAttachedDatabases(): MutableList<Pair<String, String>>? {
+fun RoomDatabase.getAttachedDatabases(): List<Pair<String, String>>? {
     return openHelper.readableDatabase.attachedDbs
 }
 
@@ -222,7 +222,7 @@ fun RoomDatabase.viewExists(viewName: List<String>, databaseName: String = ""): 
  * NOTE:  Room system tables are automatically excluded from the merge
  *
  *
- * Add the following function to the RoomDatabase class (mDatabase is ONLY accessable from inside the RoomDatabase class)
+ * Add the following function to the RoomDatabase class (mDatabase is ONLY accessible from inside the RoomDatabase class)
  *     fun mergeDataFromOtherDatabase(fromDatabaseFile: File, includeTables: List<String> = emptyList(), excludeTables: List<String> = emptyList()) {
  *         // make sure database is open
  *         if (!isOpen) {

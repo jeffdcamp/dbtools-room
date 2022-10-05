@@ -66,41 +66,43 @@ class SqliteOrgDatabase(
         return delegate.inTransaction()
     }
 
-    override fun isDbLockedByCurrentThread(): Boolean {
-        return delegate.isDbLockedByCurrentThread
-    }
+    override val isDbLockedByCurrentThread: Boolean
+        get() {
+            return delegate.isDbLockedByCurrentThread
+        }
 
     override fun yieldIfContendedSafely(): Boolean {
         return delegate.yieldIfContendedSafely()
     }
 
-    override fun yieldIfContendedSafely(sleepAfterYieldDelay: Long): Boolean {
-        return delegate.yieldIfContendedSafely(sleepAfterYieldDelay)
+    override fun yieldIfContendedSafely(sleepAfterYieldDelayMillis: Long): Boolean {
+        return delegate.yieldIfContendedSafely(sleepAfterYieldDelayMillis)
     }
 
-    override fun getVersion(): Int {
-        return delegate.version
-    }
+    override var version: Int
+        get() {
+            return delegate.version
+        }
+        set(value) {
+            delegate.version = value
+        }
 
-    override fun setVersion(version: Int) {
-        delegate.version = version
-    }
-
-    override fun getMaximumSize(): Long {
-        return delegate.maximumSize
-    }
+    override val maximumSize: Long
+        get() {
+            return delegate.maximumSize
+        }
 
     override fun setMaximumSize(numBytes: Long): Long {
         return delegate.setMaximumSize(numBytes)
     }
 
-    override fun getPageSize(): Long {
-        return delegate.pageSize
-    }
-
-    override fun setPageSize(numBytes: Long) {
-        delegate.pageSize = numBytes
-    }
+    override var pageSize: Long
+        get() {
+            return delegate.pageSize
+        }
+        set(value) {
+            delegate.pageSize = value
+        }
 
     override fun query(query: String): Cursor {
         return query(SimpleSQLiteQuery(query))
@@ -110,8 +112,8 @@ class SqliteOrgDatabase(
         return query(SimpleSQLiteQuery(query, bindArgs))
     }
 
-    override fun query(supportQuery: SupportSQLiteQuery): Cursor {
-        return delegate.rawQueryWithFactory({ _, masterQuery, editTable, query ->
+    override fun query(query: SupportSQLiteQuery): Cursor {
+        return delegate.rawQueryWithFactory({ _, masterQuery, editTable, query2 ->
 
             // todo needed??? sqlcipher only???
 //            var count = 0
@@ -135,13 +137,13 @@ class SqliteOrgDatabase(
 //                e.printStackTrace()
 //            }
 
-            supportQuery.bindTo(SqliteOrgSQLiteProgram(query))
-            SQLiteCursor(masterQuery, editTable, query)
-        }, supportQuery.sql, EMPTY_STRING_ARRAY, null)
+            query.bindTo(SqliteOrgSQLiteProgram(query2))
+            SQLiteCursor(masterQuery, editTable, query2)
+        }, query.sql, EMPTY_STRING_ARRAY, null)
     }
 
-    override fun query(supportQuery: SupportSQLiteQuery, cancellationSignal: CancellationSignal?): Cursor {
-        return query(supportQuery)
+    override fun query(query: SupportSQLiteQuery, cancellationSignal: CancellationSignal?): Cursor {
+        return query(query)
     }
 
     @Throws(SQLException::class)
@@ -155,7 +157,6 @@ class SqliteOrgDatabase(
         SimpleSQLiteQuery.bind(statement, whereArgs)
         return statement.executeUpdateDelete()
     }
-
 
     override fun update(table: String, conflictAlgorithm: Int, values: ContentValues, whereClause: String?, whereArgs: Array<Any?>?): Int {
         // taken from SQLiteDatabase class.
@@ -205,21 +206,24 @@ class SqliteOrgDatabase(
         delegate.execSQL(sql, bindArgs)
     }
 
-    override fun isReadOnly(): Boolean {
-        return delegate.isReadOnly
-    }
+    override val isReadOnly: Boolean
+        get() {
+            return delegate.isReadOnly
+        }
 
-    override fun isOpen(): Boolean {
-        return delegate.isOpen
-    }
+    override val isOpen: Boolean
+        get() {
+            return delegate.isOpen
+        }
 
     override fun needUpgrade(newVersion: Int): Boolean {
         return delegate.needUpgrade(newVersion)
     }
 
-    override fun getPath(): String {
-        return delegate.path
-    }
+    override val path: String
+        get() {
+            return delegate.path
+        }
 
     override fun setLocale(locale: Locale) {
         delegate.setLocale(locale)
@@ -229,8 +233,8 @@ class SqliteOrgDatabase(
         delegate.setMaxSqlCacheSize(cacheSize)
     }
 
-    override fun setForeignKeyConstraintsEnabled(enable: Boolean) {
-        delegate.setForeignKeyConstraintsEnabled(enable)
+    override fun setForeignKeyConstraintsEnabled(enabled: Boolean) {
+        delegate.setForeignKeyConstraintsEnabled(enabled)
     }
 
     override fun enableWriteAheadLogging(): Boolean {
@@ -241,17 +245,20 @@ class SqliteOrgDatabase(
         delegate.disableWriteAheadLogging()
     }
 
-    override fun isWriteAheadLoggingEnabled(): Boolean {
-        return delegate.isWriteAheadLoggingEnabled
-    }
+    override val isWriteAheadLoggingEnabled: Boolean
+        get() {
+            return delegate.isWriteAheadLoggingEnabled
+        }
 
-    override fun getAttachedDbs(): List<Pair<String, String>>? {
-        return delegate.attachedDbs
-    }
+    override val attachedDbs: List<Pair<String, String>>?
+        get() {
+            return delegate.attachedDbs
+        }
 
-    override fun isDatabaseIntegrityOk(): Boolean {
-        return delegate.isDatabaseIntegrityOk
-    }
+    override val isDatabaseIntegrityOk: Boolean
+        get() {
+            return delegate.isDatabaseIntegrityOk
+        }
 
     @Throws(IOException::class)
     override fun close() {
@@ -259,7 +266,7 @@ class SqliteOrgDatabase(
     }
 
     private fun isEmpty(input: String?): Boolean {
-        return input == null || input.isEmpty()
+        return input.isNullOrEmpty()
     }
 
     companion object {
