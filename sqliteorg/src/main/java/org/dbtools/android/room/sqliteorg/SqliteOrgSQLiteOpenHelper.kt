@@ -8,6 +8,7 @@ import org.sqlite.database.sqlite.SQLiteDatabase
 import org.sqlite.database.sqlite.SQLiteOpenHelper
 import java.io.File
 
+@Suppress("LongParameterList")
 open class SqliteOrgSQLiteOpenHelper(
     context: Context,
     path: String,
@@ -25,7 +26,7 @@ open class SqliteOrgSQLiteOpenHelper(
         val databaseFile = if (path.isEmpty()) {
             context.getDatabasePath(name)
         } else {
-            File(path, name)
+            File(path, name ?: "database")
         }
         databaseFile.parentFile?.mkdirs()
 
@@ -62,6 +63,7 @@ open class SqliteOrgSQLiteOpenHelper(
         delegate.close()
     }
 
+    @Suppress("LongParameterList")
     class OpenHelper(
         context: Context,
         libraryLoaderBlock: () -> Unit = {},
@@ -114,16 +116,14 @@ open class SqliteOrgSQLiteOpenHelper(
         }
 
         fun getWrappedDb(sqLiteDatabase: SQLiteDatabase): SqliteOrgDatabase {
-            if (wrappedDb == null) {
+            return wrappedDb ?: run {
                 val database = SqliteOrgDatabase(sqLiteDatabase)
                 if (password.isNotBlank()) {
                     database.execSQL("PRAGMA key = '$password'")
                 }
-
                 wrappedDb = database
+                database
             }
-
-            return wrappedDb!!
         }
 
         @Synchronized

@@ -47,8 +47,8 @@ object SqliteOrgDatabaseUtil {
                         }
                     }
                 }
-            } catch (e: Exception) {
-                Timber.e(e, "Failed to validate database [$databaseNameTag]")
+            } catch (ignore: Exception) {
+                Timber.e(ignore, "Failed to validate database [$databaseNameTag]")
                 return false
             }
         }
@@ -62,7 +62,8 @@ object SqliteOrgDatabaseUtil {
      * @param database Sqlite database
      * @param tableName table for columnName
      * @param columnName column to from tableName to be checked
-     * @param alterSql SQL to be run if the column does not exits. Example: alterTableIfColumnDoesNotExist(database, "individual", "middle_name", "ALTER TABLE individual ADD `middle_name` TEXT DEFAULT '' NOT NULL")
+     * @param alterSql SQL to be run if the column does not exits.
+     * Example: alterTableIfColumnDoesNotExist(database, "individual", "middle_name", "ALTER TABLE individual ADD `middle_name` TEXT DEFAULT '' NOT NULL")
      *
      * @return true if there were no failures
      */
@@ -110,6 +111,7 @@ object SqliteOrgDatabaseUtil {
      * @param columnName column to from tableName to be checked
      * @return true if the column exists otherwise false
      */
+    @Suppress("NestedBlockDepth")
     fun columnExists(database: SQLiteDatabase, tableName: String, columnName: String): Boolean {
         var columnExists = false
 
@@ -222,13 +224,11 @@ object SqliteOrgDatabaseUtil {
         if (dir != null && dir.exists()) {
             val prefix = "${file.name}-mj"
             val filter = FileFilter { candidate -> candidate.name.startsWith(prefix) }
-            val files = dir.listFiles(filter) ?: emptyArray()
+            val files = dir.listFiles(filter).orEmpty()
             for (masterJournal in files) {
                 deleted = deleted or masterJournal.delete()
             }
         }
         return deleted
     }
-
-    private const val CORRUPTION_CHECK_PASSED = "ok"
 }

@@ -123,9 +123,7 @@ class JdbcMemoryCursor : Cursor {
     @Throws(IllegalArgumentException::class)
     override fun getColumnIndexOrThrow(columnName: String): Int {
         val index = getColumnIndex(columnName)
-        if (index < 0) {
-            throw IllegalArgumentException("Cannot find column [$columnName]")
-        }
+        require(index > 0) { "Cannot find column [$columnName]" }
 
         return index
     }

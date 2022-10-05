@@ -6,7 +6,7 @@ coroutines = "1.6.4"
 androidxhilt = "1.0.0"
 androidxlifecycle = "2.5.1"
 desugarJdkLibs = "1.1.8"
-detekt = "1.21.0"
+detekt = "1.22.0-RC1"
 ksp = "1.7.20-1.0.6"
 room = "2.5.0-beta01"
 

@@ -13,9 +13,11 @@ import java.io.File
  * @param callback SupportSQLiteOpenHelper.Callback
  * @param password Database password
  * @param databaseErrorHandler Not yet implemented
- * @param enableJdbcTransactionSupport Enable/Disable jdbc support via autoCommit (default = true).  NOTE: known issue as of Room 2.4.0 - bulk insert needs to be fixed (because inserts get put into multiple threads, this sometimes causes the jdbc driver to throw: "database in auto-commit mode")
+ * @param enableJdbcTransactionSupport Enable/Disable jdbc support via autoCommit (default = true).
+ * NOTE: known issue as of Room 2.4.0 - bulk insert needs to be fixed (because inserts get put into multiple threads, this sometimes causes the jdbc driver to throw: "database in auto-commit mode")
  * @param onDatabaseConfigureBlock Block of code that is executed AFTER initial database connection and BEFORE database validation
  */
+@Suppress("LongParameterList")
 open class JdbcSQLiteOpenHelper(
     val path: String,
     val name: String?,
@@ -75,6 +77,7 @@ open class JdbcSQLiteOpenHelper(
         }
     }
 
+    @Suppress("NestedBlockDepth")
     private fun getDatabaseLocked(): JdbcSqliteDatabase {
         database?.let {
             if (!it.isOpen) {

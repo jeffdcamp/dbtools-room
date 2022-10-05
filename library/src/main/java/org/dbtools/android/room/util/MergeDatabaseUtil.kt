@@ -21,7 +21,8 @@ object MergeDatabaseUtil {
      * @param sourceDatabaseFile Sqlite file that will be opened and attached to the targetDatabase... then data will be copied from this database File
      * @param includeTables Only table names in this list will be merged. Table names are source database table names.  default: emptyList()
      * @param excludeTables All tables except the table names in this list will be merged. Table names are source database table names.  default: emptyList()
-     * @param sourceTableNameMap Map of name changes from sourceTable to targetTable (Example: copy table data from sourceDatabase.foo to targetDatabase.bar).  Key is the source table name, value is the target table name
+     * @param sourceTableNameMap Map of name changes from sourceTable to targetTable (Example: copy table data from sourceDatabase.foo to targetDatabase.bar).
+     * Key is the source table name, value is the target table name
      * @param mergeBlock Code to execute to perform merge.  default: database.execSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
      *
      * @return true if merge was successful
@@ -41,6 +42,7 @@ object MergeDatabaseUtil {
      *     }
      *
      */
+    @Suppress("NestedBlockDepth")
     fun mergeDatabase(
         targetDatabase: SupportSQLiteDatabase,
         sourceDatabaseFile: File,
@@ -98,24 +100,24 @@ object MergeDatabaseUtil {
                 }
 
                 targetDatabase.setTransactionSuccessful()
-            } catch (e: Exception) {
-                Timber.e(e, "Failed to merge database tables (inner) (sourceDatabaseFile: [${sourceDatabaseFile.name}] targetDatabase: [${targetDatabase.path}]")
-                onFailBlock?.invoke(e, targetDatabase, sourceDatabaseFile)
+            } catch (expected: Exception) {
+                Timber.e(expected, "Failed to merge database tables (inner) (sourceDatabaseFile: [${sourceDatabaseFile.name}] targetDatabase: [${targetDatabase.path}]")
+                onFailBlock?.invoke(expected, targetDatabase, sourceDatabaseFile)
                 return false
             } finally {
                 targetDatabase.endTransaction()
             }
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to merge database tables (outer) (sourceDatabaseFile: [${sourceDatabaseFile.name}] targetDatabase: [${targetDatabase.path}]")
-            onFailBlock?.invoke(e, targetDatabase, sourceDatabaseFile)
+        } catch (expected: Exception) {
+            Timber.e(expected, "Failed to merge database tables (outer) (sourceDatabaseFile: [${sourceDatabaseFile.name}] targetDatabase: [${targetDatabase.path}]")
+            onFailBlock?.invoke(expected, targetDatabase, sourceDatabaseFile)
             return false
         } finally {
             try {
                 // Detach databases
                 targetDatabase.detachDatabase(mergeDbName)
-            } catch (e: Exception) {
-                Timber.e(e, "Failed detach database (merge database tables)... may have never been attached")
-                onFailBlock?.invoke(e, targetDatabase, sourceDatabaseFile)
+            } catch (expected: Exception) {
+                Timber.e(expected, "Failed detach database (merge database tables)... may have never been attached")
+                onFailBlock?.invoke(expected, targetDatabase, sourceDatabaseFile)
             }
         }
 

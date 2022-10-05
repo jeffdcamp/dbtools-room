@@ -300,8 +300,8 @@ fun RoomDatabase.applySqlFile(sqlFile: File): Boolean {
         }
         @Suppress("DEPRECATION") // mirroring RoomDatabase.kt
         setTransactionSuccessful()
-    } catch (e: Exception) {
-        Timber.e(e, "Failed to apply sql file. File: [%s] Error: [%s]", sqlFile.absolutePath, e.message)
+    } catch (expected: Exception) {
+        Timber.e(expected, "Failed to apply sql file. File: [%s] Error: [%s]", sqlFile.absolutePath, expected.message)
         return false
     } finally {
         @Suppress("DEPRECATION") // mirroring RoomDatabase.kt

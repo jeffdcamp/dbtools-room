@@ -19,7 +19,8 @@ import java.util.concurrent.atomic.AtomicInteger
  * JdbcSqliteDatabase - JDBC Implementation of SupportSQLiteDatabase
  *
  * @param dbPath Path to database
- * @param enableJdbcTransactionSupport Enable/Disable jdbc support via autoCommit (default = true).  NOTE: known issue as of Room 2.4.0 - bulk insert needs to be fixed (because inserts get put into multiple threads, this sometimes causes the jdbc driver to throw: "database in auto-commit mode")
+ * @param enableJdbcTransactionSupport Enable/Disable jdbc support via autoCommit (default = true).
+ * NOTE: known issue as of Room 2.4.0 - bulk insert needs to be fixed (because inserts get put into multiple threads, this sometimes causes the jdbc driver to throw: "database in auto-commit mode")
  */
 class JdbcSqliteDatabase(
     private val dbPath: String,
@@ -35,8 +36,8 @@ class JdbcSqliteDatabase(
     init {
         try {
             DriverManager.registerDriver(JDBC())
-        } catch (e: Exception) {
-            throw IllegalStateException("Could load sqlite-jdbc driver... is the sqlite-jdbc driver included in the dependencies?", e)
+        } catch (ignore: Exception) {
+            throw IllegalStateException("Could load sqlite-jdbc driver... is the sqlite-jdbc driver included in the dependencies?", ignore)
         }
 
         conn = DriverManager.getConnection(dbUrl)
@@ -87,6 +88,7 @@ class JdbcSqliteDatabase(
         beginTransaction(transactionListener, false)
     }
 
+    @Suppress("UnusedPrivateMember")
     private fun beginTransaction(transactionListener: SQLiteTransactionListener?, exclusive: Boolean) {
         if (enableJdbcTransactionSupport) {
             if (conn.autoCommit) {
@@ -110,6 +112,7 @@ class JdbcSqliteDatabase(
 //        return !conn.autoCommit
     }
 
+    @Suppress("NestedBlockDepth")
     override fun endTransaction() {
 //        println("endTransaction().transactionCounter = ${transactionCounter.get()} START")
         if (enableJdbcTransactionSupport) {
@@ -362,9 +365,9 @@ class JdbcSqliteDatabase(
         var exception: Throwable? = null
         try {
             return block(this)
-        } catch (e: Throwable) {
-            exception = e
-            throw e
+        } catch (expected: Throwable) {
+            exception = expected
+            throw expected
         } finally {
             when {
                 this == null -> {
@@ -373,7 +376,7 @@ class JdbcSqliteDatabase(
                 else ->
                     try {
                         close()
-                    } catch (closeException: Throwable) {
+                    } catch (_: Throwable) {
                         // cause.addSuppressed(closeException) // ignored here
                     }
             }

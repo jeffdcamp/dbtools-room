@@ -13,6 +13,7 @@ import java.io.File
  * Changed Log.e -> Timber.e so that app can post to error logs
  */
 object SqliteOrgDefaultDatabaseErrorHandler : DatabaseErrorHandler {
+    @Suppress("NestedBlockDepth")
     override fun onCorruption(dbObj: SQLiteDatabase?) {
         Timber.e("Corruption reported by sqlite on database: [${dbObj?.path}]")
 //        SQLiteDatabase.wipeDetected(dbObj.path, "corruption")
@@ -35,12 +36,12 @@ object SqliteOrgDefaultDatabaseErrorHandler : DatabaseErrorHandler {
             // before that, get the attached database list first.
             try {
                 attachedDbs = dbObj?.attachedDbs
-            } catch (e: SQLiteException) {
+            } catch (_: SQLiteException) {
                 /* ignore */
             }
             try {
                 dbObj?.close()
-            } catch (e: SQLiteException) {
+            } catch (_: SQLiteException) {
                 /* ignore */
             }
         } finally {

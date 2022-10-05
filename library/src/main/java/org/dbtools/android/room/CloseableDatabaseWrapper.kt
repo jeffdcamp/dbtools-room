@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicReference
  * ```
  */
 abstract class CloseableDatabaseWrapper<out T: RoomDatabase>(protected val context: Context) {
-    private var _database = AtomicReference<T?>()
+    private val _database = AtomicReference<T?>()
 
     @Synchronized
     open fun getDatabase() = _database.get() ?: createAndSetDatabase()

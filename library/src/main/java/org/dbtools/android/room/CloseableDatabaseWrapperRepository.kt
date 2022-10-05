@@ -61,7 +61,7 @@ import java.io.File
  *
  */
 abstract class CloseableDatabaseWrapperRepository<out T: RoomDatabase>(protected val context: Context) {
-    private var databaseList = HashMap<String, T>()
+    private val databaseList = mutableMapOf<String, T>()
 
     /**
      * Get database from internal repository.
@@ -163,9 +163,11 @@ abstract class CloseableDatabaseWrapperRepository<out T: RoomDatabase>(protected
                     DatabaseUtil.deleteDatabaseFiles(File(path))
                 }
             }
-        } finally {
-            return databaseList.remove(key) != null
+        } catch(ignore: Exception) {
+            Timber.e(ignore, "Failed to close database - key: [$key]")
         }
+
+        return databaseList.remove(key) != null
     }
 
     /**

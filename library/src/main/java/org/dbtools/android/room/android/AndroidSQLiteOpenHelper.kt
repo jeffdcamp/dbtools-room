@@ -23,7 +23,7 @@ open class AndroidSQLiteOpenHelper(
         val databaseFile = if (path.isEmpty()) {
             context.getDatabasePath(name)
         } else {
-            File(path, name)
+            File(path, name ?: "database")
         }
         databaseFile.parentFile?.mkdirs()
 
@@ -101,13 +101,11 @@ open class AndroidSQLiteOpenHelper(
         }
 
         private fun getWrappedDb(sqLiteDatabase: SQLiteDatabase): AndroidSQLiteDatabase {
-            if (wrappedDb == null) {
+            return wrappedDb ?: run {
                 val database = AndroidSQLiteDatabase(sqLiteDatabase)
-
                 wrappedDb = database
+                database
             }
-
-            return wrappedDb!!
         }
 
         @Synchronized

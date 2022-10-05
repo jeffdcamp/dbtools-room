@@ -139,9 +139,7 @@ class AndroidSQLiteDatabase(
 
     override fun update(table: String, conflictAlgorithm: Int, values: ContentValues, whereClause: String?, whereArgs: Array<Any?>?): Int {
         // taken from SQLiteDatabase class.
-        if (values.size() == 0) {
-            throw IllegalArgumentException("Empty values")
-        }
+        require(values.size() != 0) { "Empty values" }
 
         val sql = StringBuilder(120)
         sql.append("UPDATE ")

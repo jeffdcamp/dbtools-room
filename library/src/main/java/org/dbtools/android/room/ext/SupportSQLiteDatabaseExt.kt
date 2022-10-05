@@ -289,8 +289,8 @@ fun SupportSQLiteDatabase.applySqlFile(sqlFile: File): Boolean {
             }
         }
         setTransactionSuccessful()
-    } catch (e: Exception) {
-        Timber.e(e, "Failed to apply sql file. File: [%s] Error: [%s]", sqlFile.absolutePath, e.message)
+    } catch (expected: Exception) {
+        Timber.e(expected, "Failed to apply sql file. File: [%s] Error: [%s]", sqlFile.absolutePath, expected.message)
         return false
     } finally {
         endTransaction()
@@ -302,7 +302,8 @@ fun SupportSQLiteDatabase.applySqlFile(sqlFile: File): Boolean {
  * Check to see if a column in a database exists, if it does not... alter query will be run
  * @param tableName table for columnName
  * @param columnName column to from tableName to be checked
- * @param alterSql SQL to be run if the column does not exits. Example: alterTableIfColumnDoesNotExist(database, "individual", "middle_name", "ALTER TABLE individual ADD `middle_name` TEXT DEFAULT '' NOT NULL")
+ * @param alterSql SQL to be run if the column does not exits.
+ * Example: alterTableIfColumnDoesNotExist(database, "individual", "middle_name", "ALTER TABLE individual ADD `middle_name` TEXT DEFAULT '' NOT NULL")
  */
 fun SupportSQLiteDatabase.alterTableIfColumnDoesNotExist(tableName: String, columnName: String, alterSql: String) {
     if (!this.columnExists(tableName, columnName)) {
@@ -318,6 +319,7 @@ fun SupportSQLiteDatabase.alterTableIfColumnDoesNotExist(tableName: String, colu
  * @param columnName column to from tableName to be checked
  * @return true if the column exists otherwise false
  */
+@Suppress("NestedBlockDepth")
 fun SupportSQLiteDatabase.columnExists(tableName: String, columnName: String): Boolean {
     var columnExists = false
 

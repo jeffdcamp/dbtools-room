@@ -54,7 +54,8 @@ internal class MergeDatabaseUtilTest {
 
         // with includes/excludes
         validateMergeTables(listOf(X_C), MergeDatabaseUtil.createTableNamesToMerge(listOf("a", "b", "x"), includeTables = listOf("x"),sourceTableNameMap = mapOf("x" to "c")))
-        validateMergeTables(listOf(A_A), MergeDatabaseUtil.createTableNamesToMerge(listOf("a", "b", "x"), includeTables = listOf("a", "x"), excludeTables = listOf("x"), sourceTableNameMap = mapOf("x" to "c")))
+        validateMergeTables(listOf(A_A), MergeDatabaseUtil.createTableNamesToMerge(
+            listOf("a", "b", "x"), includeTables = listOf("a", "x"), excludeTables = listOf("x"), sourceTableNameMap = mapOf("x" to "c")))
 
     }
 

@@ -4,6 +4,8 @@ plugins {
     signing
     kotlin("android")
     kotlin("kapt")
+    id("de.undercouch.download") version "5.2.1"
+    alias(libs.plugins.detekt)
 }
 
 android {
@@ -66,6 +68,44 @@ dependencies {
 // create JUnit reports
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+// ===== Detekt =====
+
+// download detekt config file
+tasks.register<de.undercouch.gradle.tasks.download.Download>("downloadDetektConfig") {
+    download {
+        onlyIf { !file("$projectDir/build/config/detektConfig.yml").exists() }
+        src("https://raw.githubusercontent.com/ICSEng/AndroidPublic/main/detekt/detektConfig-20221001.yml")
+        dest("$projectDir/build/config/detektConfig.yml")
+    }
+}
+
+// make sure when running detekt, the config file is downloaded
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    // Target version of the generated JVM bytecode. It is used for type resolution.
+    this.jvmTarget = "1.8"
+    dependsOn("downloadDetektConfig")
+}
+
+// ./gradlew detekt
+// ./gradlew detektDebug (support type checking)
+detekt {
+    allRules = true // fail build on any finding
+    buildUponDefaultConfig = true // preconfigure defaults
+    config = files("$projectDir/build/config/detektConfig.yml") // point to your custom config defining rules to run, overwriting default behavior
+//    baseline = file("$projectDir/config/baseline.xml") // a way of suppressing issues before introducing detekt
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    // ignore ImageVector files
+    exclude("**/ui/compose/icons/**")
+
+    reports {
+        html.required.set(true) // observe findings in your browser with structure and code snippets
+        xml.required.set(true) // checkstyle like format mainly for integrations like Jenkins
+        txt.required.set(true) // similar to the console output, contains issue signature to manually edit baseline files
+    }
 }
 
 // ===== Maven Deploy =====

@@ -76,7 +76,7 @@ object RoomLiveData {
         return object : LiveData<T>(), CoroutineScope {
             private val computing = AtomicBoolean(false)
             private val invalid = AtomicBoolean(true)
-            private var observerList = mutableListOf<Pair<TableChangeReference, InvalidationTracker.Observer>>()
+            private val observerList = mutableListOf<Pair<TableChangeReference, InvalidationTracker.Observer>>()
 
             override val coroutineContext = coroutineContext
 
