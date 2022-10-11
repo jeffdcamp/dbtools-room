@@ -276,18 +276,11 @@ fun SupportSQLiteDatabase.applySqlFile(sqlFile: File): Boolean {
 
     try {
         beginTransaction()
-        var statement = ""
-        sqlFile.forEachLine { line ->
-            statement += line
-            if (statement.endsWith(';')) {
-                this.execSQL(statement)
-                statement = ""
-            } else {
-                // If the statement currently does not end with [;] then there must be multiple lines to the full statement.
-                // Make sure to keep the newline character (some text columns may have multiple lines of data)
-                statement += '\n'
-            }
+
+        sqlFile.parseAndExecuteSqlStatements { statement ->
+            this.execSQL(statement)
         }
+
         setTransactionSuccessful()
     } catch (expected: Exception) {
         Timber.e(expected, "Failed to apply sql file. File: [%s] Error: [%s]", sqlFile.absolutePath, expected.message)

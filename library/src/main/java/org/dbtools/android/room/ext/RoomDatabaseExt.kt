@@ -274,30 +274,10 @@ fun RoomDatabase.applySqlFile(sqlFile: File): Boolean {
         @Suppress("DEPRECATION") // mirroring RoomDatabase.kt
         beginTransaction()
 
-        var statement = ""
-        sqlFile.forEachLine { line ->
-            // Prepare the line
-            // - Remove any trailing comments (sqldiff may add comments to a line (Example: 'DROP TABLE speaker; -- due to schema mismatch'))
-            // - Remove any trailing spaces (we check for a line ending with ';')
-
-            // check for sqldiff comment
-            val formattedLine = if (line.contains("; -- ")) {
-                val lineWithoutComment = line.substringBefore("; -- ") + ";" // be sure to add the ; back in
-                lineWithoutComment.trim()
-            } else {
-                line.trim()
-            }
-
-            statement += formattedLine
-            if (statement.endsWith(';')) {
-                database.execSQL(statement)
-                statement = ""
-            } else {
-                // If the statement currently does not end with [;] then there must be multiple lines to the full statement.
-                // Make sure to keep the newline character (some text columns may have multiple lines of data)
-                statement += '\n'
-            }
+        sqlFile.parseAndExecuteSqlStatements { statement ->
+            database.execSQL(statement)
         }
+
         @Suppress("DEPRECATION") // mirroring RoomDatabase.kt
         setTransactionSuccessful()
     } catch (expected: Exception) {
