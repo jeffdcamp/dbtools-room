@@ -4,7 +4,7 @@ plugins {
     signing
     kotlin("android")
     kotlin("kapt")
-    id("de.undercouch.download") version "5.2.1"
+    id("de.undercouch.download") version "5.3.0"
     alias(libs.plugins.detekt)
 }
 
@@ -81,7 +81,7 @@ tasks.withType<Test> {
 tasks.register<de.undercouch.gradle.tasks.download.Download>("downloadDetektConfig") {
     download {
         onlyIf { !file("$projectDir/build/config/detektConfig.yml").exists() }
-        src("https://raw.githubusercontent.com/ICSEng/AndroidPublic/main/detekt/detektConfig-20221001.yml")
+        src("https://raw.githubusercontent.com/ICSEng/AndroidPublic/main/detekt/detektConfig-20221107.yml")
         dest("$projectDir/build/config/detektConfig.yml")
     }
 }

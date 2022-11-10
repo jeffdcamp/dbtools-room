@@ -205,7 +205,7 @@ class JdbcSqliteDatabase(
         return query(SimpleSQLiteQuery(query))
     }
 
-    override fun query(query: String, bindArgs: Array<Any?>): Cursor {
+    override fun query(query: String, bindArgs: Array<out Any?>): Cursor {
         return query(SimpleSQLiteQuery(query, bindArgs))
     }
 
@@ -220,7 +220,7 @@ class JdbcSqliteDatabase(
         return query(query)
     }
 
-    override fun update(table: String, conflictAlgorithm: Int, values: ContentValues, whereClause: String?, whereArgs: Array<Any?>?): Int {
+    override fun update(table: String, conflictAlgorithm: Int, values: ContentValues, whereClause: String?, whereArgs: Array<out Any?>?): Int {
         check(values.size() > 0) { "Values must not be empty" }
         val setValuesSize = values.size()
         val bindArgSize = when (whereArgs) {
@@ -260,7 +260,7 @@ class JdbcSqliteDatabase(
         return stmt.executeUpdateDelete()
     }
 
-    override fun delete(table: String, whereClause: String?, whereArgs: Array<Any?>?): Int {
+    override fun delete(table: String, whereClause: String?, whereArgs: Array<out Any?>?): Int {
         val query = "DELETE FROM $table ${
             when {
                 whereClause.isNullOrBlank() -> ""
@@ -274,7 +274,7 @@ class JdbcSqliteDatabase(
 
     override fun execSQL(sql: String) = compileStatement(sql).execute()
 
-    override fun execSQL(sql: String, bindArgs: Array<Any?>) {
+    override fun execSQL(sql: String, bindArgs: Array<out Any?>) {
         val stmt = compileStatement(sql)
         SimpleSQLiteQuery.bind(stmt, bindArgs)
         stmt.execute()

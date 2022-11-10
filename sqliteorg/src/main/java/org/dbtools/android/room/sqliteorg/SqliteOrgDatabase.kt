@@ -108,7 +108,7 @@ class SqliteOrgDatabase(
         return query(SimpleSQLiteQuery(query))
     }
 
-    override fun query(query: String, bindArgs: Array<Any?>): Cursor {
+    override fun query(query: String, bindArgs: Array<out Any?>): Cursor {
         return query(SimpleSQLiteQuery(query, bindArgs))
     }
 
@@ -151,14 +151,14 @@ class SqliteOrgDatabase(
         return delegate.insertWithOnConflict(table, null, values, conflictAlgorithm)
     }
 
-    override fun delete(table: String, whereClause: String?, whereArgs: Array<Any?>?): Int {
+    override fun delete(table: String, whereClause: String?, whereArgs: Array<out Any?>?): Int {
         val query = "DELETE FROM " + table + if (isEmpty(whereClause)) "" else " WHERE $whereClause"
         val statement = compileStatement(query)
         SimpleSQLiteQuery.bind(statement, whereArgs)
         return statement.executeUpdateDelete()
     }
 
-    override fun update(table: String, conflictAlgorithm: Int, values: ContentValues, whereClause: String?, whereArgs: Array<Any?>?): Int {
+    override fun update(table: String, conflictAlgorithm: Int, values: ContentValues, whereClause: String?, whereArgs: Array<out Any?>?): Int {
         // taken from SQLiteDatabase class.
         require (values.size() != 0) { "Empty values" }
 
@@ -200,7 +200,7 @@ class SqliteOrgDatabase(
         delegate.execSQL(sql)
     }
 
-    override fun execSQL(sql: String, bindArgs: Array<Any?>) {
+    override fun execSQL(sql: String, bindArgs: Array<out Any?>) {
         delegate.execSQL(sql, bindArgs)
     }
 
