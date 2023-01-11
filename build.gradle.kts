@@ -14,6 +14,10 @@ buildscript {
     }
 }
 
+plugins {
+    id("com.autonomousapps.dependency-analysis") version "1.17.0"
+}
+
 allprojects {
     repositories {
         mavenLocal()
@@ -43,6 +47,39 @@ allprojects {
             }
         }
     }
+}
+
+// ===== Dependency Analysis =====
+// ./gradlew projectHealth
+dependencyAnalysis {
+    issues {
+        all {
+            onAny {
+                ignoreKtx(true)
+                severity("fail")
+            }
+            onUnusedDependencies {
+                exclude(
+                    ":jdbc",
+                    depGroupAndName(libs.xerial.sqlite), // loaded by reflection in UnitTest
+//                    depGroupAndName(libs.compose.ui.tooling), // Compose Previews
+                )
+            }
+            onUsedTransitiveDependencies { severity("ignore") }
+            onIncorrectConfiguration { severity("ignore") }
+            onCompileOnly { severity("ignore") }
+            onRuntimeOnly { severity("ignore") }
+            onUnusedAnnotationProcessors {
+                exclude(
+//                    depGroupAndName(libs.google.hilt.compiler)
+                )
+            }
+        }
+    }
+}
+
+fun depGroupAndName(dependency: Provider<MinimalExternalModuleDependency>): String {
+    return dependency.get().let { "${it.group}:${it.name}" }
 }
 
 tasks.register("clean", Delete::class) {
