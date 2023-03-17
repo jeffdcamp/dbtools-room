@@ -66,9 +66,9 @@ internal class RoomLiveDataTest {
             }
             val max = 2
             val observer = object : Observer<List<Foo>> {
-                override fun onChanged(it: List<Foo>?) {
+                override fun onChanged(it: List<Foo>) {
                     println(it)
-                    if (it?.size == max) {
+                    if (it.size == max) {
                         liveData.removeObserver(this)
                     }
                 }

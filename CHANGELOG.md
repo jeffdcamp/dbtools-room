@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 8.1.0 *(2023-03)*
+-------------------------
+* Added proguard rules for R8
+* Kotlin 1.8.10
+
 Version 8.0.0 *(2023-01)*
 -------------------------
 * Room 2.5.0

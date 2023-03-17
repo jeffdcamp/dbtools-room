@@ -30,7 +30,7 @@ Apps using the "dbtools-room-jdbc" dependency MUST include Xerial (or Xerial sim
 License
 =======
 
-    Copyright 2021 Jeff Campbell
+    Copyright 2017-2023 Jeff Campbell
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

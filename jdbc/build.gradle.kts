@@ -4,7 +4,7 @@ plugins {
     signing
     kotlin("android")
     kotlin("kapt")
-    id("de.undercouch.download") version "5.3.0"
+    id("de.undercouch.download") version "5.3.1"
     alias(libs.plugins.detekt)
 }
 
