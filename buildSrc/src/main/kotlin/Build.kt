@@ -8,7 +8,7 @@ object AndroidSdk {
 
 object Pom {
     const val GROUP_ID = "org.dbtools"
-    const val VERSION_NAME = "8.2.0-alpha02"
+    const val VERSION_NAME = "8.2.0-alpha03"
     const val POM_DESCRIPTION = "DBTools for Room"
 
     const val URL = "https://github.com/jeffdcamp/dbtools-room/"
