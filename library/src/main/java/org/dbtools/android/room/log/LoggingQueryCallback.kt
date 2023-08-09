@@ -7,10 +7,14 @@ import timber.log.Timber
 
 /**
  * Room QueryCallback function extension for logging executed queries
+ *
+ * @param T Type of RoomDatabase
  * @param queryContext Name that helps identify the source of the query (Example: "main.db", "userdata.db", "book-1234.db", etc)
  * @param enabled Allow an app to dynamically enable/disable logging (default: true)
  * @param combineSqlAndArgs If true, then show queries with ? replaced with arg values (default: true)
  * @param useTimber Use Timber or Log for logging (default: true)
+ *
+ * @return RoomDatabase.Builder<T>
  */
 fun <T : RoomDatabase> RoomDatabase.Builder<T>.setLoggingQueryCallback(
     queryContext: String,
@@ -23,10 +27,10 @@ fun <T : RoomDatabase> RoomDatabase.Builder<T>.setLoggingQueryCallback(
 
 /**
  * Room QueryCallback for logging executed queries
- * @param queryContext Name that helps identify the source of the query (Example: "main.db", "userdata.db", "book-1234.db", etc)
- * @param enabled Allow an app to dynamically enable/disable logging (default: true)
- * @param combineSqlAndArgs If true, then show queries with ? replaced with arg values (default: true)
- * @param useTimber Use Timber or Log for logging (default: true)
+ * @property queryContext Name that helps identify the source of the query (Example: "main.db", "userdata.db", "book-1234.db", etc)
+ * @property enabled Allow an app to dynamically enable/disable logging (default: true)
+ * @property combineSqlAndArgs If true, then show queries with ? replaced with arg values (default: true)
+ * @property useTimber Use Timber or Log for logging (default: true)
  */
 class LoggingQueryCallback(
     private val queryContext: String,

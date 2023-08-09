@@ -22,6 +22,7 @@ object MergeDatabaseUtil {
      * @param includeTables Only table names in this list will be merged. Table names are source database table names.  default: emptyList()
      * @param excludeTables All tables except the table names in this list will be merged. Table names are source database table names.  default: emptyList()
      * @param sourceTableNameMap Map of name changes from sourceTable to targetTable (Example: copy table data from sourceDatabase.foo to targetDatabase.bar).
+     * @param onFailBlock Code to execute if there is a failure during merge
      * Key is the source table name, value is the target table name
      * @param mergeBlock Code to execute to perform merge.  default: database.execSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
      *

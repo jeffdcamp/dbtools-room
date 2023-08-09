@@ -7,6 +7,8 @@ plugins {
 }
 
 android {
+    namespace="org.dbtools.android.room.jdbctest"
+
     compileSdk = AndroidSdk.COMPILE
 
     defaultConfig {
@@ -23,9 +25,18 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
     kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs = listOf("-module-name", Pom.LIBRARY_JDBC_TEST_ARTIFACT_ID)
+        jvmTarget = "17"
+//        freeCompilerArgs = listOf("-module-name", Pom.LIBRARY_JDBC_TEST_ARTIFACT_ID)
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     lint {

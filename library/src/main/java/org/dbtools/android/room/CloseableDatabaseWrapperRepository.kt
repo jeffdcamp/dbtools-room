@@ -98,6 +98,7 @@ abstract class CloseableDatabaseWrapperRepository<out T: RoomDatabase>(protected
      * NOTE: override autoRegisterDatabase(...) function to allow the isDatabaseRegistered(...) function to auto register a database
      *
      * @param key of the database
+     * @param autoRegister if the database has not yet been added to the databaseList, then auto-add it if missing
      * @return true if the database is added to the repository
      */
     open fun isDatabaseRegistered(key: String, autoRegister: Boolean = true): Boolean {
@@ -110,7 +111,7 @@ abstract class CloseableDatabaseWrapperRepository<out T: RoomDatabase>(protected
         }
     }
 
-    /**
+    /*
      * This function will call the override function autoRegisterDatabase(...)
      * @return true if the override function autoRegisterDatabase(...) successfully registered the database (this function will verify if it actually got added AFTER)
      */
@@ -148,6 +149,7 @@ abstract class CloseableDatabaseWrapperRepository<out T: RoomDatabase>(protected
     /**
      * Close the database and remove the reference from the WrapperRepository
      *
+     * @param key of the database
      * @param deleteFile Delete the database file and any associated files to this database (default: false)
      *
      * @return true if the entry existed and was removed

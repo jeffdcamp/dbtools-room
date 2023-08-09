@@ -13,8 +13,8 @@ import java.io.File
 /**
  * Preform a PRAGMA check on the database and optionally check a table for existing data
  *
- * @param databaseNameTag Optional check on a table for data. (optional)
  * @param databaseNameTag Optional tag name to help identify database in logging
+ * @param tableDataCountCheck Optional check on a table for data. (optional)
  * @param allowZeroCount Optional tableDataCountCheck if false return false if count is zero
  *
  * @return true if validation check is OK
@@ -181,8 +181,7 @@ fun SupportSQLiteDatabase.viewExists(viewNames: List<String>, databaseName: Stri
 /**
  * Drops view in a database
  *
- * @param database Database to drop the views from
- * @param viewsName Name of view to drop
+ * @param viewName Name of view to drop
  */
 fun SupportSQLiteDatabase.dropView(viewName: String) {
     DatabaseUtil.dropView(this, viewName)
@@ -212,7 +211,6 @@ fun SupportSQLiteDatabase.recreateView(viewName: String, viewQuery: String) {
 /**
  * Drops all existing views and then recreates them in a database
  *
- * @param database Database to recreate the views from
  * @param views List of Views to recreate
  */
 fun SupportSQLiteDatabase.recreateAllViews(views: List<DatabaseViewQuery>) {
@@ -228,6 +226,7 @@ fun SupportSQLiteDatabase.recreateAllViews(views: List<DatabaseViewQuery>) {
  * @param includeTables Only table names in this list will be merged. Table names are source database table names.  default: emptyList()
  * @param excludeTables All tables except the table names in this list will be merged. Table names are source database table names.  default: emptyList()
  * @param tableNameMap Map of name changes in target database (Example: copy table data from databaseA.foo to databaseB.bar).  Key is the source table name, value is the target table name
+ * @param onFailBlock Code to execute if there is a failure during merge
  * @param mergeBlock Code to execute to perform merge.  default: database.execSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
  *
  * @return true if merge was successful

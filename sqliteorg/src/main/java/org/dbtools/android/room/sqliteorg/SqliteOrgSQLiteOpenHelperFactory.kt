@@ -5,10 +5,11 @@ import org.sqlite.database.DatabaseErrorHandler
 import org.sqlite.database.sqlite.SQLiteDatabase
 
 /**
- * @param path Custom path to database
- * @param password Password field if using Sqlite SEE or other encryption library
- * @param libraryLoaderBlock Load custom libraries here.  Default: System.loadLibrary("sqliteX")
- * @param onDatabaseConfigureBlock After creation of the org.sqlite.database.sqlite.SQLiteDatabase object, this block will be called with the created instance, allowing further customizations
+ * @property path Custom path to database
+ * @property password Password field if using Sqlite SEE or other encryption library
+ * @property libraryLoaderBlock Load custom libraries here.  Default: System.loadLibrary("sqliteX")
+ * @property databaseErrorHandler Error Handler
+ * @property onDatabaseConfigureBlock After creation of the org.sqlite.database.sqlite.SQLiteDatabase object, this block will be called with the created instance, allowing further customizations
  */
 @Suppress("unused")
 class SqliteOrgSQLiteOpenHelperFactory(

@@ -8,14 +8,14 @@ import java.io.File
 /**
  * JdbcSQLiteOpenHelper - JDBC implementation of SupportSQLiteOpenHelper
  *
- * @param path Path to database
- * @param name Name of database.  If null then in memory database
- * @param callback SupportSQLiteOpenHelper.Callback
- * @param password Database password
- * @param databaseErrorHandler Not yet implemented
- * @param enableJdbcTransactionSupport Enable/Disable jdbc support via autoCommit (default = true).
+ * @property path Path to database
+ * @property name Name of database.  If null then in memory database
+ * @property callback SupportSQLiteOpenHelper.Callback
+ * @property password Database password
+ * @property enableJdbcTransactionSupport Enable/Disable jdbc support via autoCommit (default = true).
+ * @property databaseErrorHandler Not yet implemented
  * NOTE: known issue as of Room 2.4.0 - bulk insert needs to be fixed (because inserts get put into multiple threads, this sometimes causes the jdbc driver to throw: "database in auto-commit mode")
- * @param onDatabaseConfigureBlock Block of code that is executed AFTER initial database connection and BEFORE database validation
+ * @property onDatabaseConfigureBlock Block of code that is executed AFTER initial database connection and BEFORE database validation
  */
 @Suppress("LongParameterList")
 open class JdbcSQLiteOpenHelper(

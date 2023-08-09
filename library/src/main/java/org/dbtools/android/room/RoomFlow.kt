@@ -45,6 +45,7 @@ object RoomFlow {
     /**
      * Return data retrieved via block parameter as Flow
      *
+     * @param T type of flow
      * @param tableChangeReferences Tables that will cause this Flow to be triggered
      * @param inTransaction Determine which coroutine dispatcher to use
      * @param block Function that is executed to get data
@@ -52,9 +53,9 @@ object RoomFlow {
      * @return Flow<T>
      */
     fun <T> toFlow(
-            tableChangeReferences: List<TableChangeReference>?,
-            inTransaction: Boolean = false,
-            block: suspend () -> T
+        tableChangeReferences: List<TableChangeReference>?,
+        inTransaction: Boolean = false,
+        block: suspend () -> T,
     ): Flow<T> = flow {
         // Observer channel receives signals from the invalidation tracker to emit queries.
         val observerChannel = Channel<Unit>(Channel.CONFLATED)

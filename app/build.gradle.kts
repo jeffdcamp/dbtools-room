@@ -5,6 +5,8 @@ plugins {
 }
 
 android {
+    namespace = "org.dbtools.sample.roomsqlite"
+
     compileSdk = AndroidSdk.COMPILE
 
     defaultConfig {
@@ -26,11 +28,9 @@ android {
     }
 
     compileOptions {
-        // Flag to enable support for the new language APIs
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
         isCoreLibraryDesugaringEnabled = true
-
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     buildFeatures {

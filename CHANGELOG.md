@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+Version 8.2.0-alpha02 *(2023-06)*
+-------------------------
+* Room 2.6.0-alpha02
+* Kotlin 1.8.21
+* Updated documentation
+* Updated other project dependencies (AGP 8.0.2/Gradle 8.1.1/Java 17/etc)
+
 Version 8.1.0 *(2023-03)*
 -------------------------
 * Added proguard rules for R8

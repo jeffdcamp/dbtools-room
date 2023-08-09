@@ -41,16 +41,18 @@ import kotlin.coroutines.CoroutineContext
  *     arrayOf("a", "b", "c")
  * }
  */
-@Suppress("unused")
+@Deprecated("Use Flow")
 object RoomLiveData {
     /**
      * Return data retrieved via block parameter as LiveData
      *
+     * @param T type of LiveData
      * @param coroutineContext Thread in which block is executed on
      * @param block Function that is executed to get data
      *
      * @return LiveData<T>
      */
+    @Deprecated("Use RoomFlow.toFlow(...)")
     fun <T> toLiveData(coroutineContext: CoroutineContext = Dispatchers.IO, block: suspend () -> T): LiveData<T> {
         return toLiveDataInternal(null, coroutineContext, block)
     }
@@ -58,12 +60,14 @@ object RoomLiveData {
     /**
      * Return data retrieved via block parameter as LiveData
      *
+     * @param T type of data for the LiveData
      * @param tableChangeReferences Tables that will cause this LiveData to be triggered
      * @param coroutineContext Thread in which block is executed on
      * @param block Function that is executed to get data
      *
      * @return LiveData<T>
      */
+    @Deprecated("Use RoomFlow.toFlow(...)")
     fun <T> toLiveData(tableChangeReferences: List<TableChangeReference>, coroutineContext: CoroutineContext = Dispatchers.IO, block: suspend () -> T): LiveData<T> {
         return toLiveDataInternal(tableChangeReferences, coroutineContext, block)
     }
@@ -180,6 +184,7 @@ fun RoomDatabase.tableChangeReferences(vararg tableNames: String): TableChangeRe
     return TableChangeReference(this, tableNames.toList())
 }
 
+@Deprecated("Use RoomDatabase.toFlow")
 fun <T> RoomDatabase.toLiveData(vararg tableNames: String, coroutineContext: CoroutineContext = Dispatchers.IO, block: suspend () -> T): LiveData<T> {
     return RoomLiveData.toLiveData(listOf(TableChangeReference(this, tableNames.toList())), coroutineContext) { block() }
 }

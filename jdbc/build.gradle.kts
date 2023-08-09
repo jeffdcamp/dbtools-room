@@ -4,11 +4,13 @@ plugins {
     signing
     kotlin("android")
     kotlin("kapt")
-    id("de.undercouch.download") version "5.3.1"
+    id("de.undercouch.download") version "5.4.0"
     alias(libs.plugins.detekt)
 }
 
 android {
+    namespace="org.dbtools.android.room.jdbc"
+
     compileSdk = AndroidSdk.COMPILE
 
     defaultConfig {
@@ -16,9 +18,14 @@ android {
         targetSdk = AndroidSdk.TARGET
     }
 
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
     kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs = listOf("-module-name", Pom.LIBRARY_JDBC_ARTIFACT_ID)
+        jvmTarget = "17"
+//        freeCompilerArgs = listOf("-module-name", Pom.LIBRARY_JDBC_ARTIFACT_ID)
     }
 
     lint {
@@ -76,7 +83,7 @@ tasks.withType<Test> {
 tasks.register<de.undercouch.gradle.tasks.download.Download>("downloadDetektConfig") {
     download {
         onlyIf { !file("$projectDir/build/config/detektConfig.yml").exists() }
-        src("https://raw.githubusercontent.com/ICSEng/AndroidPublic/main/detekt/detektConfig-20221107.yml")
+        src("https://raw.githubusercontent.com/ICSEng/AndroidPublic/main/detekt/detektConfig-20230526.yml")
         dest("$projectDir/build/config/detektConfig.yml")
     }
 }
@@ -84,7 +91,7 @@ tasks.register<de.undercouch.gradle.tasks.download.Download>("downloadDetektConf
 // make sure when running detekt, the config file is downloaded
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
     // Target version of the generated JVM bytecode. It is used for type resolution.
-    this.jvmTarget = "1.8"
+    this.jvmTarget = "17"
     dependsOn("downloadDetektConfig")
 }
 

@@ -310,6 +310,7 @@ object DatabaseUtil {
      * that may have been created by the database engine.
      *
      * @param srcFile The database file path.
+     * @param targetFile New name of the database.
      * @return true if the database was successfully rename.
      */
     fun renameDatabaseFiles(srcFile: File, targetFile: File): Boolean {
