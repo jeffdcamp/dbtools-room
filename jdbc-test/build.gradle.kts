@@ -53,13 +53,14 @@ dependencies {
 
     // Code
     implementation(libs.kotlin.coroutines.android)
-    implementation(libs.timber)
+    implementation(libs.kermit)
+    implementation(libs.okio)
 
     // Test
     implementation(libs.junit.jupiter)
     implementation(libs.junit.engine)
     implementation(libs.mockK)
-    testImplementation(libs.truth)
+    testImplementation(libs.assertk)
     implementation(libs.androidx.room.testing)
 
     // Test (internal only)

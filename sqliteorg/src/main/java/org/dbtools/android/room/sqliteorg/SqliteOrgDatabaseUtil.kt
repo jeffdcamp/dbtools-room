@@ -1,7 +1,7 @@
 package org.dbtools.android.room.sqliteorg
 
+import co.touchlab.kermit.Logger
 import org.sqlite.database.sqlite.SQLiteDatabase
-import timber.log.Timber
 import java.io.File
 import java.io.FileFilter
 import kotlin.system.measureTimeMillis
@@ -21,13 +21,13 @@ object SqliteOrgDatabaseUtil {
      * @return true if validation check is OK
      */
     fun validateDatabaseFile(path: String, databaseNameTag: String = "", tableDataCountCheck: String = "", allowZeroCount: Boolean = true): Boolean {
-        Timber.i("Checking database integrity for [%s]", databaseNameTag)
+        Logger.i { "Checking database integrity for [$databaseNameTag]" }
         val totalTimeMs = measureTimeMillis {
             try {
                 SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY).use { database ->
                     // pragma check
                     if (!database.isDatabaseIntegrityOk) {
-                        Timber.e("validateDatabase - database [%s] isDatabaseIntegrityOk check failed", databaseNameTag)
+                        Logger.e { "validateDatabase - database [$databaseNameTag] isDatabaseIntegrityOk check failed" }
                         return false
                     }
 
@@ -41,19 +41,19 @@ object SqliteOrgDatabaseUtil {
                             }
 
                             if (count == null || (!allowZeroCount && count == 0)) {
-                                Timber.e("validateDatabase - table [%s] is BLANK for database [%s] is blank", tableDataCountCheck, databaseNameTag)
+                                Logger.e { "validateDatabase - table [$tableDataCountCheck] is BLANK for database [$databaseNameTag] is blank" }
                                 return false
                             }
                         }
                     }
                 }
             } catch (ignore: Exception) {
-                Timber.e(ignore, "Failed to validate database [$databaseNameTag]")
+                Logger.e(ignore) { "Failed to validate database [$databaseNameTag]" }
                 return false
             }
         }
 
-        Timber.i("Database integrity for [$databaseNameTag]  OK! (${totalTimeMs}ms)")
+        Logger.i { "Database integrity for [$databaseNameTag]  OK! (${totalTimeMs}ms)" }
         return true
     }
 
@@ -69,12 +69,12 @@ object SqliteOrgDatabaseUtil {
      */
     fun alterTableIfColumnDoesNotExist(database: SQLiteDatabase, tableName: String, columnName: String, alterSql: String): Boolean {
         if (!tableExists(database, tableName)) {
-            Timber.e("Cannot ALTER table [$tableName] that does not exist in database [${database.path}]")
+            Logger.e { "Cannot ALTER table [$tableName] that does not exist in database [${database.path}]" }
             return false
         }
 
         if (!columnExists(database, tableName, columnName)) {
-            Timber.i("Adding column [$columnName] to table [$tableName]")
+            Logger.i { "Adding column [$columnName] to table [$tableName]" }
             database.execSQL(alterSql)
         }
 
@@ -97,7 +97,7 @@ object SqliteOrgDatabaseUtil {
                     tableExists = true
                 }
             } else {
-                Timber.w("Query: [SELECT count(1) FROM sqlite_master WHERE type='table' AND name='$tableName'] returned NO data")
+                Logger.w { "Query: [SELECT count(1) FROM sqlite_master WHERE type='table' AND name='$tableName'] returned NO data" }
             }
         }
 
@@ -124,7 +124,7 @@ object SqliteOrgDatabaseUtil {
                     }
                 } while (!columnExists && cursor.moveToNext())
             } else {
-                Timber.w("Query: [PRAGMA table_info($tableName)] returned NO data")
+                Logger.w { "Query: [PRAGMA table_info($tableName)] returned NO data" }
             }
 
         }
@@ -152,7 +152,7 @@ object SqliteOrgDatabaseUtil {
      */
     fun checkAndFixRoomIdentityHash(database: SQLiteDatabase, expectedVersion: Int, expectedIdentityHash: String) {
         if (expectedIdentityHash.isBlank()) {
-            Timber.e("checkAndFixRoomIdentityHash -- expectedIdentityHash is blank")
+            Logger.e { "checkAndFixRoomIdentityHash -- expectedIdentityHash is blank" }
             return
         }
 
@@ -167,7 +167,7 @@ object SqliteOrgDatabaseUtil {
             return
         }
 
-        Timber.w("checkAndFixRoomIdentityHash -- updating expectedIdentityHash: [$expectedIdentityHash]")
+        Logger.w { "checkAndFixRoomIdentityHash -- updating expectedIdentityHash: [$expectedIdentityHash]" }
         database.beginTransaction()
         try {
             database.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)", emptyArray())
@@ -199,7 +199,7 @@ object SqliteOrgDatabaseUtil {
                     cursor.getString(columnIndex)
                 }
             } else {
-                Timber.w("Query: [SELECT identity_hash FROM room_master_table LIMIT 1] returned NO data")
+                Logger.w { "Query: [SELECT identity_hash FROM room_master_table LIMIT 1] returned NO data" }
             }
         }
 

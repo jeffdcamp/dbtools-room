@@ -1,10 +1,10 @@
 package org.dbtools.android.room.util
 
 import androidx.sqlite.db.SupportSQLiteDatabase
+import co.touchlab.kermit.Logger
 import org.dbtools.android.room.ext.attachDatabase
 import org.dbtools.android.room.ext.detachDatabase
 import org.dbtools.android.room.ext.findTableNames
-import timber.log.Timber
 import java.io.File
 
 /**
@@ -56,14 +56,14 @@ object MergeDatabaseUtil {
             }
     ): Boolean {
         if (!sourceDatabaseFile.exists()) {
-            Timber.e("Failed to merged [${sourceDatabaseFile.absolutePath}] into targetDatabase :: sourceDatabaseFile database does not exist")
+            Logger.e { "Failed to merged [${sourceDatabaseFile.absolutePath}] into targetDatabase :: sourceDatabaseFile database does not exist" }
             return false
         }
 
         val mergeDbName = "merge_db"
 
         if (!targetDatabase.isOpen) {
-            Timber.e("Failed to merge [targetDatabase is not open]")
+            Logger.e { "Failed to merge [targetDatabase is not open]" }
             return false
         }
 
@@ -80,7 +80,7 @@ object MergeDatabaseUtil {
             // verify the remaining tables actually exist in the target database
             tableNamesToMerge.forEach {
                 if (!targetTableNames.contains(it.targetTableName)) {
-                    Timber.e("Table does not exist in target database: [${it.targetTableName}]")
+                    Logger.e { "Table does not exist in target database: [${it.targetTableName}]" }
                     return false
                 }
             }
@@ -93,23 +93,23 @@ object MergeDatabaseUtil {
                     if (sourceTableNames.contains(mergeTable.sourceTableName)) {
                         val sourceTableName = "$mergeDbName.${mergeTable.sourceTableName}"
 
-                        Timber.i("Merging [$sourceTableName] INTO [${mergeTable.targetTableName}]")
+                        Logger.i { "Merging [$sourceTableName] INTO [${mergeTable.targetTableName}]" }
                         mergeBlock(targetDatabase, sourceTableName, mergeTable.targetTableName) // default: database.execSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
                     } else {
-                        Timber.w("WARNING: Cannot merge table [${mergeTable.sourceTableName}]... it does not exist in sourceDatabaseFile... skipping...")
+                        Logger.w { "WARNING: Cannot merge table [${mergeTable.sourceTableName}]... it does not exist in sourceDatabaseFile... skipping..." }
                     }
                 }
 
                 targetDatabase.setTransactionSuccessful()
             } catch (expected: Exception) {
-                Timber.e(expected, "Failed to merge database tables (inner) (sourceDatabaseFile: [${sourceDatabaseFile.name}] targetDatabase: [${targetDatabase.path}]")
+                Logger.e(expected) { "Failed to merge database tables (inner) (sourceDatabaseFile: [${sourceDatabaseFile.name}] targetDatabase: [${targetDatabase.path}]" }
                 onFailBlock?.invoke(expected, targetDatabase, sourceDatabaseFile)
                 return false
             } finally {
                 targetDatabase.endTransaction()
             }
         } catch (expected: Exception) {
-            Timber.e(expected, "Failed to merge database tables (outer) (sourceDatabaseFile: [${sourceDatabaseFile.name}] targetDatabase: [${targetDatabase.path}]")
+            Logger.e(expected) { "Failed to merge database tables (outer) (sourceDatabaseFile: [${sourceDatabaseFile.name}] targetDatabase: [${targetDatabase.path}]" }
             onFailBlock?.invoke(expected, targetDatabase, sourceDatabaseFile)
             return false
         } finally {
@@ -117,7 +117,7 @@ object MergeDatabaseUtil {
                 // Detach databases
                 targetDatabase.detachDatabase(mergeDbName)
             } catch (expected: Exception) {
-                Timber.e(expected, "Failed detach database (merge database tables)... may have never been attached")
+                Logger.e(expected) { "Failed detach database (merge database tables)... may have never been attached" }
                 onFailBlock?.invoke(expected, targetDatabase, sourceDatabaseFile)
             }
         }
@@ -144,7 +144,7 @@ object MergeDatabaseUtil {
         }
 
         if (includeTables.isNotEmpty() && tableNamesToMerge.size != includeTables.size) {
-            Timber.e("WARNING one or more of the tables in the include list was not found in this database")
+            Logger.e { "WARNING one or more of the tables in the include list was not found in this database" }
         }
 
         // remove excluded tableNames

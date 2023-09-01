@@ -12,8 +12,11 @@ import androidx.room.Query
         @Insert(onConflict = OnConflictStrategy.REPLACE)
         fun insert(entity: TestEntity)
 
-        @Query("SELECT * FROM testEntity")
+        @Query("SELECT * FROM TestEntity")
         fun findAllTestEntities(): List<TestEntity>
+
+        @Query("SELECT count(1) FROM TestEntity")
+        fun findCount(): Int
 
         @Query("DELETE FROM testEntity")
         fun deleteAllTestEntities()

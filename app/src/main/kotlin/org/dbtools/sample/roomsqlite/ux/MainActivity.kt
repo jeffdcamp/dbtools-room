@@ -5,17 +5,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.dbtools.android.room.sqliteorg.SqliteOrgDatabaseUtil
 import org.dbtools.android.room.util.DatabaseUtil
 import org.dbtools.sample.roomsqlite.databinding.ActivityMainBinding
 import org.dbtools.sample.roomsqlite.model.repository.IndividualRepository
-import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity(), CoroutineScope {
@@ -125,7 +124,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     private fun testRoomLiveData() = launch {
         // check to make sure there is individuals
         if (!hasRecords()) {
-            Timber.e("Cannot test.... no individuals")
+            Logger.e { "Cannot test.... no individuals" }
             return@launch
         }
 
@@ -133,24 +132,24 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         val liveData = individualRepository.findNumberByIdLiveData()
 
         // OBSERVE and show last number
-        Timber.i("testRoomLiveData(): Initial observe ")
+        Logger.i { "testRoomLiveData(): Initial observe " }
         liveData.observe(this@MainActivity, Observer { data ->
             data ?: return@Observer
             val message = "Last Number Set: $data"
-            Timber.i("testRoomLiveData(): $message ")
+            Logger.i { "testRoomLiveData(): $message " }
             Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
         })
 
         // CHANGE NUMBER
         withContext(Dispatchers.IO) {
             delay(1000)
-            Timber.i("testRoomLiveData(): change #1 ")
+            Logger.i { "testRoomLiveData(): change #1 " }
             val lastNumber = individualRepository.getLastIndividualNumber()
             individualRepository.updateLastIndividualNumber(500)
 
             // RESTORE
             delay(1000)
-            Timber.i("testRoomLiveData(): change #2 ")
+            Logger.i { "testRoomLiveData(): change #2 " }
             individualRepository.updateLastIndividualNumber(lastNumber)
         }
     }
@@ -158,7 +157,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     private fun testRoomFlow() = launch {
         // check to make sure there is individuals
         if (!hasRecords()) {
-            Timber.e("Cannot test.... no individuals")
+            Logger.e { "Cannot test.... no individuals" }
             return@launch
         }
 
@@ -166,11 +165,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         val flow = individualRepository.findNumberByIdFlow()
 
         // OBSERVE and show last number
-        Timber.i("testRoomFlow(): Initial collect ")
+        Logger.i { "testRoomFlow(): Initial collect " }
         val job = lifecycleScope.launch {
             flow.collect { data ->
                 val message = "COLLECT / Last Number Set: $data"
-                Timber.i("testRoomFlow(): $message ")
+                Logger.i { "testRoomFlow(): $message " }
                 Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
             }
         }
@@ -178,13 +177,13 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         // CHANGE NUMBER
         withContext(Dispatchers.IO) {
             delay(1000)
-            Timber.i("testRoomFlow(): change #1 ")
+            Logger.i { "testRoomFlow(): change #1 " }
             val lastNumber = individualRepository.getLastIndividualNumber()
             individualRepository.updateLastIndividualNumber(500)
 
             // RESTORE
             delay(1000)
-            Timber.i("testRoomFlow(): change #2 ")
+            Logger.i { "testRoomFlow(): change #2 " }
             individualRepository.updateLastIndividualNumber(lastNumber)
         }
 
@@ -200,10 +199,10 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         }
 
         if (results.success) {
-            Timber.i("Test Merge results: ${results.message}")
+            Logger.i { "Test Merge results: ${results.message}" }
             Toast.makeText(this@MainActivity, results.message, Toast.LENGTH_LONG).show()
         } else {
-            Timber.e("Test Merge results: ${results.message}")
+            Logger.e { "Test Merge results: ${results.message}" }
             Toast.makeText(this@MainActivity, results.message, Toast.LENGTH_LONG).show()
         }
     }

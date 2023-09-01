@@ -1,6 +1,9 @@
 package org.dbtools.android.room.jdbctest.extensions
 
-import com.google.common.truth.Truth.assertThat
+import assertk.assertThat
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
+import assertk.assertions.isTrue
 import io.mockk.mockk
 import org.dbtools.android.room.jdbctest.extensions.testdata.TestDatabase
 import org.dbtools.android.room.jdbctest.extensions.testdata.TestEntity

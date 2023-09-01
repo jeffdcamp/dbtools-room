@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 // Sample Entity to test database extensions
-@Entity(tableName = "testEntity")
+@Entity
 data class TestEntity(
     @PrimaryKey
     var id: Long,

@@ -22,12 +22,12 @@ import androidx.room.util.FtsTableInfo
 import androidx.room.util.TableInfo
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
+import co.touchlab.kermit.Logger
 import io.mockk.mockk
 import org.dbtools.android.room.jdbc.JdbcSQLiteOpenHelperFactory
 import org.junit.jupiter.api.extension.AfterEachCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
-import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
 import java.lang.ref.WeakReference
@@ -142,7 +142,7 @@ class RoomDatabaseMigrationExtension(
     fun createDatabase(name: String, version: Int): SupportSQLiteDatabase {
         val dbPath = File(databaseDir, name)
         if (dbPath.exists()) {
-            Timber.d("deleting database file $dbPath")
+            Logger.d { "deleting database file $dbPath" }
             if (!dbPath.delete()) {
                 throw IllegalStateException(
                     """There is a database file called $dbPath and I could not delete it.

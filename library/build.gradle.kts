@@ -4,7 +4,7 @@ plugins {
     signing
     kotlin("android")
     kotlin("kapt")
-    id("de.undercouch.download") version "5.4.0"
+    id("de.undercouch.download") version "5.5.0"
     alias(libs.plugins.detekt)
 }
 
@@ -62,7 +62,8 @@ dependencies {
     api(libs.androidx.lifecycle.livedata)
     api(libs.androidx.room.runtime)
     api(libs.kotlin.coroutines.android)
-    api(libs.timber)
+    implementation(libs.kermit)
+    implementation(libs.okio)
 
     // Test
     testImplementation(project(":jdbc"))
@@ -71,7 +72,7 @@ dependencies {
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly(libs.junit.engine)
     testImplementation(libs.mockK)
-    testImplementation(libs.truth)
+    testImplementation(libs.assertk)
     testImplementation(libs.androidx.room.testing)
     kaptTest(libs.androidx.room.compiler)
 }

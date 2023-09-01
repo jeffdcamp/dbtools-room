@@ -2,8 +2,8 @@ package org.dbtools.android.room
 
 import android.content.Context
 import androidx.room.RoomDatabase
+import co.touchlab.kermit.Logger
 import org.dbtools.android.room.util.DatabaseUtil
-import timber.log.Timber
 import java.io.File
 
 
@@ -72,13 +72,13 @@ abstract class CloseableDatabaseWrapperRepository<out T: RoomDatabase>(protected
      */
     open fun getDatabase(key: String): T? {
         if (key.isBlank()) {
-            Timber.e("key for the database is unspecified")
+            Logger.e { "key for the database is unspecified" }
             return null
         }
 
         // if database is not registered, then try to auto-register
         if (!isDatabaseRegistered(key, true)) {
-            Timber.d("database is not registered for key [$key]")
+            Logger.d { "database is not registered for key [$key]" }
             return null
         }
 
@@ -135,7 +135,7 @@ abstract class CloseableDatabaseWrapperRepository<out T: RoomDatabase>(protected
     @Synchronized
     open fun registerDatabase(key: String, filename: String): Boolean {
         if (isDatabaseRegistered(key, false)) {
-            Timber.d("Database already registered for key [$key]")
+            Logger.d { "Database already registered for key [$key]" }
             return false
         }
 
@@ -166,7 +166,7 @@ abstract class CloseableDatabaseWrapperRepository<out T: RoomDatabase>(protected
                 }
             }
         } catch(ignore: Exception) {
-            Timber.e(ignore, "Failed to close database - key: [$key]")
+            Logger.e(ignore) { "Failed to close database - key: [$key]" }
         }
 
         return databaseList.remove(key) != null

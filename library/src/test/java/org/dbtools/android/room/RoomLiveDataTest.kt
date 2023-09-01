@@ -19,7 +19,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.RegisterExtension
-import timber.log.Timber
 
 @ExtendWith(MockKExtension::class)
 internal class RoomLiveDataTest {
@@ -33,18 +32,6 @@ internal class RoomLiveDataTest {
 
     @BeforeEach
     fun setUp() {
-        Timber.plant(object : Timber.Tree() {
-            override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-                val logMessage: String = when {
-                    tag != null && tag.isNotEmpty() -> "[$tag] $message"
-                    else -> message
-                }
-
-                println(logMessage)
-            }
-
-        })
-
         TestFilesystem.deleteFilesystem()
 
         every { context.filesDir } returns TestFilesystem.INTERNAL_FILES_DIR

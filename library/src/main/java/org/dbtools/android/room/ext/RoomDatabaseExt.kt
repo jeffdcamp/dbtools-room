@@ -5,9 +5,9 @@ package org.dbtools.android.room.ext
 import android.util.Pair
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import co.touchlab.kermit.Logger
 import org.dbtools.android.room.util.DatabaseUtil
 import org.dbtools.android.room.util.MergeDatabaseUtil
-import timber.log.Timber
 import java.io.File
 
 /**
@@ -263,7 +263,7 @@ fun RoomDatabase.mergeDatabase(
 fun RoomDatabase.applySqlFile(sqlFile: File): Boolean {
     if (!sqlFile.exists()) {
         // Can't apply if there is no file
-        Timber.e("Failed to apply sql file. File: [%s] does NOT exist", sqlFile.absolutePath)
+        Logger.e { "Failed to apply sql file. File: [${sqlFile.absolutePath}] does NOT exist" }
         return false
     }
 
@@ -281,7 +281,7 @@ fun RoomDatabase.applySqlFile(sqlFile: File): Boolean {
         @Suppress("DEPRECATION") // mirroring RoomDatabase.kt
         setTransactionSuccessful()
     } catch (expected: Exception) {
-        Timber.e(expected, "Failed to apply sql file. File: [%s] Error: [%s]", sqlFile.absolutePath, expected.message)
+        Logger.e(expected) { "Failed to apply sql file. File: [${sqlFile.absolutePath}] Error: [${expected.message}]" }
         return false
     } finally {
         @Suppress("DEPRECATION") // mirroring RoomDatabase.kt

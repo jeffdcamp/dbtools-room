@@ -4,7 +4,7 @@ plugins {
     signing
     kotlin("android")
     kotlin("kapt")
-    id("de.undercouch.download") version "5.4.0"
+    id("de.undercouch.download") version "5.5.0"
     alias(libs.plugins.detekt)
 }
 
@@ -56,16 +56,18 @@ android {
 dependencies {
     api(libs.androidx.lifecycle.runtime)
     api(libs.androidx.room.runtime)
+    api(libs.okio)
     compileOnly(libs.xerial.sqlite)
 
     // Test
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly(libs.junit.engine)
     testImplementation(libs.mockK)
-    testImplementation(libs.truth)
+    testImplementation(libs.assertk)
     testImplementation(libs.androidx.room.testing)
     testImplementation(libs.androidx.room.ktx)
     testImplementation(libs.androidx.lifecycle.livedata)
+    testImplementation(libs.kotlin.coroutines.test)
     kaptTest(libs.androidx.room.compiler)
     testImplementation(libs.xerial.sqlite)
 }

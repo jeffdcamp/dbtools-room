@@ -4,19 +4,20 @@ import android.database.DatabaseErrorHandler
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.util.Pair
+import co.touchlab.kermit.Logger
+import org.dbtools.android.room.log.DbToolsRoomCrashLogException
 import org.dbtools.android.room.util.DatabaseUtil
-import timber.log.Timber
 import java.io.File
 
 /**
  * Copied from android.database.DefaultDatabaseErrorHandler
  *
- * Changed Log.e -> Timber.e so that app can post to error logs
+ * Changed Log.e -> Logger.e so that app can post to error logs
  */
 @Suppress("NestedBlockDepth")
 object AndroidDefaultDatabaseErrorHandler : DatabaseErrorHandler {
     override fun onCorruption(dbObj: SQLiteDatabase?) {
-        Timber.e("Corruption reported by sqlite on database: [${dbObj?.path}]")
+        Logger.e(DbToolsRoomCrashLogException()) { "Corruption reported by sqlite on database: [${dbObj?.path}]" }
 //        SQLiteDatabase.wipeDetected(dbObj.path, "corruption")
 
         // is the corruption detected even before database could be 'opened'?

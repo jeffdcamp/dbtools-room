@@ -2,10 +2,10 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "9145de6d23914594361752b577ea34af",
+    "identityHash": "8071f4987096ab05c619e2a999d705cb",
     "entities": [
       {
-        "tableName": "testEntity",
+        "tableName": "TestEntity",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `age` INTEGER NOT NULL, `coolFact` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -34,18 +34,19 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": false,
           "columnNames": [
             "id"
-          ],
-          "autoGenerate": false
+          ]
         },
         "indices": [],
         "foreignKeys": []
       }
     ],
+    "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"9145de6d23914594361752b577ea34af\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8071f4987096ab05c619e2a999d705cb')"
     ]
   }
 }

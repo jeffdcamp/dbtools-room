@@ -77,9 +77,8 @@ dependencies {
 
     // Code
     implementation(libs.kotlin.coroutines.android)
-    implementation(libs.timber)
-
-    // UI
+    implementation(libs.kermit)
+    implementation(libs.okio)
 
     // === Android Architecture Components ===
     implementation(libs.androidx.lifecycle.runtime)

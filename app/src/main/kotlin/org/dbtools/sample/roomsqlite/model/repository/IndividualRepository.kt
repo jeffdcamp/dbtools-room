@@ -3,6 +3,7 @@ package org.dbtools.sample.roomsqlite.model.repository
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +15,6 @@ import org.dbtools.android.room.toLiveData
 import org.dbtools.android.room.util.DatabaseUtil
 import org.dbtools.sample.roomsqlite.model.db.main.MainDatabaseWrapperRepository
 import org.dbtools.sample.roomsqlite.model.db.main.individual.Individual
-import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -126,12 +126,12 @@ class IndividualRepository(
         val mainDatabaseB = mainDatabaseWrapperRepository.getDatabase(DB_B)
 
         if (mainDatabaseA?.validateDatabaseFile(DB_A) == false) {
-            Timber.e("Database validation failed.... exiting")
+            Logger.e { "Database validation failed.... exiting" }
             return
         }
 
-        Timber.i("Database A path: [$DB_A_PATH]" )
-        Timber.i("Database B path: [$DB_B_PATH]" )
+        Logger.i { "Database A path: [$DB_A_PATH]" }
+        Logger.i { "Database B path: [$DB_B_PATH]" }
 
         showAllMainDatabaseInfo("After Register Database")
 
@@ -193,16 +193,16 @@ class IndividualRepository(
     }
 
     private fun showAllMainDatabaseInfo(event: String) {
-        Timber.i("========== $event ==========")
+        Logger.i { "========== $event ==========" }
         showMainDatabaseInfo(DB_A)
         showMainDatabaseInfo(DB_B)
     }
 
     private fun showMainDatabaseInfo(key: String = DB_A) {
-        Timber.i("===== Database [$key] info: count[${getIndividualCount(key)}] =====")
+        Logger.i { "===== Database [$key] info: count[${getIndividualCount(key)}] =====" }
         val allIndividuals = individualDao(key)?.findAll() ?: emptyList()
         allIndividuals.forEach {individual ->
-            Timber.i("- ${individual.firstName} ${individual.lastName}")
+            Logger.i { "- ${individual.firstName} ${individual.lastName}" }
         }
     }
 

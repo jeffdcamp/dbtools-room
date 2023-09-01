@@ -1,18 +1,19 @@
 [versions]
-agp = "8.1.0"
-kotlin = "1.9.0"
+agp = "8.1.1"
+kotlin = "1.9.10"
 coroutines = "1.7.3"
 
 androidxlifecycle = "2.6.1"
+assertk = "0.26.1"
 desugarJdkLibs = "2.0.3"
 detekt = "1.23.1"
 junit = "5.10.0"
-ksp = "1.9.0-1.0.13"
-room = "2.6.0-alpha03"
-mockK = "1.13.5"
-sqliteJdbc = "3.42.0.0"
-timber = "5.0.1"
-truth = "1.1.5"
+kermit = "2.0.0-RC5"
+ksp = "1.9.10-1.0.13"
+room = "2.6.0-beta01"
+mockK = "1.13.7"
+okio = "3.5.0"
+xerial = "3.42.0.0"
 versionsGradlePlugin = "0.47.0"
 
 [plugins]
@@ -33,18 +34,21 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 
+assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
+
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
 junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 
+kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
+
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlin-gradlePluginClasspath = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 mockK = { module = "io.mockk:mockk", version.ref = "mockK" }
 
-timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
-
-truth = { module = "com.google.truth:truth", version.ref = "truth" }
+okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 
 gradleVersions-gradlePluginClasspath = { module = "com.github.ben-manes:gradle-versions-plugin", version.ref = "versionsGradlePlugin" }
 
-xerial-sqlite = { module = "org.xerial:sqlite-jdbc", version.ref = "sqliteJdbc" }
+xerial-sqlite = { module = "org.xerial:sqlite-jdbc", version.ref = "xerial" }

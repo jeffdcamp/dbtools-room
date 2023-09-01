@@ -1,9 +1,7 @@
 package org.dbtools.android.room.log
 
-import android.annotation.SuppressLint
-import android.util.Log
 import androidx.room.RoomDatabase
-import timber.log.Timber
+import co.touchlab.kermit.Logger
 
 /**
  * Room QueryCallback function extension for logging executed queries
@@ -12,17 +10,15 @@ import timber.log.Timber
  * @param queryContext Name that helps identify the source of the query (Example: "main.db", "userdata.db", "book-1234.db", etc)
  * @param enabled Allow an app to dynamically enable/disable logging (default: true)
  * @param combineSqlAndArgs If true, then show queries with ? replaced with arg values (default: true)
- * @param useTimber Use Timber or Log for logging (default: true)
  *
  * @return RoomDatabase.Builder<T>
  */
 fun <T : RoomDatabase> RoomDatabase.Builder<T>.setLoggingQueryCallback(
     queryContext: String,
     enabled: Boolean = true,
-    combineSqlAndArgs: Boolean = true,
-    useTimber: Boolean = true
+    combineSqlAndArgs: Boolean = true
 ): RoomDatabase.Builder<T> {
-    return this.setQueryCallback(LoggingQueryCallback(queryContext, enabled, combineSqlAndArgs, useTimber), LoggingExecutor)
+    return this.setQueryCallback(LoggingQueryCallback(queryContext, enabled, combineSqlAndArgs), LoggingExecutor)
 }
 
 /**
@@ -30,13 +26,11 @@ fun <T : RoomDatabase> RoomDatabase.Builder<T>.setLoggingQueryCallback(
  * @property queryContext Name that helps identify the source of the query (Example: "main.db", "userdata.db", "book-1234.db", etc)
  * @property enabled Allow an app to dynamically enable/disable logging (default: true)
  * @property combineSqlAndArgs If true, then show queries with ? replaced with arg values (default: true)
- * @property useTimber Use Timber or Log for logging (default: true)
  */
 class LoggingQueryCallback(
     private val queryContext: String,
     var enabled: Boolean = true,
-    private val combineSqlAndArgs: Boolean = true,
-    private val useTimber: Boolean = true
+    private val combineSqlAndArgs: Boolean = true
 ) : RoomDatabase.QueryCallback {
     var lastLog = ""
         private set
@@ -99,14 +93,8 @@ class LoggingQueryCallback(
         }
     }
 
-    @SuppressLint("LogNotTimber")
     private fun log(message: String) {
         lastLog = message
-
-        if (useTimber) {
-            Timber.d(message)
-        } else {
-            Log.d("LoggingQueryCallback", message)
-        }
+        Logger.d { message }
     }
 }

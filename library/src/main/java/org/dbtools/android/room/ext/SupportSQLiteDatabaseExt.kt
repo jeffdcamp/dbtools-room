@@ -4,10 +4,10 @@ package org.dbtools.android.room.ext
 
 import android.util.Pair
 import androidx.sqlite.db.SupportSQLiteDatabase
+import co.touchlab.kermit.Logger
 import org.dbtools.android.room.DatabaseViewQuery
 import org.dbtools.android.room.util.DatabaseUtil
 import org.dbtools.android.room.util.MergeDatabaseUtil
-import timber.log.Timber
 import java.io.File
 
 /**
@@ -269,7 +269,7 @@ fun SupportSQLiteDatabase.mergeDatabase(
 fun SupportSQLiteDatabase.applySqlFile(sqlFile: File): Boolean {
     if (!sqlFile.exists()) {
         // Can't apply if there is no file
-        Timber.e("Failed to apply sql file. File: [%s] does NOT exist", sqlFile.absolutePath)
+        Logger.e { "Failed to apply sql file. File: [${sqlFile.absolutePath}] does NOT exist" }
         return false
     }
 
@@ -282,7 +282,7 @@ fun SupportSQLiteDatabase.applySqlFile(sqlFile: File): Boolean {
 
         setTransactionSuccessful()
     } catch (expected: Exception) {
-        Timber.e(expected, "Failed to apply sql file. File: [%s] Error: [%s]", sqlFile.absolutePath, expected.message)
+        Logger.e(expected) { "Failed to apply sql file. File: [${sqlFile.absolutePath}] Error: [${expected.message}]" }
         return false
     } finally {
         endTransaction()
@@ -299,7 +299,7 @@ fun SupportSQLiteDatabase.applySqlFile(sqlFile: File): Boolean {
  */
 fun SupportSQLiteDatabase.alterTableIfColumnDoesNotExist(tableName: String, columnName: String, alterSql: String) {
     if (!this.columnExists(tableName, columnName)) {
-        Timber.i("Adding column [$columnName] to table [$tableName]")
+        Logger.i { "Adding column [$columnName] to table [$tableName]" }
         execSQL(alterSql)
         resetRoom()
     }
@@ -324,7 +324,7 @@ fun SupportSQLiteDatabase.columnExists(tableName: String, columnName: String): B
                 }
             } while (!columnExists && cursor.moveToNext())
         } else {
-            Timber.w("Query: [PRAGMA table_info($tableName)] returned NO data")
+            Logger.w { "Query: [PRAGMA table_info($tableName)] returned NO data" }
         }
 
     }
