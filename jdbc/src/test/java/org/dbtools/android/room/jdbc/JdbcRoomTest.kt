@@ -3,7 +3,8 @@ package org.dbtools.android.room.jdbc
 import android.app.Application
 import androidx.room.Room
 import androidx.room.withTransaction
-import com.google.common.truth.Truth
+import assertk.assertThat
+import assertk.assertions.isEqualTo
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach
@@ -50,7 +51,7 @@ class JdbcRoomTest {
     }
 
     private suspend fun testRange(itemDatabase: ItemDatabase, numItems: Int, withTransaction: Boolean) {
-        val itemDao = itemDatabase.itemDao
+        val itemDao = itemDatabase.itemDao()
 
         // remove any existing records
         itemDao.deleteAll()
@@ -68,7 +69,7 @@ class JdbcRoomTest {
         }
 
         // make sure all was inserted
-        Truth.assertThat(itemDao.findCount()).isEqualTo(itemNames.size)
+        assertThat(itemDao.findCount()).isEqualTo(itemNames.size)
     }
 }
 
