@@ -28,7 +28,7 @@ class JdbcSQLiteStatement(
         return if (results.next()) {
             results.getLong(1)
         } else {
-            -1L
+            0L
         }
     }
 
