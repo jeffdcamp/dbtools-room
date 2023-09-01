@@ -1,10 +1,12 @@
 Change Log
 ==========
 
-Version 8.2.0-alpha03 *(2023-08)*
+Version 8.2.0-beta01 *(2023-09)*
 -------------------------
-* Room 2.6.0-alpha03
-* Kotlin 1.9.0
+* Room 2.6.0-beta01
+* Kotlin 1.9.10
+* Changed Timber > Logger 
+* Support for xerial 3.43.0.0 / fixed JdbcSQLiteStatement.executeInsert() to no longer use generatedKeys
 
 Version 8.2.0-alpha02 *(2023-06)*
 -------------------------
