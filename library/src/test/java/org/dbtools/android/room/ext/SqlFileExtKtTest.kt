@@ -1,6 +1,7 @@
 package org.dbtools.android.room.ext
 
-import com.google.common.truth.Truth.assertThat
+import assertk.assertThat
+import assertk.assertions.isEqualTo
 import org.junit.jupiter.api.Test
 import java.io.File
 

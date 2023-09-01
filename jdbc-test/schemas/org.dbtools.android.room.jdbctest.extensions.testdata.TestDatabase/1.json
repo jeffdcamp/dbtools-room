@@ -5,7 +5,7 @@
     "identityHash": "91ea4a0890c20ff12e4b956d7fde2df1",
     "entities": [
       {
-        "tableName": "testEntity",
+        "tableName": "TestEntity",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `age` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
