@@ -15,7 +15,7 @@ buildscript {
 }
 
 plugins {
-    id("com.autonomousapps.dependency-analysis") version "1.21.0"
+    id("com.autonomousapps.dependency-analysis") version "1.22.0"
 }
 
 allprojects {
@@ -50,7 +50,7 @@ allprojects {
 }
 
 // ===== Dependency Analysis =====
-// ./gradlew projectHealth
+// ./gradlew projectHealth./gradlew projectHealth
 dependencyAnalysis {
     issues {
         all {
