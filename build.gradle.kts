@@ -15,7 +15,7 @@ buildscript {
 }
 
 plugins {
-    id("com.autonomousapps.dependency-analysis") version "1.22.0"
+    id("com.autonomousapps.dependency-analysis") version "1.27.0"
 }
 
 allprojects {
@@ -69,11 +69,7 @@ dependencyAnalysis {
             onIncorrectConfiguration { severity("ignore") }
             onCompileOnly { severity("ignore") }
             onRuntimeOnly { severity("ignore") }
-            onUnusedAnnotationProcessors {
-                exclude(
-//                    depGroupAndName(libs.google.hilt.compiler)
-                )
-            }
+            onUnusedAnnotationProcessors { }
         }
     }
 }

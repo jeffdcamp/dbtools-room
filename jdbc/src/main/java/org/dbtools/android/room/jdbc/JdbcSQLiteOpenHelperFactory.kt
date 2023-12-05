@@ -8,11 +8,11 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper
  * JdbcSQLiteOpenHelperFactory - JDBC implementation of SupportSQLiteOpenHelper.Factory
  *
  * @property path Path to database
- * @property password Database password
- * @property databaseErrorHandler Not yet implemented
- * @property enableJdbcTransactionSupport Enable/Disable jdbc support via autoCommit (default = true).
+ * @param password Database password
+ * @param databaseErrorHandler Not yet implemented
+ * @param enableJdbcTransactionSupport Enable/Disable jdbc support via autoCommit (default = true).
  * NOTE: known issue as of Room 2.4.0 - bulk insert needs to be fixed (because inserts get put into multiple threads, this sometimes causes the jdbc driver to throw: "database in auto-commit mode")
- * @property onDatabaseConfigureBlock Block of code that is executed AFTER initial database connection and BEFORE database validation * @param enableJdbcTransactionSupport
+ * @param onDatabaseConfigureBlock Block of code that is executed AFTER initial database connection and BEFORE database validation * @param enableJdbcTransactionSupport
  */
 class JdbcSQLiteOpenHelperFactory(
     val path: String = "",

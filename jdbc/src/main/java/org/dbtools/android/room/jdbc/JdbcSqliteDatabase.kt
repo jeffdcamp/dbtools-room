@@ -18,8 +18,8 @@ import java.util.concurrent.atomic.AtomicInteger
 /**
  * JdbcSqliteDatabase - JDBC Implementation of SupportSQLiteDatabase
  *
- * @property dbPath Path to database
- * @property enableJdbcTransactionSupport Enable/Disable jdbc support via autoCommit (default = true).
+ * @param dbPath Path to database
+ * @param enableJdbcTransactionSupport Enable/Disable jdbc support via autoCommit (default = true).
  * NOTE: known issue as of Room 2.4.0 - bulk insert needs to be fixed (because inserts get put into multiple threads, this sometimes causes the jdbc driver to throw: "database in auto-commit mode")
  */
 class JdbcSqliteDatabase(
