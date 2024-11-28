@@ -1,54 +1,41 @@
 [versions]
-agp = "8.2.0"
-kotlin = "1.9.20"
-coroutines = "1.7.3"
+agp = "8.5.2"
+kotlin = "2.0.21"
+kotlinxCoroutines = "1.9.0"
+kotlinxSerialization = "1.7.3"
+kotlinxDateTime = "0.6.1"
 
-androidxlifecycle = "2.6.2"
-assertk = "0.27.0"
-desugarJdkLibs = "2.0.4"
-detekt = "1.23.4"
-junit = "5.10.1"
-kermit = "2.0.2"
-ksp = "1.9.20-1.0.14"
-room = "2.6.1"
-mockK = "1.13.8"
-okio = "3.6.0"
-xerial = "3.44.1.0"
-versionsGradlePlugin = "0.50.0"
+android-compileSdk = "35"
+android-minSdk = "23"
+
+assertk = "0.28.1"
+detekt = "1.23.7"
+downloadPlugin = "5.6.0"
+kermit = "2.0.5"
+kover = "0.8.3"
+okio = "3.9.1"
+room = "2.7.0-alpha11"
+versionsPlugin = "0.51.0"
 
 [plugins]
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+download = { id = "de.undercouch.download", version.ref = "downloadPlugin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin" }
 
 [libraries]
-android-gradlePluginClasspath = { module = "com.android.tools.build:gradle", version.ref = "agp" }
-android-desugar = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdkLibs" }
-
-androidx-appcompat = "androidx.appcompat:appcompat:1.6.1"
-
-androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxlifecycle" }
-androidx-lifecycle-livedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidxlifecycle" }
-
-androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
-androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
-androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
-
 assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
-
-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
-junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
-
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 
-kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
-kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
-kotlin-gradlePluginClasspath = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-
-mockK = { module = "io.mockk:mockk", version.ref = "mockK" }
+kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
+kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test" }
 
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 
-gradleVersions-gradlePluginClasspath = { module = "com.github.ben-manes:gradle-versions-plugin", version.ref = "versionsGradlePlugin" }
-
-xerial-sqlite = { module = "org.xerial:sqlite-jdbc", version.ref = "xerial" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }

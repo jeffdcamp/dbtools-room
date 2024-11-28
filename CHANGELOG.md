@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.0.0] - 2024-11-27
+
+### Changed
+
+- Changed dbtools-room to fully support Room KMP (https://developer.android.com/training/data-storage/room/room-kmp-migration)
+- Room 2.7.0-alpha11
+- Added SqliteConnection extensions
+- Added SQLiteStatement extensions
+- Added Kotlin date-time TypeConverters
+- Added Filesystem utilities
+- Added RoomDatabaseRepository
+
+### Removed
+
+- Removed all Room code associated with Support SQLite
+- Removed JDBC libraries (jdbc, jdbc-tes)
+- Remove sqlite-android
+
 ## [8.3.0] - 2023-10-18
 
 ### Changed

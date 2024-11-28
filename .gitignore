@@ -24,3 +24,4 @@ target/
 .gradle/
 build/
 local.properties
+.kotlin/

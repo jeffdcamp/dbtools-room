@@ -1,1 +1,17 @@
-include(":sqliteorg", ":jdbc", ":jdbc-test", ":library", ":app", ":sqlite-android")
+pluginManagement {
+    repositories {
+        google()
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenLocal()
+        google()
+        mavenCentral()
+    }
+}
+
+include(":dbtools-room")

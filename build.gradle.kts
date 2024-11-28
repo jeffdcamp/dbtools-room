@@ -1,37 +1,33 @@
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-
-buildscript {
-    repositories {
-        mavenLocal()
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-    dependencies {
-        classpath(libs.android.gradlePluginClasspath)
-        classpath(libs.kotlin.gradlePluginClasspath)
-        classpath(libs.gradleVersions.gradlePluginClasspath)
-    }
-}
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("com.autonomousapps.dependency-analysis") version "1.27.0"
+    // this is necessary to avoid the plugins to be loaded multiple times
+    // in each subproject's classloader
+    alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kover) apply false
+
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.download)
+    alias(libs.plugins.versions)
 }
 
 allprojects {
-    repositories {
-        mavenLocal()
-        google()
-        mavenCentral()
-//        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-    }
+    // Gradle Dependency Reports
+    // ./gradlew -q app:dependencies --configuration debugCompileClasspath > deps.txt
+    // ./gradlew app:dependencies --scan.
 
     // Gradle Dependency Check
-    apply(plugin = "com.github.ben-manes.versions") // ./gradlew dependencyUpdates -Drevision=release
-    val excludeVersionContaining = listOf("alpha", "eap") // example: "alpha", "beta"
-    val ignoreArtifacts = listOf("room-compiler", "room-runtime", "room-testing", "room-ktx") // some artifacts may be OK to check for "alpha"... add these exceptions here
+    // ./gradlew dependencyUpdates -Drevision=release
+    // ./gradlew dependencyUpdates -Drevision=release --refresh-dependencies
+    apply(plugin = rootProject.libs.plugins.versions.get().pluginId)
+    val excludeVersionContaining = listOf("alpha", "eap", "M1", "dev") // example: "alpha", "beta"
+    // some artifacts may be OK to check for "alpha"... add these exceptions here
+    val ignoreArtifacts = buildList {
+        addAll(listOf("room-compiler"))
+    }
 
-    tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
+    tasks.named<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask>("dependencyUpdates") {
         resolutionStrategy {
             componentSelection {
                 all {
@@ -47,35 +43,48 @@ allprojects {
             }
         }
     }
-}
 
-// ===== Dependency Analysis =====
-// ./gradlew projectHealth./gradlew projectHealth
-dependencyAnalysis {
-    issues {
-        all {
-            onAny {
-                ignoreKtx(true)
-                severity("fail")
+    // ===== Detekt =====
+    // Known KMP issues https://github.com/detekt/detekt/issues/5611
+    apply(plugin = rootProject.libs.plugins.detekt.get().pluginId).also {
+        // download detekt config file
+        tasks.register<de.undercouch.gradle.tasks.download.Download>("downloadDetektConfig") {
+            download {
+                onlyIf { !file("$projectDir/build/config/detektConfig.yml").exists() }
+                src("https://raw.githubusercontent.com/jeffdcamp/kmp-commons/master/detekt/detektConfig-latest.yml")
+                dest("$projectDir/build/config/detektConfig.yml")
             }
-            onUnusedDependencies {
-                exclude(
-                    ":jdbc",
-                    depGroupAndName(libs.xerial.sqlite), // loaded by reflection in UnitTest
-//                    depGroupAndName(libs.compose.ui.tooling), // Compose Previews
-                )
+        }
+
+        // make sure when running detekt, the config file is downloaded
+        tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+            // Target version of the generated JVM bytecode. It is used for type resolution.
+            this.jvmTarget = JvmTarget.JVM_17.target
+            dependsOn("downloadDetektConfig")
+        }
+
+        detekt {
+            allRules = true // fail build on any finding
+            buildUponDefaultConfig = true // preconfigure defaults
+            config.setFrom(files("$projectDir/build/config/detektConfig.yml")) // point to your custom config defining rules to run, overwriting default behavior
+        }
+
+        tasks.withType<io.gitlab.arturbosch.detekt.Detekt> {
+            setSource(files(project.projectDir))
+            exclude("**/build/**")
+            exclude("**/*.kts")
+            exclude("**/Platform.*.kt")
+
+
+            exclude {
+                it.file.relativeTo(projectDir).startsWith(buildDir.relativeTo(projectDir))
             }
-            onUsedTransitiveDependencies { severity("ignore") }
-            onIncorrectConfiguration { severity("ignore") }
-            onCompileOnly { severity("ignore") }
-            onRuntimeOnly { severity("ignore") }
-            onUnusedAnnotationProcessors { }
+        }
+
+        tasks.register("detektAll") {
+            dependsOn(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>())
         }
     }
-}
-
-fun depGroupAndName(dependency: Provider<MinimalExternalModuleDependency>): String {
-    return dependency.get().let { "${it.group}:${it.name}" }
 }
 
 tasks.register("clean", Delete::class) {
