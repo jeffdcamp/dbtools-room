@@ -1,7 +1,7 @@
 [versions]
 agp = "8.5.2"
-kotlin = "2.0.21"
-kotlinxCoroutines = "1.9.0"
+kotlin = "2.1.0"
+kotlinxCoroutines = "1.10.1"
 kotlinxSerialization = "1.7.3"
 kotlinxDateTime = "0.6.1"
 
@@ -12,9 +12,9 @@ assertk = "0.28.1"
 detekt = "1.23.7"
 downloadPlugin = "5.6.0"
 kermit = "2.0.5"
-kover = "0.8.3"
+kover = "0.9.0"
 okio = "3.9.1"
-room = "2.7.0-alpha11"
+room = "2.7.0-alpha12"
 versionsPlugin = "0.51.0"
 
 [plugins]
@@ -27,15 +27,15 @@ kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin" }
 
 [libraries]
-assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
-kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
+assertk = { group = "com.willowtreeapps.assertk", name = "assertk", version.ref = "assertk" }
+kermit = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
 
-kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
-kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
-kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
-kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test" }
+kotlin-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+kotlin-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDateTime" }
+kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test" }
 
-okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
+okio = { group = "com.squareup.okio", name = "okio", version.ref = "okio" }
 
-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
