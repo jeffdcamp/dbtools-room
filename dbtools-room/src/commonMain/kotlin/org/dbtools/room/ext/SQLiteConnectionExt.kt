@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.SQLiteStatement
 import androidx.sqlite.execSQL
-import androidx.sqlite.use
 import co.touchlab.kermit.Logger
 import okio.FileSystem
 import okio.Path

@@ -1,8 +1,8 @@
 [versions]
-agp = "8.5.2"
-kotlin = "2.1.0"
+agp = "8.7.3" # only use the latest supported by KMP (https://kotlinlang.org/docs/multiplatform-compatibility-guide.html)
+kotlin = "2.1.10"
 kotlinxCoroutines = "1.10.1"
-kotlinxSerialization = "1.7.3"
+kotlinxSerialization = "1.8.0"
 kotlinxDateTime = "0.6.1"
 
 android-compileSdk = "35"
@@ -12,10 +12,10 @@ assertk = "0.28.1"
 detekt = "1.23.7"
 downloadPlugin = "5.6.0"
 kermit = "2.0.5"
-kover = "0.9.0"
-okio = "3.9.1"
-room = "2.7.0-alpha12"
-versionsPlugin = "0.51.0"
+kover = "0.9.1"
+okio = "3.10.2"
+room = "2.7.0-alpha13"
+versionsPlugin = "0.52.0"
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "agp" }
