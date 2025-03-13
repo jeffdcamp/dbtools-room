@@ -14,7 +14,7 @@ downloadPlugin = "5.6.0"
 kermit = "2.0.5"
 kover = "0.9.1"
 okio = "3.10.2"
-room = "2.7.0-rc01"
+room = "2.7.0-rc02"
 versionsPlugin = "0.52.0"
 
 [plugins]
