@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Room 2.7.0-rc03
+- Kotlin 2.1.20
+
+
+## [9.0.5] - 2025-03-13
+
+### Changed
+
 - Room 2.7.0-rc02
 
 
