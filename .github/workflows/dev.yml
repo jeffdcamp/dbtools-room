@@ -27,14 +27,8 @@ jobs:
     - name: Build
       run: ./gradlew clean build
 
-    - name: Test
-      run: ./gradlew testUnitTest
-
-#    - name: Lint
-#      run: ./gradlew lint
-
-    - name: Detekt
-      run: ./gradlew detekt
+    - name: Runs all checks (Test, Detekt, etc.)
+      run: ./gradlew check
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4

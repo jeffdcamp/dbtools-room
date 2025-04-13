@@ -87,8 +87,8 @@ kotlin {
 //    }
 //}
 
-// ./gradlew clean build detekt publishToMavenLocal
-// ./gradlew clean build detekt publishAllPublicationsToMavenCentralRepository
+// ./gradlew clean build check publishToMavenLocal
+// ./gradlew clean build check publishAllPublicationsToMavenCentralRepository
 fun MavenPublication.mavenCentralPom() {
     pom {
         name.set("DBTools Room")
@@ -189,22 +189,32 @@ tasks {
         dependsOn(withType<Sign>())
     }
 
-    named("compileTestKotlinIosArm64") {
-        dependsOn(named("signIosArm64Publication"))
+    if (org.gradle.internal.os.OperatingSystem.current().isMacOsX) {
+        named("compileTestKotlinIosArm64") {
+            dependsOn(named("signIosArm64Publication"))
+        }
+        named("compileTestKotlinIosSimulatorArm64") {
+            dependsOn(named("signIosSimulatorArm64Publication"))
+        }
+        named("compileTestKotlinIosX64") {
+            dependsOn(named("signIosX64Publication"))
+        }
+        named("compileTestKotlinMacosArm64") {
+            dependsOn(named("signMacosArm64Publication"))
+        }
+        named("compileTestKotlinMacosX64") {
+            dependsOn(named("signMacosX64Publication"))
+        }
+
+        // Mac can also do Linux signing
+        named("compileTestKotlinLinuxX64") {
+            dependsOn(named("signLinuxX64Publication"))
+        }
     }
-    named("compileTestKotlinIosSimulatorArm64") {
-        dependsOn(named("signIosSimulatorArm64Publication"))
-    }
-    named("compileTestKotlinIosX64") {
-        dependsOn(named("signIosX64Publication"))
-    }
-    named("compileTestKotlinLinuxX64") {
-        dependsOn(named("signLinuxX64Publication"))
-    }
-    named("compileTestKotlinMacosArm64") {
-        dependsOn(named("signMacosArm64Publication"))
-    }
-    named("compileTestKotlinMacosX64") {
-        dependsOn(named("signMacosX64Publication"))
+
+    if (org.gradle.internal.os.OperatingSystem.current().isLinux) {
+        named("compileTestKotlinLinuxX64") {
+            dependsOn(named("signLinuxX64Publication"))
+        }
     }
 }
