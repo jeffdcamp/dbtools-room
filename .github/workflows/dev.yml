@@ -14,10 +14,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: set up JDK 17
+    - name: set up JDK 21
       uses: actions/setup-java@v2
       with:
-        java-version: '17'
+        java-version: '21'
         distribution: 'temurin'
         cache: gradle
 
@@ -25,16 +25,16 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build
-      run: ./gradlew clean assembleDebug
+      run: ./gradlew clean build
 
     - name: Test
-      run: ./gradlew testDebugUnitTest
+      run: ./gradlew testUnitTest
 
-    - name: Lint
-      run: ./gradlew lintDebug
+#    - name: Lint
+#      run: ./gradlew lint
 
-#    - name: Detekt
-#      run: ./gradlew downloadDetektConfig detekt
+    - name: Detekt
+      run: ./gradlew detekt
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
