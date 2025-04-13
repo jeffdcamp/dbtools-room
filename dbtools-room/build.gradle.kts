@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kover)
+//    alias(libs.plugins.kover) // Does not seem to work with "com.android.kotlin.multiplatform.library"
     alias(libs.plugins.download)
     id("maven-publish")
     signing
@@ -16,11 +16,18 @@ plugins {
 kotlin {
     applyDefaultHierarchyTemplate()
 
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
+    androidLibrary {
+        namespace = "com.dbtools.room"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+
+        compilations.configureEach {
+            compilerOptions.configure {
+                jvmTarget.set(
+                    JvmTarget.JVM_17
+                )
+            }
         }
-        publishAllLibraryVariants()
     }
 
     jvm {
@@ -68,35 +75,20 @@ kotlin {
     }
 }
 
-android {
-    namespace = "com.dbtools.room"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-}
-
 // ./gradlew koverHtmlReport
 // ./gradlew koverVerify
-kover {
-    reports {
-        verify {
-            rule {
-                minBound(0)
-            }
-        }
-    }
-}
+//kover {
+//    reports {
+//        verify {
+//            rule {
+//                minBound(0)
+//            }
+//        }
+//    }
+//}
 
-// ./gradlew clean build assembleRelease publishToMavenLocal
-// ./gradlew clean build assembleRelease publishMavenPublicationToMavenLocal publishAndroidReleasePublicationToMavenLocal
-// ./gradlew clean build assembleRelease publishMavenPublicationToMavenCentralRepository publishReleasePublicationToMavenCentralRepository
-// ./gradlew clean build assembleRelease publishAllPublicationsToMavenCentralRepository
+// ./gradlew clean build detekt publishToMavenLocal
+// ./gradlew clean build detekt publishAllPublicationsToMavenCentralRepository
 fun MavenPublication.mavenCentralPom() {
     pom {
         name.set("DBTools Room")

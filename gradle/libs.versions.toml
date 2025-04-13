@@ -18,7 +18,7 @@ room = "2.7.0"
 versionsPlugin = "0.52.0"
 
 [plugins]
-android-library = { id = "com.android.library", version.ref = "agp" }
+android-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 download = { id = "de.undercouch.download", version.ref = "downloadPlugin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
