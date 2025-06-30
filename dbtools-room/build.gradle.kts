@@ -16,6 +16,10 @@ plugins {
 kotlin {
     applyDefaultHierarchyTemplate()
 
+    compilerOptions {
+        optIn.add("kotlin.time.ExperimentalTime")
+    }
+
     androidLibrary {
         namespace = "com.dbtools.room"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -185,6 +189,10 @@ signing {
 // https://github.com/gradle/gradle/issues/26091
 // https://youtrack.jetbrains.com/issue/KT-46466
 tasks {
+    withType<PublishToMavenLocal> {
+        dependsOn(withType<Sign>())
+    }
+
     withType<PublishToMavenRepository> {
         dependsOn(withType<Sign>())
     }
@@ -218,3 +226,5 @@ tasks {
         }
     }
 }
+
+

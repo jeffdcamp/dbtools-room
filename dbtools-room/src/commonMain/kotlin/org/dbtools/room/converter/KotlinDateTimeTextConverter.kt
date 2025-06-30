@@ -1,10 +1,10 @@
 package org.dbtools.room.converter
 
 import androidx.room.TypeConverter
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
+import kotlin.time.Instant
 
 object KotlinDateTimeTextConverter {
     @TypeConverter

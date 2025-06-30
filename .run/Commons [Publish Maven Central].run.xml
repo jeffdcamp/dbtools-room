@@ -12,9 +12,8 @@
         <list>
           <option value="clean" />
           <option value="build" />
-          <option value="assembleRelease" />
-          <option value="publishMavenPublicationToMavenCentralRepository" />
-          <option value="publishReleasePublicationToMavenCentralRepository" />
+          <option value="check" />
+          <option value="publishAllPublicationsToMavenCentralRepository" />
         </list>
       </option>
       <option name="vmOptions" />

@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.1.0] - 2025-06-30
+
+### Changed
+
+- Kotlin 2.2.0
+- Kotlin Date-Time 1.7.0 (changed kotlinx.datetime.Instant to kotlin.time.Instant)
+- Room 2.7.2
+
+
 ## [9.0.9] - 2025-04-30
 
 ### Changed
