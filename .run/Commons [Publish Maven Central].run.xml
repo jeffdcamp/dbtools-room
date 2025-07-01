@@ -13,7 +13,7 @@
           <option value="clean" />
           <option value="build" />
           <option value="check" />
-          <option value="publishAllPublicationsToMavenCentralRepository" />
+          <option value="publishToMavenCentral" />
         </list>
       </option>
       <option name="vmOptions" />
