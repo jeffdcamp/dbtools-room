@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kover) apply false
+    alias(libs.plugins.vanniktechPublishing) apply false
 
     alias(libs.plugins.detekt)
     alias(libs.plugins.download)
