@@ -52,7 +52,7 @@ allprojects {
         tasks.register<de.undercouch.gradle.tasks.download.Download>("downloadDetektConfig") {
             download {
                 onlyIf { !file("$projectDir/build/config/detektConfig.yml").exists() }
-                src("https://raw.githubusercontent.com/jeffdcamp/kmp-commons/master/detekt/detektConfig-latest.yml")
+                src("https://mobile-cdn.churchofjesuschrist.org/android/build/detekt/detektConfig-20231101.yml")
                 dest("$projectDir/build/config/detektConfig.yml")
             }
         }
