@@ -1,3 +1,5 @@
+@file:Suppress("DuplicatedCode", "unused")
+
 package org.dbtools.room.ext
 
 import okio.FileSystem

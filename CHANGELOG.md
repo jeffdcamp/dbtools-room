@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.2.0] - 2025-07-29
+
+### Added
+
+- Added extension functions for Room Transactor
+- Added SQLiteStatement.bindArgs()
+- Added extension functions for kotlinx.io Filesystem
+
 ## [9.1.1] - 2025-07-11
 
 ### Changed

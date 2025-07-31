@@ -4,6 +4,7 @@ kotlin = "2.2.0"
 kotlinxCoroutines = "1.10.2"
 kotlinxSerialization = "1.9.0"
 kotlinxDateTime = "0.7.1"
+kotlinxIo = "0.8.0"
 
 android-compileSdk = "36"
 android-minSdk = "23"
@@ -13,7 +14,7 @@ detekt = "1.23.8"
 downloadPlugin = "5.6.0"
 kermit = "2.0.6"
 kover = "0.9.1"
-vanniktechPlugin = "0.33.0"
+vanniktechPlugin = "0.34.0"
 okio = "3.15.0"
 room = "2.7.2"
 versionsPlugin = "0.52.0"
@@ -35,6 +36,7 @@ kermit = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
 kotlin-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 kotlin-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDateTime" }
+kotlin-io-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-io-core", version.ref = "kotlinxIo" }
 kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test" }
 

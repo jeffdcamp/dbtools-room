@@ -64,6 +64,7 @@ kotlin {
                 implementation(libs.kotlin.coroutines.core)
                 implementation(libs.kotlin.serialization.json)
                 implementation(libs.kotlin.datetime)
+                implementation(libs.kotlin.io.core)
                 implementation(libs.room.runtime)
                 implementation(libs.okio)
                 implementation(libs.kermit)

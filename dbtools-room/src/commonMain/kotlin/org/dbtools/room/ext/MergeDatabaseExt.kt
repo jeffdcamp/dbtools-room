@@ -1,5 +1,9 @@
+@file:Suppress("DuplicatedCode")
+
 package org.dbtools.room.ext
 
+import androidx.room.Transactor
+import androidx.room.execSQL
 import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.execSQL
 import co.touchlab.kermit.Logger
@@ -7,7 +11,7 @@ import co.touchlab.kermit.Logger
 /**
  * Merge database tables from other databases.
  *
- * By default all tables (except Room system tables) will be merged
+ * By default, all tables (except Room system tables) will be merged
  *
  * @param otherDatabasePath Sqlite file that will be opened and attached to the targetDatabase... then data will be copied from this database File
  * @param includeTables Only table names in this list will be merged. Table names are source database table names.  default: emptyList()
@@ -22,17 +26,11 @@ import co.touchlab.kermit.Logger
  * NOTE:  Room system tables are automatically excluded from the merge
  *
  *
- * Add the following function to the RoomDatabase class (mDatabase is ONLY accessible from inside the RoomDatabase class)
- *     fun mergeDataFromOtherDatabase(sourceDatabaseFile: File, includeTables: List<String> = emptyList(), excludeTables: List<String> = emptyList()) {
- *         // make sure database is open
- *         if (!isOpen) {
- *             openHelper.writableDatabase
- *         }
- *
- *         // merge database
- *         mDatabase.mergeDatabase(sourceDatabaseFile, includeTables, excludeTables)
- *     }
- *
+ * Add the following function to the RoomDatabase class
+ * suspend fun mergeDataFromOtherDatabase(connection: SQLiteConnection, otherDatabasePath: String, dispatcher: CoroutineDispatcher): Boolean = withContext(dispatcher) {
+ *      // merge database
+ *     return@withContext connection.mergeDatabase(otherDatabasePath)
+ * }
  */
 @Suppress("NestedBlockDepth")
 fun SQLiteConnection.mergeDatabase(
@@ -105,6 +103,71 @@ fun SQLiteConnection.mergeDatabase(
     return true
 }
 
+@Suppress("NestedBlockDepth")
+suspend fun Transactor.mergeDatabase(
+    otherDatabasePath: String,
+    includeTables: List<String> = emptyList(),
+    excludeTables: List<String> = emptyList(),
+    sourceTableNameMap: Map<String, String> = emptyMap(),
+    onFailBlock: ((e: Exception, targetTransactor: Transactor) -> Unit)? = null,
+    mergeBlock: suspend (transactor: Transactor, sourceTableName: String, targetTableName: String) -> Unit = { transactor, sourceTableName, targetTableName ->
+        transactor.defaultMerge(sourceTableName, targetTableName)
+    }
+): Boolean {
+    val mergeDbName = "merge_db"
+
+    try {
+        // Attach sourceDatabase with primary
+        attachDatabase(otherDatabasePath, mergeDbName)
+
+        // Get a list of tables to merge
+        val sourceTableNames = findTableNames(mergeDbName)
+        val targetTableNames = findTableNames()
+
+        val tableNamesToMerge = createTableNamesToMerge(sourceTableNames, includeTables, excludeTables, sourceTableNameMap)
+
+        // verify the remaining tables actually exist in the target database
+        tableNamesToMerge.forEach {
+            if (!targetTableNames.contains(it.targetTableName)) {
+                Logger.e { "Table does not exist in target database: [${it.targetTableName}]" }
+                return false
+            }
+        }
+
+        // Merge table content
+        try {
+            tableNamesToMerge.forEach { mergeTable ->
+                if (sourceTableNames.contains(mergeTable.sourceTableName)) {
+                    val sourceTableName = "$mergeDbName.${mergeTable.sourceTableName}"
+
+                    Logger.i { "Merging [$sourceTableName] INTO [${mergeTable.targetTableName}]" }
+                    mergeBlock(this, sourceTableName, mergeTable.targetTableName) // default: database.execSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
+                } else {
+                    Logger.w { "WARNING: Cannot merge table [${mergeTable.sourceTableName}]... it does not exist in sourceDatabaseFile... skipping..." }
+                }
+            }
+        } catch (expected: Exception) {
+            Logger.e(expected) { "Failed to merge database tables (inner) (sourceDatabaseFile: [${otherDatabasePath}]" }
+            onFailBlock?.invoke(expected, this)
+            return false
+        }
+    } catch (expected: Exception) {
+        Logger.e(expected) { "Failed to merge database tables (outer) (sourceDatabaseFile: [${otherDatabasePath}]" }
+        onFailBlock?.invoke(expected, this)
+        return false
+    } finally {
+        try {
+            // Detach databases
+            detachDatabase(mergeDbName)
+        } catch (expected: Exception) {
+            Logger.e(expected) { "Failed detach database (merge database tables)... may have never been attached" }
+            onFailBlock?.invoke(expected, this)
+        }
+    }
+
+    return true
+}
+
 private fun createTableNamesToMerge(
     sourceTableNames: List<String>,
     includeTables: List<String> = emptyList(),
@@ -137,6 +200,10 @@ private fun createTableNamesToMerge(
 }
 
 private fun SQLiteConnection.defaultMerge(sourceTableName: String, targetTableName: String) {
+    execSQL("INSERT OR IGNORE INTO $targetTableName SELECT * FROM $sourceTableName")
+}
+
+private suspend fun Transactor.defaultMerge(sourceTableName: String, targetTableName: String) {
     execSQL("INSERT OR IGNORE INTO $targetTableName SELECT * FROM $sourceTableName")
 }
 

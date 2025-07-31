@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Commons [Publish Local]" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration default="false" name="Publish Local" type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -13,7 +13,7 @@
           <option value="clean" />
           <option value="build" />
           <option value="check" />
-          <option value="publishToMavenCentral" />
+          <option value="publishToMavenLocal" />
         </list>
       </option>
       <option name="vmOptions" />
