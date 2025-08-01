@@ -475,7 +475,7 @@ fun SQLiteConnection.checkAndFixRoomIdentityHash(expectedVersion: Int, expectedI
         return
     }
 
-    Logger.w { "checkAndFixRoomIdentityHash -- updating expectedIdentityHash: [$expectedIdentityHash]" }
+    Logger.i { "checkAndFixRoomIdentityHash -- updating expectedIdentityHash: [$expectedIdentityHash]" }
     runInTransaction {
         execSQL("CREATE TABLE IF NOT EXISTS ${Room.MASTER_TABLE_NAME} (id INTEGER PRIMARY KEY,identity_hash TEXT)")
         execSQL("INSERT OR REPLACE INTO ${Room.MASTER_TABLE_NAME} (id,identity_hash) VALUES(42, '$expectedIdentityHash')")

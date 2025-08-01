@@ -139,7 +139,7 @@ abstract class RoomDatabaseRepository<out T: RoomDatabase> {
      */
     open fun registerDatabase(key: String, filename: String): Boolean {
         if (isDatabaseRegistered(key, false)) {
-            Logger.d { "Database already registered for key [$key]" }
+            Logger.w { "Database already registered for key [$key]" }
             return false
         }
 

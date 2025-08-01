@@ -2,7 +2,6 @@
 
 package org.dbtools.room.ext
 
-import androidx.room.Room
 import androidx.room.Transactor
 import androidx.room.execSQL
 import androidx.room.util.getColumnIndexOrThrow
@@ -390,55 +389,4 @@ suspend fun Transactor.isIntegrityOk(): Boolean {
             false
         }
     }
-}
-
-/**
- * If the database should NOT have a migration and is a pre-populated database that should not be managed by Room... make sure Room migration is never needed.
- *
- * NOTE: this SHOULD be called BEFORE room has a chance to open the database and verify the database
- *
- * Example Usage:
- *     val driver = BundledSQLiteDriver()
- *     val connection = driver.open(mySqliteDbFileName)
- *     connection.checkAndFixRoomIdentityHash(MyDatabase.DATABASE_VERSION, MyDatabase.ROOM_DATABASE_IDENTITY_HASH)
- *     connection.close()
- *
- * OR Example using SQLiteDriverExt
- *     val driver = BundledSQLiteDriver()
- *     driver.checkAndFixRoomIdentityHash(mySqliteDbFileName, MyDatabase.DATABASE_VERSION, MyDatabase.ROOM_DATABASE_IDENTITY_HASH)
- *
- * @param expectedVersion SQLite Database version (PRAGMA user_version)
- * @param expectedIdentityHash Hash that is expected.  If the expectedIdentityHash does not match the existing identity hash (currently in the room_master_table), then just delete the table
- */
-suspend fun Transactor.checkAndFixRoomIdentityHash(expectedVersion: Int, expectedIdentityHash: String) {
-    if (expectedIdentityHash.isBlank()) {
-        Logger.e { "checkAndFixRoomIdentityHash -- expectedIdentityHash is blank" }
-        return
-    }
-
-    // set database version
-    if (getDatabaseVersion() != expectedVersion) {
-        setDatabaseVersion(expectedVersion)
-    }
-
-    // if we already have the correct identity hash
-    if (tableExists(Room.MASTER_TABLE_NAME) && findRoomIdentityHash() == expectedIdentityHash) {
-        // we are OK
-        return
-    }
-
-    Logger.w { "checkAndFixRoomIdentityHash -- updating expectedIdentityHash: [$expectedIdentityHash]" }
-    execSQL("CREATE TABLE IF NOT EXISTS ${Room.MASTER_TABLE_NAME} (id INTEGER PRIMARY KEY,identity_hash TEXT)")
-    execSQL("INSERT OR REPLACE INTO ${Room.MASTER_TABLE_NAME} (id,identity_hash) VALUES(42, '$expectedIdentityHash')")
-}
-
-/**
- * Find the Room Identity Hash
- * Note: if you are not sure if the room_master_table exists, check first with tableExists(database, "room_master_table")
- *
- * @return identity_hash for this database OR null if it does exist
- */
-suspend fun Transactor.findRoomIdentityHash(): String? {
-    // NOTE: the id column for this table always seems to be 42 and there is always only 1 row... so lets just find the first row
-    return execTextResultSql("SELECT identity_hash FROM room_master_table LIMIT 1")
 }

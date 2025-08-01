@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [9.2.0] - 2025-07-29
+## [9.2.1] - 2025-07-31
+
+### Changed
+
+- Removed checkAndFixRoomIdentityHash() from TransactorExt and RoomDatabaseExt
+- Added SQLiteDriver.validateDatabase()
+- Added extension functions for kotlinx.io Filesystem
+
+## [9.2.0] - 2025-07-31
 
 ### Added
 

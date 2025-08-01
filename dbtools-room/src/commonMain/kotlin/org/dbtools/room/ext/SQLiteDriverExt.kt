@@ -23,3 +23,22 @@ fun SQLiteDriver.checkAndFixRoomIdentityHash(fileName: String, expectedVersion: 
     extraSetupBlock(connection)
     connection.close()
 }
+
+/**
+ * Preform a PRAGMA check on the database and optionally check a table for existing data.
+ *
+ * @param fileName File name to SQLite Database
+ * @param tag Optional tag name to help identify database in logging
+ * @param tableDataCountCheck Optional check on a table for data. (optional)
+ * @param allowZeroCount Optional tableDataCountCheck if false return false if count is zero
+ *
+ * @return true if validation check is OK
+ */
+fun SQLiteDriver.validateDatabase(fileName: String, tag: String = "", tableDataCountCheck: String? = null, allowZeroCount: Boolean = true): Boolean {
+    val connection = open(fileName)
+    val success = connection.validateDatabase(tag, tableDataCountCheck, allowZeroCount)
+    connection.close()
+
+    return success
+}
+
