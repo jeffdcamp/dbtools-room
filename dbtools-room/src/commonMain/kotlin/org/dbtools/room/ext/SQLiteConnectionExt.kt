@@ -457,29 +457,34 @@ inline fun SQLiteConnection.runInTransaction(block: () -> Unit): Boolean {
  *
  * @param expectedVersion SQLite Database version (PRAGMA user_version)
  * @param expectedIdentityHash Hash that is expected.  If the expectedIdentityHash does not match the existing identity hash (currently in the room_master_table), then just delete the table
+ * @return true if the identity hash was changed
  */
-fun SQLiteConnection.checkAndFixRoomIdentityHash(expectedVersion: Int, expectedIdentityHash: String) {
+fun SQLiteConnection.checkAndFixRoomIdentityHash(expectedVersion: Int, expectedIdentityHash: String): Boolean {
     if (expectedIdentityHash.isBlank()) {
         Logger.e { "checkAndFixRoomIdentityHash -- expectedIdentityHash is blank" }
-        return
+        return false
     }
 
-    // set database version
-    if (getDatabaseVersion() != expectedVersion) {
+    // set database version at PRAGMA level (user_version)
+    val actualDatabaseVersion = getDatabaseVersion()
+    if (actualDatabaseVersion != expectedVersion) {
         setDatabaseVersion(expectedVersion)
     }
 
-    // if we already have the correct identity hash
+    // check if we already have the correct identity hash in the room_master_table
     if (tableExists(Room.MASTER_TABLE_NAME) && findRoomIdentityHash() == expectedIdentityHash) {
         // we are OK
-        return
+        return false
     }
 
-    Logger.i { "checkAndFixRoomIdentityHash -- updating expectedIdentityHash: [$expectedIdentityHash]" }
+    Logger.i { "checkAndFixRoomIdentityHash -- updating expectedIdentityHash from [$actualDatabaseVersion] to [$expectedIdentityHash]" }
+    // set database version at for Room (room_master_table)
     runInTransaction {
         execSQL("CREATE TABLE IF NOT EXISTS ${Room.MASTER_TABLE_NAME} (id INTEGER PRIMARY KEY,identity_hash TEXT)")
         execSQL("INSERT OR REPLACE INTO ${Room.MASTER_TABLE_NAME} (id,identity_hash) VALUES(42, '$expectedIdentityHash')")
     }
+
+    return true
 }
 
 /**

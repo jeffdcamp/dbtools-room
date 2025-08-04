@@ -16,11 +16,17 @@ import androidx.sqlite.SQLiteDriver
  * @param expectedVersion SQLite Database version (PRAGMA user_version)
  * @param expectedIdentityHash Hash that is expected.  If the expectedIdentityHash does not match the existing identity hash (currently in the room_master_table), then just delete the table
  * @param extraSetupBlock This may be useful for doing any additional setup that is needed after the identity hash is checked and fixed.
+ * Params are the SQLiteConnection and a boolean indicating if the identity hash was changed (false if it was already setup with the right hash).
  */
-fun SQLiteDriver.checkAndFixRoomIdentityHash(fileName: String, expectedVersion: Int, expectedIdentityHash: String, extraSetupBlock: (SQLiteConnection) -> Unit = {  }) {
+fun SQLiteDriver.checkAndFixRoomIdentityHash(
+    fileName: String,
+    expectedVersion: Int,
+    expectedIdentityHash: String,
+    extraSetupBlock: (SQLiteConnection, hashChanged: Boolean) -> Unit = { _, _ -> }
+) {
     val connection = open(fileName)
-    connection.checkAndFixRoomIdentityHash(expectedVersion, expectedIdentityHash)
-    extraSetupBlock(connection)
+    val hashChanged = connection.checkAndFixRoomIdentityHash(expectedVersion, expectedIdentityHash)
+    extraSetupBlock(connection, hashChanged)
     connection.close()
 }
 
