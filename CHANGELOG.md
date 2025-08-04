@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.2.2] - 2025-08-04
+
+### Changed
+
+- Improved checkAndFixRoomIdentityHash() to identify if the hash code was changed
+- Gradle 9.0.0
+
 ## [9.2.1] - 2025-07-31
 
 ### Changed
