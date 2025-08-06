@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.2.3] - 2025-08-06
+
+### Changed
+
+- Simplified RoomDatabaseRepository and improved thread safety
+- AGP 8.12.0 
+- OKIO 3.16.0
+
 ## [9.2.2] - 2025-08-04
 
 ### Changed
