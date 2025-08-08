@@ -229,3 +229,15 @@ suspend fun RoomDatabase.resetRoom(newVersion: Int = 0) {
 suspend fun RoomDatabase.isIntegrityOk(): Boolean {
     return useReaderConnection { it.isIntegrityOk() }
 }
+
+/**
+ * Get the filename of the database
+ *
+ * @param name Name of the database (default is "main").  If you have attached databases, you can specify the alias name of the attached database.
+ * @return The file path of the database, or null if not found
+ */
+suspend fun RoomDatabase.getDatabaseFilename(name: String = "main"): String? {
+    return useReaderConnection { transactor ->
+        transactor.getAttachedDatabases().firstOrNull { it.name == name }?.file
+    }
+}
