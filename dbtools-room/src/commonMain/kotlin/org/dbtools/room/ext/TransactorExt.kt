@@ -4,7 +4,6 @@ package org.dbtools.room.ext
 
 import androidx.room.Transactor
 import androidx.room.execSQL
-import androidx.room.util.getColumnIndexOrThrow
 import androidx.sqlite.SQLiteStatement
 import co.touchlab.kermit.Logger
 import kotlinx.coroutines.runBlocking
@@ -83,19 +82,19 @@ suspend fun Transactor.detachDatabase(databaseName: String) {
  * @return List of AttachedDatabaseInfo containing the database name and file path
  */
 suspend fun Transactor.getAttachedDatabases(): List<AttachedDatabaseInfo> {
+    val databaseInfoList = mutableListOf<AttachedDatabaseInfo>()
+
     usePrepared("SELECT * FROM pragma_database_list") { statement ->
-        val databaseInfoList = mutableListOf<AttachedDatabaseInfo>()
-        val nameColumnIndex = getColumnIndexOrThrow(statement, "name")
-        val fileColumnIndex = getColumnIndexOrThrow(statement, "file")
+        val nameColumnIndex = statement.getColumnIndexOrThrow("name")
+        val fileColumnIndex = statement.getColumnIndexOrThrow("file")
         while (statement.step()) {
             val name = statement.getText(nameColumnIndex)
             val file = statement.getText(fileColumnIndex)
             databaseInfoList.add(AttachedDatabaseInfo(name, file))
         }
-        return@usePrepared databaseInfoList
     }
 
-    return emptyList()
+    return databaseInfoList
 }
 
 /**

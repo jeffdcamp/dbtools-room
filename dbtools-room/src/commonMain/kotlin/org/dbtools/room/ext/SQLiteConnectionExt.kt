@@ -3,7 +3,6 @@
 package org.dbtools.room.ext
 
 import androidx.room.Room
-import androidx.room.util.getColumnIndexOrThrow
 import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.SQLiteStatement
 import androidx.sqlite.execSQL
@@ -83,15 +82,16 @@ fun SQLiteConnection.detachDatabase(databaseName: String) {
  * @return List of AttachedDatabaseInfo containing the database name and file path
  */
 fun SQLiteConnection.getAttachedDatabases(): List<AttachedDatabaseInfo> {
-    val statement = prepare("SELECT * FROM pragma_database_list")
-
     val databaseInfoList = mutableListOf<AttachedDatabaseInfo>()
-    val nameColumnIndex = getColumnIndexOrThrow(statement, "name")
-    val fileColumnIndex = getColumnIndexOrThrow(statement, "file")
-    while (statement.step()) {
-        val name = statement.getText(nameColumnIndex)
-        val file = statement.getText(fileColumnIndex)
-        databaseInfoList.add(AttachedDatabaseInfo(name, file))
+
+    prepare("SELECT * FROM pragma_database_list").use { statement ->
+        val nameColumnIndex = statement.getColumnIndexOrThrow("name")
+        val fileColumnIndex = statement.getColumnIndexOrThrow("file")
+        while (statement.step()) {
+            val name = statement.getText(nameColumnIndex)
+            val file = statement.getText(fileColumnIndex)
+            databaseInfoList.add(AttachedDatabaseInfo(name, file))
+        }
     }
 
     return databaseInfoList
