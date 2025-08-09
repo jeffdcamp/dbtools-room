@@ -9,10 +9,13 @@ import kotlinx.coroutines.sync.withLock
 /**
  * Database repository to hold key/value set of similar databases
  *
+ * @param <K> The type of the key used to identify each database instance
+ * @param <T> The type of the RoomDatabase managed by this repository
+ *
  * ```
      * data class LanguageCode(val value: Value)
      *
-     * class BookDatabaseRepository: RoomDatabaseRepository<BookDatabase, LanguageCode>(context) {
+     * class BookDatabaseRepository: RoomDatabaseRepository<LanguageCode, BookDatabase>(context) {
      *
      *   override fun getDatabaseFilename(key: LanguageCode): String? {
      *       val databasePath: Path = getBookDatabasePath(key)
@@ -38,7 +41,7 @@ import kotlinx.coroutines.sync.withLock
  * bookDatabase?.getAuthorDao()?.findNameById(123)
  *
  */
-abstract class RoomDatabaseRepository<out T: RoomDatabase, K> {
+abstract class RoomDatabaseRepository<K, out T: RoomDatabase> {
     private val databaseList = mutableMapOf<String, RoomDatabaseRepositoryItem<T>>()
 
     private val creationLocks = mutableMapOf<String, Mutex>()
