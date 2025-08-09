@@ -10,9 +10,11 @@ import kotlinx.coroutines.sync.withLock
  * Database repository to hold key/value set of similar databases
  *
  * ```
-     * class BookDatabaseRepository: RoomDatabaseRepository<BookDatabase>(context) {
+     * data class LanguageCode(val value: Value)
      *
-     *   override fun getDatabaseFilename(key: String): String? {
+     * class BookDatabaseRepository: RoomDatabaseRepository<BookDatabase, LanguageCode>(context) {
+     *
+     *   override fun getDatabaseFilename(key: LanguageCode): String? {
      *       val databasePath: Path = getBookDatabasePath(key)
      *       return if (fileSystem.exists(databasePath)) databasePath.toString() else null
      *   }
@@ -26,6 +28,8 @@ import kotlinx.coroutines.sync.withLock
      *   override fun deleteDatabase(filename: String) {
      *       FileSystem.SYSTEM.deleteDatabaseFiles(filename.toPath())
      *   }
+     *
+     *   override fun keyToString(key: LanguageCode): String = key.value
      * }
  * ```
  *
@@ -34,7 +38,7 @@ import kotlinx.coroutines.sync.withLock
  * bookDatabase?.getAuthorDao()?.findNameById(123)
  *
  */
-abstract class RoomDatabaseRepository<out T: RoomDatabase> {
+abstract class RoomDatabaseRepository<out T: RoomDatabase, K> {
     private val databaseList = mutableMapOf<String, RoomDatabaseRepositoryItem<T>>()
 
     private val creationLocks = mutableMapOf<String, Mutex>()
@@ -51,7 +55,7 @@ abstract class RoomDatabaseRepository<out T: RoomDatabase> {
      * @param key of the database
      * @return filename/path of the database or null if the database could not set up
      */
-    abstract fun getDatabaseFilename(key: String): String?
+    abstract fun getDatabaseFilename(key: K): String?
 
     /**
      * Create a new database instance
@@ -67,19 +71,22 @@ abstract class RoomDatabaseRepository<out T: RoomDatabase> {
      */
     protected abstract fun deleteDatabase(filename: String)
 
+    protected abstract fun keyToString(key: K): String
+
     /**
      * Get database from internal repository.
      *
      * @param key of the database
      * @return RoomDatabase or null if the database does not exist
      */
-    open fun getDatabase(key: String): T? {
-        if (key.isBlank()) {
-            Logger.e { "key for the database is unspecified" }
+    open fun getDatabase(key: K): T? {
+        val keyAsString = keyToString(key)
+        if (keyAsString.isBlank()) {
+            Logger.e { "key for the database is unspecified or blank (check keyToString(key) results)" }
             return null
         }
 
-        val database = databaseList[key]?.database
+        val database = databaseList[keyAsString]?.database
         if (database != null) {
             // database is already registered
             return database
@@ -91,17 +98,17 @@ abstract class RoomDatabaseRepository<out T: RoomDatabase> {
         //    1. This section of code should be called VERY rarely (ONLY when first-time registration happens), so it is not a performance issue
         //    2. This allows the caller to not have to use a suspend function (especially when using a Flow Dao function... which shouldn't be a suspend function)
         return runBlocking {
-            getKeyMutex(key).withLock {
+            getKeyMutex(keyAsString).withLock {
                 if (!isDatabaseRegistered(key)) {
                     val filename = getDatabaseFilename(key)
                     if (filename != null) {
-                        databaseList[key] = RoomDatabaseRepositoryItem(createDatabase(filename), filename)
+                        databaseList[keyAsString] = RoomDatabaseRepositoryItem(createDatabase(filename), filename)
                     } else {
                         return@withLock null
                     }
                 }
 
-                databaseList[key]?.database
+                databaseList[keyAsString]?.database
             }
         }
     }
@@ -113,7 +120,7 @@ abstract class RoomDatabaseRepository<out T: RoomDatabase> {
      * @param key of the database
      * @return true if the database is added to the repository
      */
-    fun isDatabaseRegistered(key: String): Boolean = databaseList.containsKey(key)
+    fun isDatabaseRegistered(key: K): Boolean = databaseList.containsKey(keyToString(key))
 
     /**
      * Close the database and remove the reference from the WrapperRepository
@@ -123,7 +130,11 @@ abstract class RoomDatabaseRepository<out T: RoomDatabase> {
      *
      * @return true if the entry existed and was removed
      */
-    open fun closeDatabase(key: String, deleteFile: Boolean = false): Boolean {
+    open fun closeDatabase(key: K, deleteFile: Boolean = false): Boolean {
+        return closeDatabase(keyToString(key), deleteFile)
+    }
+
+    private fun closeDatabase(key: String, deleteFile: Boolean = false): Boolean {
         try {
             val databaseRepositoryItem = databaseList[key]
             databaseRepositoryItem?.let {
