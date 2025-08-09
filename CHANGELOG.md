@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.2.4] - 2025-08-09
+
+### Added
+
+- Added RoomDatabase.getDatabaseFilename()
+
+### Changed
+
+- Changed RoomDatabaseRepository to support generic key types
+- Fixed issues with getAttachedDatabases()
+
+
 ## [9.2.3] - 2025-08-06
 
 ### Changed
