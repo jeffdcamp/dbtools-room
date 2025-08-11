@@ -290,7 +290,7 @@ fun SQLiteConnection.recreateAllViews(views: List<DatabaseViewQuery>) {
  *
  * @return true If all SQL statements successfully were applied
  */
-fun SQLiteConnection.applySqlFile(fileSystem: FileSystem, sqlPath: Path): Boolean {
+suspend fun SQLiteConnection.applySqlFile(fileSystem: FileSystem, sqlPath: Path): Boolean {
     if (!fileSystem.exists(sqlPath)) {
         // Can't apply if there is no file
         Logger.e { "Failed to apply sql file. File: [$sqlPath] does NOT exist" }

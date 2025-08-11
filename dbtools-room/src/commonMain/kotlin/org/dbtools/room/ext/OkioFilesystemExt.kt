@@ -50,7 +50,7 @@ private fun FileSystem.atomicMoveIfExists(source: Path, target: Path) {
 }
 
 @Suppress("NestedBlockDepth")
-fun FileSystem.parseAndExecuteSqlStatements(path: Path, execSQL: (String) -> Unit) {
+suspend fun FileSystem.parseAndExecuteSqlStatements(path: Path, execSQL: suspend (String) -> Unit) {
     var statement = ""
     source(path).use { fileSource ->
         fileSource.buffer().use { bufferedFileSource ->

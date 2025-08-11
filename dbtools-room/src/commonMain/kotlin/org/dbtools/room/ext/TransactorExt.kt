@@ -4,9 +4,9 @@ package org.dbtools.room.ext
 
 import androidx.room.Transactor
 import androidx.room.execSQL
+import androidx.room.immediateTransaction
 import androidx.sqlite.SQLiteStatement
 import co.touchlab.kermit.Logger
-import kotlinx.coroutines.runBlocking
 import okio.FileSystem
 import okio.Path
 import org.dbtools.room.DatabaseViewQuery
@@ -279,15 +279,17 @@ suspend fun Transactor.recreateAllViews(views: List<DatabaseViewQuery>) {
  *
  * @return true If all SQL statements successfully were applied
  */
-fun Transactor.applySqlFile(fileSystem: FileSystem, sqlPath: Path): Boolean {
+suspend fun Transactor.applySqlFile(fileSystem: FileSystem, sqlPath: Path): Boolean {
     if (!fileSystem.exists(sqlPath)) {
         // Can't apply if there is no file
         Logger.e { "Failed to apply sql file. File: [$sqlPath] does NOT exist" }
         return false
     }
 
-    fileSystem.parseAndExecuteSqlStatements(sqlPath) { statement ->
-        runBlocking { this@applySqlFile.execSQL(statement) }
+    immediateTransaction {
+        fileSystem.parseAndExecuteSqlStatements(sqlPath) { statement ->
+            this@applySqlFile.execSQL(statement)
+        }
     }
 
     return true
