@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.2.5] - 2025-08-11
+
+### Changed
+
+- Changed applySqlFile() and parseAndExecuteSqlStatements() to be suspend functions
+
 ## [9.2.4] - 2025-08-09
 
 ### Added
