@@ -107,6 +107,7 @@ abstract class RoomDatabaseRepository<K, out T: RoomDatabase> {
                     if (filename != null) {
                         databaseList[keyAsString] = RoomDatabaseRepositoryItem(createDatabase(filename), filename)
                     } else {
+                        Logger.e { "Could not create database for key: [$keyAsString] because getDatabaseFilename($key) returned null" }
                         return@withLock null
                     }
                 }
