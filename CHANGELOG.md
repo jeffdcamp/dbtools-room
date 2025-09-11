@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.3.0] - 2025-09-11
+
+### Changed
+
+- Room 2.8.0 support
+- AGP 8.13.0
+- Simplified KotlinDateTimeTextConverter
+
 ## [9.2.5] - 2025-08-11
 
 ### Changed
