@@ -2,9 +2,8 @@ package org.dbtools.room.database
 
 import androidx.room.RoomDatabase
 import co.touchlab.kermit.Logger
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.atomicfu.locks.ReentrantLock
+import kotlinx.atomicfu.locks.withLock
 
 /**
  * Database repository to hold key/value set of similar databases
@@ -42,15 +41,9 @@ import kotlinx.coroutines.sync.withLock
  *
  */
 abstract class RoomDatabaseRepository<K, out T: RoomDatabase> {
-    private val databaseList = mutableMapOf<String, RoomDatabaseRepositoryItem<T>>()
+    private val lock = ReentrantLock()
 
-    private val creationLocks = mutableMapOf<String, Mutex>()
-    private val creationLocksMutex = Mutex()
-    private suspend fun getKeyMutex(key: String): Mutex {
-        return creationLocksMutex.withLock {
-            creationLocks.getOrPut(key) { Mutex() }
-        }
-    }
+    private val databaseList = mutableMapOf<String, RoomDatabaseRepositoryItem<T>>()
 
     /**
      * Get the database filename/path
@@ -96,24 +89,18 @@ abstract class RoomDatabaseRepository<K, out T: RoomDatabase> {
         }
 
         // if database is not registered then try to register it
-        //
-        // Use runBlocking here so that getDatabase(...) does not need to be a suspend function
-        //    1. This section of code should be called VERY rarely (ONLY when first-time registration happens), so it is not a performance issue
-        //    2. This allows the caller to not have to use a suspend function (especially when using a Flow Dao function... which shouldn't be a suspend function)
-        return runBlocking {
-            getKeyMutex(keyAsString).withLock {
-                if (!isDatabaseRegistered(key)) {
-                    val filename = getDatabaseFilename(key)
-                    if (filename != null) {
-                        databaseList[keyAsString] = RoomDatabaseRepositoryItem(createDatabase(filename), filename)
-                    } else {
-                        Logger.e { "Could not create database for key: [$keyAsString] because getDatabaseFilename($key) returned null" }
-                        return@withLock null
-                    }
+        return lock.withLock {
+            if (!isDatabaseRegistered(key)) {
+                val filename = getDatabaseFilename(key)
+                if (filename != null) {
+                    databaseList[keyAsString] = RoomDatabaseRepositoryItem(createDatabase(filename), filename)
+                } else {
+                    Logger.e { "Could not create database for key: [$keyAsString] because getDatabaseFilename($key) returned null" }
+                    return@withLock null
                 }
-
-                databaseList[keyAsString]?.database
             }
+
+            databaseList[keyAsString]?.database
         }
     }
 

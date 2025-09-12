@@ -66,6 +66,7 @@ kotlin {
                 implementation(libs.kotlin.datetime)
                 implementation(libs.kotlin.io.core)
                 implementation(libs.room.runtime)
+                implementation(libs.kotlin.atomicfu)
                 implementation(libs.okio)
                 implementation(libs.kermit)
             }

@@ -1,6 +1,7 @@
 [versions]
 agp = "8.13.0" # only use the latest supported by KMP (https://kotlinlang.org/docs/multiplatform-compatibility-guide.html)
 kotlin = "2.2.20"
+kotlinxAtomicfu = "0.29.0"
 kotlinxCoroutines = "1.10.2"
 kotlinxSerialization = "1.9.0"
 kotlinxDateTime = "0.7.1"
@@ -33,6 +34,7 @@ versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin
 assertk = { group = "com.willowtreeapps.assertk", name = "assertk", version.ref = "assertk" }
 kermit = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
 
+kotlin-atomicfu = { group = "org.jetbrains.kotlinx", name = "atomicfu", version.ref = "kotlinxAtomicfu" }
 kotlin-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 kotlin-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDateTime" }
