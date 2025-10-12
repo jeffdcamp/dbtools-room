@@ -97,43 +97,16 @@ kotlin {
 // ./gradlew clean build check publishToMavenLocal
 // ./gradlew clean build check publishAllPublicationsToMavenCentralRepository
 mavenPublishing {
-    val version: String by project
-    coordinates("org.dbtools", "dbtools-room", version)
     publishToMavenCentral()
     signAllPublications()
 
-    pom {
-        name.set("DBTools Room")
-        description.set("DBTools Room")
-        url.set("https://github.com/jeffdcamp/dbtools-room")
-        licenses {
-            license {
-                name.set("The Apache Software License, Version 2.0")
-                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-            }
-        }
-        developers {
-            developer {
-                id.set("jcampbell")
-                name.set("Jeff Campbell")
-            }
-        }
-        scm {
-            connection.set("scm:git:git://github.com/jeffdcamp/dbtools-room.git")
-            developerConnection.set("scm:git:git@github.com:jeffdcamp/dbtools-room.git")
-            url.set("https://github.com/jeffdcamp/dbtools-room")
-        }
-    }
-}
-
-signing {
-    setRequired {
-        findProperty("signing.keyId") != null
-    }
-
-    publishing.publications.all {
-        sign(this)
-    }
+    configure(
+        com.vanniktech.maven.publish.KotlinMultiplatform(
+            javadocJar = com.vanniktech.maven.publish.JavadocJar.Empty(),
+            sourcesJar = true,
+            androidVariantsToPublish = listOf("release"),
+        )
+    )
 }
 
 // TODO: remove after following issues are fixed
