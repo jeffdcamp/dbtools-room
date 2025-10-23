@@ -1,6 +1,6 @@
 [versions]
 agp = "8.13.0" # only use the latest supported by KMP (https://kotlinlang.org/docs/multiplatform-compatibility-guide.html)
-kotlin = "2.2.20"
+kotlin = "2.2.21"
 kotlinxAtomicfu = "0.29.0"
 kotlinxCoroutines = "1.10.2"
 kotlinxSerialization = "1.9.0"
@@ -14,10 +14,10 @@ assertk = "0.28.1"
 detekt = "1.23.8"
 downloadPlugin = "5.6.0"
 kermit = "2.0.8"
-kover = "0.9.2"
+kover = "0.9.3"
 vanniktechPlugin = "0.34.0"
-okio = "3.16.1"
-room = "2.8.2"
+okio = "3.16.2"
+room = "2.8.3"
 versionsPlugin = "0.53.0"
 
 [plugins]

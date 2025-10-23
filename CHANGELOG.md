@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.3.3] - 2025-10-23
+
+### Changed
+
+- Room 2.8.3
+- Fixed issues with Transactor tablesExists(xxx), viewExists(xxx), and getDatabaseVersion()
+- Other version updates
+
 ## [9.3.2] - 2025-10-12
 
 ### Changed
