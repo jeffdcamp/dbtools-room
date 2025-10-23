@@ -35,7 +35,7 @@ suspend fun Transactor.validateDatabase(tag: String = "", tableDataCountCheck: S
 
         // make sure there is data in the database
         if (!tableDataCountCheck.isNullOrBlank()) {
-            usePrepared("SELECT count(1) FROM $tableDataCountCheck") { statement ->
+            val validCount = usePrepared("SELECT count(1) FROM $tableDataCountCheck") { statement ->
                 val count = if (statement.step()) {
                     statement.getInt(0)
                 } else {
@@ -44,8 +44,14 @@ suspend fun Transactor.validateDatabase(tag: String = "", tableDataCountCheck: S
 
                 if (count == null || (!allowZeroCount && count == 0)) {
                     Logger.e { "validateDatabase - table [$tableDataCountCheck] is BLANK for database [$tag] is blank" }
-                    return@usePrepared false
+                    false
+                } else {
+                    true
                 }
+            }
+
+            if (!validCount) {
+                return false
             }
         }
     } catch (expected: Exception) {
@@ -206,27 +212,25 @@ suspend fun Transactor.viewExists(viewNames: List<String>, databaseName: String 
 }
 
 internal suspend fun Transactor.execIntResultSql(sql: String, columnIndex: Int = 0): Int? {
-    this.usePrepared(sql) { statement ->
+    return this.usePrepared(sql) { statement ->
         if (statement.step()) {
-            return@usePrepared statement.getInt(columnIndex)
+            statement.getInt(columnIndex)
         } else {
             Logger.w { "Failed to get Int for [$sql] (returned NO data)" }
+            null
         }
     }
-
-    return null
 }
 
 internal suspend fun Transactor.execTextResultSql(sql: String, columnIndex: Int = 0): String? {
-    this.usePrepared(sql) { statement ->
+    return this.usePrepared(sql) { statement ->
         if (statement.step()) {
-            return@usePrepared statement.getText(columnIndex)
+            statement.getText(columnIndex)
         } else {
             Logger.w { "Failed to get Text for [$sql] (returned NO data)" }
+            null
         }
     }
-
-    return null
 }
 
 /**

@@ -217,27 +217,25 @@ fun SQLiteConnection.viewExists(viewNames: List<String>, databaseName: String = 
 }
 
 internal fun SQLiteConnection.execIntResultSql(sql: String, columnIndex: Int = 0): Int? {
-    this.prepare(sql).use { statement ->
+    return this.prepare(sql).use { statement ->
         if (statement.step()) {
-            return statement.getInt(columnIndex)
+            statement.getInt(columnIndex)
         } else {
             Logger.w { "Failed to get Int for [$sql] (returned NO data)" }
+            null
         }
     }
-
-    return null
 }
 
 internal fun SQLiteConnection.execTextResultSql(sql: String, columnIndex: Int = 0): String? {
-    this.prepare(sql).use { statement ->
+    return this.prepare(sql).use { statement ->
         if (statement.step()) {
-            return statement.getText(columnIndex)
+            statement.getText(columnIndex)
         } else {
             Logger.w { "Failed to get Text for [$sql] (returned NO data)" }
+            null
         }
     }
-
-    return null
 }
 
 /**
