@@ -313,7 +313,6 @@ fun SQLiteConnection.alterTableIfColumnDoesNotExist(tableName: String, columnNam
     if (!this.columnExists(tableName, columnName)) {
         Logger.i { "Adding column [$columnName] to table [$tableName]" }
         execSQL(alterSql)
-        resetRoom()
     }
 }
 
