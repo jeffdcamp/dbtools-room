@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.3.4] - 2025-11-04
+
+### Changed
+
+- Removed resetRoom from SQLiteConnection.alterTableIfColumnDoesNotExist(...)
+- Updated Gradle to 9.2.0
+
 ## [9.3.3] - 2025-10-23
 
 ### Changed
