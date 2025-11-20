@@ -1,5 +1,5 @@
 [versions]
-agp = "8.13.0" # only use the latest supported by KMP (https://kotlinlang.org/docs/multiplatform-compatibility-guide.html)
+agp = "8.13.1" # only use the latest supported by KMP (https://kotlinlang.org/docs/multiplatform-compatibility-guide.html)
 kotlin = "2.2.21"
 kotlinxAtomicfu = "0.29.0"
 kotlinxCoroutines = "1.10.2"
@@ -15,13 +15,13 @@ detekt = "1.23.8"
 downloadPlugin = "5.6.0"
 kermit = "2.0.8"
 kover = "0.9.3"
-vanniktechPlugin = "0.34.0"
-okio = "3.16.2"
-room = "2.8.3"
+vanniktechPlugin = "0.35.0"
+okio = "3.16.4"
+room = "2.8.4"
 versionsPlugin = "0.53.0"
 
 [plugins]
-android-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+android-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 download = { id = "de.undercouch.download", version.ref = "downloadPlugin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

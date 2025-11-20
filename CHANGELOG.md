@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.3.5] - 2025-11-19
+
+### Changed
+
+- Room 2.8.4
+- Updated Gradle to 9.2.1
+
 ## [9.3.4] - 2025-11-04
 
 ### Changed
