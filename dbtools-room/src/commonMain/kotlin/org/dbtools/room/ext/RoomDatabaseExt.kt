@@ -3,6 +3,8 @@
 package org.dbtools.room.ext
 
 import androidx.room.RoomDatabase
+import androidx.room.TransactionScope
+import androidx.room.immediateTransaction
 import androidx.room.useReaderConnection
 import androidx.room.useWriterConnection
 import okio.FileSystem
@@ -239,5 +241,17 @@ suspend fun RoomDatabase.isIntegrityOk(): Boolean {
 suspend fun RoomDatabase.getDatabaseFilename(name: String = "main"): String? {
     return useReaderConnection { transactor ->
         transactor.getAttachedDatabases().firstOrNull { it.name == name }?.file
+    }
+}
+
+/**
+ * Performs a SQLiteTransactionType.IMMEDIATE within the block.
+ *
+ * @param T The return type of the transaction block.
+ * @param block The block to execute in the transaction.
+ */
+suspend fun <T> RoomDatabase.withImmediateTransaction(block: suspend TransactionScope<T>.() -> T): T {
+    return useWriterConnection { transactor ->
+        transactor.immediateTransaction(block)
     }
 }

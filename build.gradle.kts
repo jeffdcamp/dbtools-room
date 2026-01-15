@@ -1,5 +1,4 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     // this is necessary to avoid the plugins to be loaded multiple times
@@ -39,45 +38,39 @@ fun isNonStable(version: String, includeStablePreRelease: Boolean): Boolean {
 }
 
 allprojects {
+    apply(plugin = rootProject.libs.plugins.detekt.get().pluginId)
+    apply(plugin = rootProject.libs.plugins.download.get().pluginId)
+
     // ===== Detekt =====
-    // Known KMP issues https://github.com/detekt/detekt/issues/5611
-    apply(plugin = rootProject.libs.plugins.detekt.get().pluginId).also {
-        // download detekt config file
-        tasks.register<de.undercouch.gradle.tasks.download.Download>("downloadDetektConfig") {
-            download {
-                onlyIf { !file("$projectDir/build/config/detektConfig.yml").exists() }
-                src("https://mobile-cdn.churchofjesuschrist.org/android/build/detekt/detektConfig-20231101.yml")
-                dest("$projectDir/build/config/detektConfig.yml")
-            }
+    // download detekt config file
+    tasks.register<de.undercouch.gradle.tasks.download.Download>("downloadDetektConfig") {
+        download {
+            onlyIf { !file("$projectDir/build/config/detektConfig.yml").exists() }
+            src("https://mobile-cdn.churchofjesuschrist.org/android/build/detekt/v2/detektConfig-latest.yml")
+            dest("$projectDir/build/config/detektConfig.yml")
         }
+    }
 
-        // make sure when running detekt, the config file is downloaded
-        tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-            // Target version of the generated JVM bytecode. It is used for type resolution.
-            this.jvmTarget = JvmTarget.JVM_17.target
-            dependsOn("downloadDetektConfig")
-        }
+    // ./gradlew detekt
+    // ./gradlew detektDebug (support type checking)
+    detekt {
+        allRules = true // fail build on any finding
+        buildUponDefaultConfig = true // preconfigure defaults
+        config.setFrom("$projectDir/build/config/detektConfig.yml") // point to your custom config defining rules to run, overwriting default behavior
+        baseline = file("$projectDir/config/detektBaseline.xml") // a way of suppressing issues before introducing detekt (./gradlew detektBaseline)
+        source.setFrom("src/main/java", "src/main/kotlin", "src/commonMain/kotlin", "src/androidMain/kotlin", "src/jvmMain/kotlin", "src/iosMain/kotlin")
+    }
 
-        detekt {
-            allRules = true // fail build on any finding
-            buildUponDefaultConfig = true // preconfigure defaults
-            config.setFrom(files("$projectDir/build/config/detektConfig.yml")) // point to your custom config defining rules to run, overwriting default behavior
-        }
+    tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
+        dependsOn("downloadDetektConfig")
 
-        tasks.withType<io.gitlab.arturbosch.detekt.Detekt> {
-            setSource(files(project.projectDir))
-            exclude("**/build/**")
-            exclude("**/*.kts")
-            exclude("**/Platform.*.kt")
+        // ignore ImageVector files
+        exclude("**/ui/compose/icons/**")
 
-
-            exclude {
-                it.file.relativeTo(projectDir).startsWith(buildDir.relativeTo(projectDir))
-            }
-        }
-
-        tasks.register("detektAll") {
-            dependsOn(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>())
+        reports {
+            html.required.set(true) // observe findings in your browser with structure and code snippets
+//            xml.required.set(true) // checkstyle like format mainly for integrations like Jenkins
+//            txt.required.set(true) // similar to the console output, contains issue signature to manually edit baseline files
         }
     }
 }

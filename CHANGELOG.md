@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [9.4.0] - 2026-01-15
+
+### Changed
+
+- Added RoomDatabase.withImmediateTransaction { }
+- Kotlin 2.3.0
+- Updated other dependencies
+
 ## [9.3.5] - 2025-11-19
 
 ### Changed
