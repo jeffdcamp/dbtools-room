@@ -6,11 +6,10 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.android.multiplatform.library)
+    alias(libs.plugins.android.library)
 //    alias(libs.plugins.kover) // Does not seem to work with "com.android.kotlin.multiplatform.library"
     alias(libs.plugins.download)
     alias(libs.plugins.vanniktechPublishing)
-    signing
 }
 
 kotlin {
@@ -25,12 +24,8 @@ kotlin {
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
 
-        compilations.configureEach {
-            compilerOptions.configure {
-                jvmTarget.set(
-                    JvmTarget.JVM_17
-                )
-            }
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
 
