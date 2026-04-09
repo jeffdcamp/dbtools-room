@@ -1,7 +1,7 @@
 [versions]
 agp = "9.1.0" # only use the latest supported by KMP (https://kotlinlang.org/docs/multiplatform-compatibility-guide.html)
-kotlin = "2.3.10"
-kotlinxAtomicfu = "0.31.0"
+kotlin = "2.3.20"
+kotlinxAtomicfu = "0.32.1"
 kotlinxCoroutines = "1.10.2"
 kotlinxSerialization = "1.10.0"
 kotlinxDateTime = "0.7.1"
@@ -14,10 +14,10 @@ assertk = "0.28.1"
 detekt = "2.0.0-alpha.2"
 downloadPlugin = "5.7.0"
 kermit = "2.1.0"
-kover = "0.9.7"
+kover = "0.9.8"
 vanniktechPlugin = "0.36.0"
 okio = "3.17.0"
-room = "2.8.4"
+room = "3.0.0-alpha03"
 versionsPlugin = "0.53.0"
 
 [plugins]
@@ -44,4 +44,4 @@ kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test" }
 
 okio = { group = "com.squareup.okio", name = "okio", version.ref = "okio" }
 
-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-runtime = { group = "androidx.room3", name = "room3-runtime", version.ref = "room" }

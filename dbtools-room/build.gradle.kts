@@ -38,10 +38,8 @@ kotlin {
     linuxX64()
 
     listOf(
-        iosX64(),
         iosArm64(),
         iosSimulatorArm64(),
-        macosX64(),
         macosArm64(),
     ).forEach {
         it.binaries.framework {
@@ -123,16 +121,9 @@ tasks {
         named("compileTestKotlinIosSimulatorArm64") {
             dependsOn(named("signIosSimulatorArm64Publication"))
         }
-        named("compileTestKotlinIosX64") {
-            dependsOn(named("signIosX64Publication"))
-        }
         named("compileTestKotlinMacosArm64") {
             dependsOn(named("signMacosArm64Publication"))
         }
-        named("compileTestKotlinMacosX64") {
-            dependsOn(named("signMacosX64Publication"))
-        }
-
         // Mac can also do Linux signing
         named("compileTestKotlinLinuxX64") {
             dependsOn(named("signLinuxX64Publication"))

@@ -2,9 +2,9 @@
 
 package org.dbtools.room.ext
 
-import androidx.room.Transactor
-import androidx.room.execSQL
-import androidx.room.immediateTransaction
+import androidx.room3.Transactor
+import androidx.room3.executeSQL
+import androidx.room3.immediateTransaction
 import androidx.sqlite.SQLiteStatement
 import co.touchlab.kermit.Logger
 import okio.FileSystem
@@ -70,7 +70,7 @@ suspend fun Transactor.validateDatabase(tag: String = "", tableDataCountCheck: S
  */
 suspend fun Transactor.attachDatabase(toDatabasePath: String, toDatabaseName: String) {
     val sql = "ATTACH DATABASE '$toDatabasePath' AS $toDatabaseName"
-    execSQL(sql)
+    executeSQL(sql)
 }
 
 /**
@@ -79,7 +79,7 @@ suspend fun Transactor.attachDatabase(toDatabasePath: String, toDatabaseName: St
  */
 suspend fun Transactor.detachDatabase(databaseName: String) {
     val sql = "DETACH DATABASE '$databaseName'"
-    execSQL(sql)
+    executeSQL(sql)
 }
 
 /**
@@ -239,7 +239,7 @@ internal suspend fun Transactor.execTextResultSql(sql: String, columnIndex: Int 
  * @param viewName Name of view to drop
  */
 suspend fun Transactor.dropView(viewName: String) {
-    execSQL("DROP VIEW IF EXISTS $viewName")
+    executeSQL("DROP VIEW IF EXISTS $viewName")
 }
 
 /**
@@ -253,7 +253,7 @@ suspend fun Transactor.dropAllViews(views: List<String> = emptyList()) {
 }
 
 suspend fun Transactor.createView(viewName: String, viewQuery: String) {
-    execSQL("CREATE VIEW `$viewName` AS $viewQuery")
+    executeSQL("CREATE VIEW `$viewName` AS $viewQuery")
 }
 
 suspend fun Transactor.createAllViews(views: List<DatabaseViewQuery>) {
@@ -292,7 +292,7 @@ suspend fun Transactor.applySqlFile(fileSystem: FileSystem, sqlPath: Path): Bool
 
     immediateTransaction {
         fileSystem.parseAndExecuteSqlStatements(sqlPath) { statement ->
-            this@applySqlFile.execSQL(statement)
+            this@applySqlFile.executeSQL(statement)
         }
     }
 
@@ -309,7 +309,7 @@ suspend fun Transactor.applySqlFile(fileSystem: FileSystem, sqlPath: Path): Bool
 suspend fun Transactor.alterTableIfColumnDoesNotExist(tableName: String, columnName: String, alterSql: String) {
     if (!this.columnExists(tableName, columnName)) {
         Logger.i { "Adding column [$columnName] to table [$tableName]" }
-        execSQL(alterSql)
+        executeSQL(alterSql)
         resetRoom()
     }
 }
@@ -356,7 +356,7 @@ suspend fun Transactor.getDatabaseVersion(): Int {
  * @param newVersion version to be set on database
  */
 suspend fun Transactor.setDatabaseVersion(newVersion: Int) {
-    execSQL("PRAGMA user_version = $newVersion")
+    executeSQL("PRAGMA user_version = $newVersion")
 }
 
 /**
@@ -365,7 +365,7 @@ suspend fun Transactor.setDatabaseVersion(newVersion: Int) {
  * @param newVersion version to be set on database (default to 0)
  */
 suspend fun Transactor.resetRoom(newVersion: Int = 0) {
-    execSQL("DROP TABLE IF EXISTS room_master_table")
+    executeSQL("DROP TABLE IF EXISTS room_master_table")
     setDatabaseVersion(newVersion)
 }
 

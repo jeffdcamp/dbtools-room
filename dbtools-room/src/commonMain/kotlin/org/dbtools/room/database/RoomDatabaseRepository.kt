@@ -1,6 +1,6 @@
 package org.dbtools.room.database
 
-import androidx.room.RoomDatabase
+import androidx.room3.RoomDatabase
 import co.touchlab.kermit.Logger
 import kotlinx.atomicfu.locks.ReentrantLock
 import kotlinx.atomicfu.locks.withLock

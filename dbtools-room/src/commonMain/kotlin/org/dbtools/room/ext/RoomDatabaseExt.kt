@@ -2,11 +2,11 @@
 
 package org.dbtools.room.ext
 
-import androidx.room.RoomDatabase
-import androidx.room.TransactionScope
-import androidx.room.immediateTransaction
-import androidx.room.useReaderConnection
-import androidx.room.useWriterConnection
+import androidx.room3.RoomDatabase
+import androidx.room3.TransactionScope
+import androidx.room3.immediateTransaction
+import androidx.room3.useReaderConnection
+import androidx.room3.useWriterConnection
 import okio.FileSystem
 import okio.Path
 import org.dbtools.room.DatabaseViewQuery

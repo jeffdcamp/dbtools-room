@@ -1,6 +1,6 @@
 package org.dbtools.room.database
 
-import androidx.room.RoomDatabase
+import androidx.room3.RoomDatabase
 import kotlinx.atomicfu.locks.ReentrantLock
 import kotlinx.atomicfu.locks.withLock
 import kotlin.concurrent.atomics.ExperimentalAtomicApi

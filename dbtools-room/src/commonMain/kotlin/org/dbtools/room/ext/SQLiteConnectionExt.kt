@@ -2,7 +2,7 @@
 
 package org.dbtools.room.ext
 
-import androidx.room.Room
+import androidx.room3.Room
 import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.SQLiteStatement
 import androidx.sqlite.execSQL

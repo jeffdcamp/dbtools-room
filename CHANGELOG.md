@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [10.0.0-alpha03] - 2026-04-08
+
+### Changed
+
+- Room 3.0.0-alpha03 (migrated from `androidx.room` to `androidx.room3`)
+- Renamed `Transactor.execSQL()` to `Transactor.executeSQL()`
+- Removed iosX64 and macosX64 targets
+- Kotlin 2.3.20
+- Updated other dependencies
+
 ## [9.4.0] - 2026-01-15
 
 ### Changed

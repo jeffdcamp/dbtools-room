@@ -2,8 +2,8 @@
 
 package org.dbtools.room.ext
 
-import androidx.room.Transactor
-import androidx.room.execSQL
+import androidx.room3.Transactor
+import androidx.room3.executeSQL
 import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.execSQL
 import co.touchlab.kermit.Logger
@@ -19,7 +19,7 @@ import co.touchlab.kermit.Logger
  * @param sourceTableNameMap Map of name changes from sourceTable to targetTable (Example: copy table data from sourceDatabase.foo to targetDatabase.bar).
  * @param onFailBlock Code to execute if there is a failure during merge
  * Key is the source table name, value is the target table name
- * @param mergeBlock Code to execute to perform merge.  default: database.execSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
+ * @param mergeBlock Code to execute to perform merge.  default: database.executeSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
  *
  * @return true if merge was successful
  *
@@ -72,7 +72,7 @@ fun SQLiteConnection.mergeDatabase(
                     val sourceTableName = "$mergeDbName.${mergeTable.sourceTableName}"
 
                     Logger.i { "Merging [$sourceTableName] INTO [${mergeTable.targetTableName}]" }
-                    mergeBlock(this, sourceTableName, mergeTable.targetTableName) // default: database.execSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
+                    mergeBlock(this, sourceTableName, mergeTable.targetTableName) // default: database.executeSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
                 } else {
                     Logger.w { "WARNING: Cannot merge table [${mergeTable.sourceTableName}]... it does not exist in sourceDatabaseFile... skipping..." }
                 }
@@ -141,7 +141,7 @@ suspend fun Transactor.mergeDatabase(
                     val sourceTableName = "$mergeDbName.${mergeTable.sourceTableName}"
 
                     Logger.i { "Merging [$sourceTableName] INTO [${mergeTable.targetTableName}]" }
-                    mergeBlock(this, sourceTableName, mergeTable.targetTableName) // default: database.execSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
+                    mergeBlock(this, sourceTableName, mergeTable.targetTableName) // default: database.executeSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
                 } else {
                     Logger.w { "WARNING: Cannot merge table [${mergeTable.sourceTableName}]... it does not exist in sourceDatabaseFile... skipping..." }
                 }
@@ -204,7 +204,7 @@ private fun SQLiteConnection.defaultMerge(sourceTableName: String, targetTableNa
 }
 
 private suspend fun Transactor.defaultMerge(sourceTableName: String, targetTableName: String) {
-    execSQL("INSERT OR IGNORE INTO $targetTableName SELECT * FROM $sourceTableName")
+    executeSQL("INSERT OR IGNORE INTO $targetTableName SELECT * FROM $sourceTableName")
 }
 
 private fun getTargetTableName(sourceToTargetTableMap: Map<String, String>, sourceTableName: String): String {
