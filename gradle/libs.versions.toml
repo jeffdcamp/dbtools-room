@@ -1,7 +1,7 @@
 [versions]
 agp = "9.2.1" # only use the latest supported by KMP (https://kotlinlang.org/docs/multiplatform-compatibility-guide.html)
-kotlin = "2.3.21"
-kotlinxAtomicfu = "0.32.1"
+kotlin = "2.4.0"
+kotlinxAtomicfu = "0.33.0"
 kotlinxCoroutines = "1.11.0"
 kotlinxSerialization = "1.11.0"
 kotlinxDateTime = "0.8.0"
@@ -17,7 +17,7 @@ kermit = "2.1.0"
 kover = "0.9.8"
 vanniktechPlugin = "0.36.0"
 okio = "3.17.0"
-room = "3.0.0-alpha04"
+room = "3.0.0-alpha06"
 versionsPlugin = "0.54.0"
 
 [plugins]
