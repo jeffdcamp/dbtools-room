@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [10.0.0-rc01] - 2026-06-22
+
+### Changed
+
+- Room 3.0.0-rc01
+- Updated other dependencies
+
 ## [10.0.0-alpha06] - 2026-06-09
 
 ### Changed
