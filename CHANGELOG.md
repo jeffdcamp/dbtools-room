@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [10.0.0] - 2026-07-09
+
+### Added
+
+- Foojay toolchain resolver convention plugin
+- Configured Gradle daemon to use Adoptium Java 25 toolchain
+
+### Changed
+
+- Room 3.0.0
+- Updated Room `TypeConverter` to `ColumnTypeConverter` in `KotlinDateTimeTextConverter`
+- Updated kotlinx-io to 0.9.1
+- Updated Gradle to 9.6.1
+
 ## [10.0.0-rc01] - 2026-06-22
 
 ### Changed
