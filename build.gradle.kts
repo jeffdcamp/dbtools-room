@@ -8,8 +8,6 @@ plugins {
     alias(libs.plugins.kover) apply false
     alias(libs.plugins.vanniktechPublishing) apply false
 
-    alias(libs.plugins.detekt)
-    alias(libs.plugins.download)
     alias(libs.plugins.versions)
 }
 
@@ -35,46 +33,4 @@ fun isNonStable(version: String, includeStablePreRelease: Boolean): Boolean {
         stableKeyword || regex.matches(version)
     }
     return isStable.not()
-}
-
-allprojects {
-    apply(plugin = rootProject.libs.plugins.detekt.get().pluginId)
-    apply(plugin = rootProject.libs.plugins.download.get().pluginId)
-
-    // ===== Detekt =====
-    // download detekt config file
-    tasks.register<de.undercouch.gradle.tasks.download.Download>("downloadDetektConfig") {
-        download {
-            onlyIf { !file("$projectDir/build/config/detektConfig.yml").exists() }
-            src("https://mobile-cdn.churchofjesuschrist.org/android/build/detekt/v2/detektConfig-latest.yml")
-            dest("$projectDir/build/config/detektConfig.yml")
-        }
-    }
-
-    // ./gradlew detekt
-    // ./gradlew detektDebug (support type checking)
-    detekt {
-        allRules = true // fail build on any finding
-        buildUponDefaultConfig = true // preconfigure defaults
-        config.setFrom("$projectDir/build/config/detektConfig.yml") // point to your custom config defining rules to run, overwriting default behavior
-        baseline = file("$projectDir/config/detektBaseline.xml") // a way of suppressing issues before introducing detekt (./gradlew detektBaseline)
-        source.setFrom("src/main/java", "src/main/kotlin", "src/commonMain/kotlin", "src/androidMain/kotlin", "src/jvmMain/kotlin", "src/iosMain/kotlin")
-    }
-
-    tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
-        dependsOn("downloadDetektConfig")
-
-        // ignore ImageVector files
-        exclude("**/ui/compose/icons/**")
-
-        reports {
-            html.required.set(true) // observe findings in your browser with structure and code snippets
-//            xml.required.set(true) // checkstyle like format mainly for integrations like Jenkins
-//            txt.required.set(true) // similar to the console output, contains issue signature to manually edit baseline files
-        }
-    }
-}
-
-tasks.register("clean", Delete::class) {
-    delete(rootProject.buildDir)
 }

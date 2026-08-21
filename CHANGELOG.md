@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [10.1.0] - 2026-08-21
+
+### Added
+
+- Support cross-compiling Apple (iOS/macOS) klibs on non-Mac (e.g. Linux CI) hosts for assembling/publishing all targets
+
+### Changed
+
+- Room 3.0.1
+- Kotlin 2.4.10
+- Updated Gradle to 9.7.0
+- Updated AGP to 9.3.1
+- Updated okio to 3.18.1
+- Updated detekt to 2.0.0-alpha.6
+- Updated kover to 0.9.9
+- Updated versions plugin to 0.61.0 (`io.github.ben-manes.versions`)
+- Raised Android `minSdk` to 24
+
 ## [10.0.0] - 2026-07-09
 
 ### Added
