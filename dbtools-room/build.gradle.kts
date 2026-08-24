@@ -87,6 +87,7 @@ kotlin {
                 implementation(libs.kotlin.coroutines.test)
                 implementation(libs.assertk)
                 implementation(libs.kotlin.coroutines.test)
+                implementation(libs.okio.fakefilesystem)
             }
         }
     }

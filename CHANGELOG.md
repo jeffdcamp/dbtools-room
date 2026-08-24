@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [10.1.1] - 2026-08-23
+
+### Fixed
+
+- `deleteDatabaseFiles`/`renameDatabaseFiles` now build sidecar file paths (`-journal`, `-shm`, `-wal`, `.lck`) from the full database path instead of just the file name, so the correct files are deleted/moved when the database lives in a subdirectory
+- kotlinx-io `deleteDatabaseFiles` no longer fails when a sidecar file is missing (uses `mustExist = false`)
+
+### Added
+
+- Tests for filesystem extension functions (`okio-fakefilesystem` test dependency)
+
 ## [10.1.0] - 2026-08-21
 
 ### Added

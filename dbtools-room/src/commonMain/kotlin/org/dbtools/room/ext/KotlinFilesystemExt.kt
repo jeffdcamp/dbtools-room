@@ -15,11 +15,12 @@ import kotlinx.io.readLine
  * @return true if the database was successfully deleted.
  */
 fun FileSystem.deleteDatabaseFiles(file: Path): Boolean {
-    delete(file)
-    delete(Path("${file.name}-journal"))
-    delete(Path("${file.name}-shm"))
-    delete(Path("${file.name}-wal"))
-    delete(Path("${file.name}.lck"))
+    // kotlinx-io's delete defaults to mustExist = true; pass false so absent sidecars aren't an error.
+    delete(file, mustExist = false)
+    delete(Path("$file-journal"), mustExist = false)
+    delete(Path("$file-shm"), mustExist = false)
+    delete(Path("$file-wal"), mustExist = false)
+    delete(Path("$file.lck"), mustExist = false)
 
     return !exists(file)
 }
@@ -34,10 +35,10 @@ fun FileSystem.deleteDatabaseFiles(file: Path): Boolean {
  */
 fun FileSystem.renameDatabaseFiles(srcFile: Path, targetFile: Path): Boolean {
     atomicMove(srcFile, targetFile)
-    atomicMoveIfExists(Path("${srcFile.name}-journal"),Path( "${targetFile.name}-journal"))
-    atomicMoveIfExists(Path("${srcFile.name}-shm"),Path( "${targetFile.name}-shm"))
-    atomicMoveIfExists(Path("${srcFile.name}-wal"),Path( "${targetFile.name}-wal"))
-    atomicMoveIfExists(Path("${srcFile.name}.lck"),Path( "${targetFile.name}.lck"))
+    atomicMoveIfExists(Path("$srcFile-journal"), Path("$targetFile-journal"))
+    atomicMoveIfExists(Path("$srcFile-shm"), Path("$targetFile-shm"))
+    atomicMoveIfExists(Path("$srcFile-wal"), Path("$targetFile-wal"))
+    atomicMoveIfExists(Path("$srcFile.lck"), Path("$targetFile.lck"))
 
     return exists(targetFile) && !exists(srcFile)
 }

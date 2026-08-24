@@ -43,5 +43,6 @@ kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-s
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test" }
 
 okio = { group = "com.squareup.okio", name = "okio", version.ref = "okio" }
+okio-fakefilesystem = { group = "com.squareup.okio", name = "okio-fakefilesystem", version.ref = "okio" }
 
 room-runtime = { group = "androidx.room3", name = "room3-runtime", version.ref = "room" }

@@ -17,10 +17,10 @@ import okio.use
  */
 fun FileSystem.deleteDatabaseFiles(file: Path): Boolean {
     delete(file)
-    delete("${file.name}-journal".toPath())
-    delete("${file.name}-shm".toPath())
-    delete("${file.name}-wal".toPath())
-    delete("${file.name}.lck".toPath())
+    delete("$file-journal".toPath())
+    delete("$file-shm".toPath())
+    delete("$file-wal".toPath())
+    delete("$file.lck".toPath())
 
     return !exists(file)
 }
@@ -35,10 +35,10 @@ fun FileSystem.deleteDatabaseFiles(file: Path): Boolean {
  */
 fun FileSystem.renameDatabaseFiles(srcFile: Path, targetFile: Path): Boolean {
     atomicMove(srcFile, targetFile)
-    atomicMoveIfExists("${srcFile.name}-journal".toPath(), "${targetFile.name}-journal".toPath())
-    atomicMoveIfExists("${srcFile.name}-shm".toPath(), "${targetFile.name}-shm".toPath())
-    atomicMoveIfExists("${srcFile.name}-wal".toPath(), "${targetFile.name}-wal".toPath())
-    atomicMoveIfExists("${srcFile.name}.lck".toPath(), "${targetFile.name}.lck".toPath())
+    atomicMoveIfExists("$srcFile-journal".toPath(), "$targetFile-journal".toPath())
+    atomicMoveIfExists("$srcFile-shm".toPath(), "$targetFile-shm".toPath())
+    atomicMoveIfExists("$srcFile-wal".toPath(), "$targetFile-wal".toPath())
+    atomicMoveIfExists("$srcFile.lck".toPath(), "$targetFile.lck".toPath())
 
     return exists(targetFile) && !exists(srcFile)
 }
