@@ -1,6 +1,6 @@
 [versions]
-agp = "9.3.1" # only use the latest supported by KMP (https://kotlinlang.org/docs/multiplatform-compatibility-guide.html)
-kotlin = "2.4.10"
+agp = "9.4.0" # only use the latest supported by KMP (https://kotlinlang.org/docs/multiplatform-compatibility-guide.html)
+kotlin = "2.4.20"
 kotlinxAtomicfu = "0.33.0"
 kotlinxCoroutines = "1.11.0"
 kotlinxSerialization = "1.11.0"
@@ -13,11 +13,11 @@ android-minSdk = "24"
 assertk = "0.28.1"
 detekt = "2.0.0-alpha.6"
 downloadPlugin = "5.7.0"
-kermit = "2.1.0"
+kermit = "2.2.0"
 kover = "0.9.9"
 vanniktechPlugin = "0.37.0"
-okio = "3.18.1"
-room = "3.0.1"
+okio = "3.18.2"
+room = "3.0.2"
 versionsPlugin = "0.61.0"
 
 [plugins]

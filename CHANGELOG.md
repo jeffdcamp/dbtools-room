@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [10.2.0] - 2026-09-08
+
+### Changed
+
+- Room 3.0.2
+- Kotlin 2.4.20
+- Updated Gradle to 9.7.1
+- Updated AGP to 9.4.0
+- Updated okio to 3.18.2
+- Updated kermit to 2.2.0
+
 ## [10.1.1] - 2026-08-23
 
 ### Fixed
