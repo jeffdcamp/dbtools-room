@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [10.2.1] - 2026-09-29
+
+### Changed
+
+- Room 3.0.3
+- Updated Gradle to 9.8.0
+- Updated AGP to 9.4.1
+
+
 ## [10.2.0] - 2026-09-08
 
 ### Changed
