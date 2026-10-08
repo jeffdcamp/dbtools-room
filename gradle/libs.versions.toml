@@ -1,6 +1,6 @@
 [versions]
 agp = "9.4.1" # only use the latest supported by KMP (https://kotlinlang.org/docs/multiplatform-compatibility-guide.html)
-kotlin = "2.4.20"
+kotlin = "2.4.21"
 kotlinxAtomicfu = "0.33.0"
 kotlinxCoroutines = "1.11.0"
 kotlinxSerialization = "1.11.0"
@@ -18,7 +18,7 @@ kover = "0.9.11"
 vanniktechPlugin = "0.37.0"
 okio = "3.18.2"
 room = "3.0.3"
-versionsPlugin = "0.64.0"
+versionsPlugin = "0.65.0"
 
 [plugins]
 android-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
