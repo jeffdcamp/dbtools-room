@@ -39,12 +39,16 @@ private val SHADOW_TABLE_SUFFIXES = mapOf(
 private val VIRTUAL_TABLE_MODULE_REGEX = Regex("""^\s*CREATE\s+VIRTUAL\s+TABLE\b[\s\S]*?\bUSING\s+(\w+)""", RegexOption.IGNORE_CASE)
 
 /** `sqlite_master` for [databaseName] (an attached database alias), or for the main database when blank. */
-private fun sqliteMasterTable(databaseName: String): String =
+internal fun sqliteMasterTable(databaseName: String): String =
     if (databaseName.isBlank()) "sqlite_master" else "${databaseName.quoteSqlIdentifier()}.sqlite_master"
 
 /** `"table"`, or `"schema"."table"` when [databaseName] is not blank. */
 internal fun qualifiedTableName(tableName: String, databaseName: String): String =
     if (databaseName.isBlank()) tableName.quoteSqlIdentifier() else "${databaseName.quoteSqlIdentifier()}.${tableName.quoteSqlIdentifier()}"
+
+/** `('a','b')`: [values] as a SQL IN list of string literals, with any embedded `'` doubled. */
+internal fun sqlInClause(values: List<String>): String =
+    values.joinToString(",", prefix = "(", postfix = ")") { "'${it.replace("'", "''")}'" }
 
 internal fun findTablesInfoSql(databaseName: String, includeInternalTables: Boolean): String {
     val internalFilter = if (includeInternalTables) {

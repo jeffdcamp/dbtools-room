@@ -184,6 +184,27 @@ class SqlSchemaExtTest {
         assertFailure { connection.rowCount("no_such_table") }.isInstanceOf<SQLiteException>()
     }
 
+    /** The older name-based functions quote the attached database alias too. */
+    @Test
+    fun `table and view lookups in an attached database whose name needs quoting`() {
+        connection.execSQL("""ATTACH DATABASE ':memory:' AS "my db"""")
+        connection.execSQL("""CREATE TABLE "my db".note (id INTEGER)""")
+        connection.execSQL("""CREATE VIEW "my db".note_ids AS SELECT id FROM note""")
+
+        assertThat(connection.findTableNames("my db")).containsExactly("note")
+        assertThat(connection.tableExists("note", "my db")).isTrue()
+        assertThat(connection.findViewNames("my db")).containsExactly("note_ids")
+        assertThat(connection.viewExists("note_ids", "my db")).isTrue()
+    }
+
+    @Test
+    fun `tableExists handles a name containing an apostrophe`() {
+        connection.execSQL("""CREATE TABLE "o'brien" (id INTEGER)""")
+
+        assertThat(connection.tableExists("o'brien")).isTrue()
+        assertThat(connection.tablesExists(listOf("item", "o'brien"))).isTrue()
+    }
+
     @Test
     fun `quoteSqlIdentifier wraps and escapes double quotes`() {
         assertThat("item".quoteSqlIdentifier()).isEqualTo("\"item\"")

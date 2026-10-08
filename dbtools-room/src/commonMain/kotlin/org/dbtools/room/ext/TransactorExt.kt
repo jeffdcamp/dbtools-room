@@ -111,17 +111,9 @@ suspend fun Transactor.getAttachedDatabases(): List<AttachedDatabaseInfo> {
  */
 suspend fun Transactor.findTableNames(databaseName: String = ""): List<String> {
     val tableNames = mutableListOf<String>()
-    if (databaseName.isNotBlank()) {
-        usePrepared("SELECT tbl_name FROM $databaseName.sqlite_master where type='table'") {
-            while (it.step()) {
-                tableNames.add(it.getText(0))
-            }
-        }
-    } else {
-        usePrepared("SELECT tbl_name FROM sqlite_master where type='table'")  {
-            while (it.step()) {
-                tableNames.add(it.getText(0))
-            }
+    usePrepared("SELECT tbl_name FROM ${sqliteMasterTable(databaseName)} where type='table'") {
+        while (it.step()) {
+            tableNames.add(it.getText(0))
         }
     }
 
@@ -148,13 +140,8 @@ suspend fun Transactor.tableExists(tableName: String, databaseName: String = "")
  * @return true If ALL tableNames exist
  */
 suspend fun Transactor.tablesExists(tableNames: List<String>, databaseName: String = ""): Boolean {
-    val inClaus = tableNames.joinToString(",", prefix = "(", postfix = ")") { "'$it'" }
-
-    val tableCount = if (databaseName.isNotBlank()) {
-        execIntResultSql("SELECT count(1) FROM $databaseName.sqlite_master WHERE type='table' AND tbl_name IN $inClaus")
-    } else {
-        execIntResultSql("SELECT count(1) FROM sqlite_master WHERE type='table' AND tbl_name IN $inClaus")
-    }
+    val inClaus = sqlInClause(tableNames)
+    val tableCount = execIntResultSql("SELECT count(1) FROM ${sqliteMasterTable(databaseName)} WHERE type='table' AND tbl_name IN $inClaus")
 
     return tableCount == tableNames.size
 }
@@ -165,17 +152,9 @@ suspend fun Transactor.tablesExists(tableNames: List<String>, databaseName: Stri
  */
 suspend fun Transactor.findViewNames(databaseName: String = ""): List<String> {
     val viewNames = mutableListOf<String>()
-    if (databaseName.isNotBlank()) {
-        usePrepared("SELECT tbl_name FROM $databaseName.sqlite_master where type='view'") {
-            while (it.step()) {
-                viewNames.add(it.getText(0))
-            }
-        }
-    } else {
-        usePrepared("SELECT tbl_name FROM sqlite_master where type='view'") {
-            while (it.step()) {
-                viewNames.add(it.getText(0))
-            }
+    usePrepared("SELECT tbl_name FROM ${sqliteMasterTable(databaseName)} where type='view'") {
+        while (it.step()) {
+            viewNames.add(it.getText(0))
         }
     }
 
@@ -202,13 +181,8 @@ suspend fun Transactor.viewExists(viewName: String, databaseName: String = ""): 
  * @return true If ALL viewNames exist
  */
 suspend fun Transactor.viewExists(viewNames: List<String>, databaseName: String = ""): Boolean {
-    val inClaus = viewNames.joinToString(",", prefix = "(", postfix = ")") { "'$it'" }
-
-    val viewCount = if (databaseName.isNotBlank()) {
-        execIntResultSql("SELECT count(1) FROM $databaseName.sqlite_master WHERE type='view' AND tbl_name IN $inClaus")
-    } else {
-        execIntResultSql("SELECT count(1) FROM sqlite_master WHERE type='view' AND tbl_name IN $inClaus")
-    }
+    val inClaus = sqlInClause(viewNames)
+    val viewCount = execIntResultSql("SELECT count(1) FROM ${sqliteMasterTable(databaseName)} WHERE type='view' AND tbl_name IN $inClaus")
 
     return viewCount == viewNames.size
 }

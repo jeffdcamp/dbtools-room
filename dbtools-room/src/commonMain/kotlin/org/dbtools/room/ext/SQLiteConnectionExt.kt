@@ -104,12 +104,7 @@ fun SQLiteConnection.getAttachedDatabases(): List<AttachedDatabaseInfo> {
  * @param databaseName Alias name for database (such as an attached database) (optional)
  */
 fun SQLiteConnection.findTableNames(databaseName: String = ""): List<String> {
-    val statement = if (databaseName.isNotBlank()) {
-        prepare("SELECT tbl_name FROM $databaseName.sqlite_master where type='table'")
-    } else {
-        prepare("SELECT tbl_name FROM sqlite_master where type='table'")
-    }
-
+    val statement = prepare("SELECT tbl_name FROM ${sqliteMasterTable(databaseName)} where type='table'")
 
     val tableNames = mutableListOf<String>()
     statement.use {
@@ -141,13 +136,8 @@ fun SQLiteConnection.tableExists(tableName: String, databaseName: String = ""): 
  * @return true If ALL tableNames exist
  */
 fun SQLiteConnection.tablesExists(tableNames: List<String>, databaseName: String = ""): Boolean {
-    val inClaus = tableNames.joinToString(",", prefix = "(", postfix = ")") { "'$it'" }
-
-    val statement = if (databaseName.isNotBlank()) {
-        prepare("SELECT count(1) FROM $databaseName.sqlite_master WHERE type='table' AND tbl_name IN $inClaus")
-    } else {
-        prepare("SELECT count(1) FROM sqlite_master WHERE type='table' AND tbl_name IN $inClaus")
-    }
+    val inClaus = sqlInClause(tableNames)
+    val statement = prepare("SELECT count(1) FROM ${sqliteMasterTable(databaseName)} WHERE type='table' AND tbl_name IN $inClaus")
 
     var tableCount = 0
     statement.use {
@@ -164,11 +154,7 @@ fun SQLiteConnection.tablesExists(tableNames: List<String>, databaseName: String
  * @param databaseName Alias name for database (such as an attached database) (optional)
  */
 fun SQLiteConnection.findViewNames(databaseName: String = ""): List<String> {
-    val statement = if (databaseName.isNotBlank()) {
-        prepare("SELECT tbl_name FROM $databaseName.sqlite_master where type='view'")
-    } else {
-        prepare("SELECT tbl_name FROM sqlite_master where type='view'")
-    }
+    val statement = prepare("SELECT tbl_name FROM ${sqliteMasterTable(databaseName)} where type='view'")
 
     val viewNames = mutableListOf<String>()
     statement.use {
@@ -200,13 +186,8 @@ fun SQLiteConnection.viewExists(viewName: String, databaseName: String = ""): Bo
  * @return true If ALL viewNames exist
  */
 fun SQLiteConnection.viewExists(viewNames: List<String>, databaseName: String = ""): Boolean {
-    val inClaus = viewNames.joinToString(",", prefix = "(", postfix = ")") { "'$it'" }
-
-    val statement = if (databaseName.isNotBlank()) {
-        prepare("SELECT count(1) FROM $databaseName.sqlite_master WHERE type='view' AND tbl_name IN $inClaus")
-    } else {
-        prepare("SELECT count(1) FROM sqlite_master WHERE type='view' AND tbl_name IN $inClaus")
-    }
+    val inClaus = sqlInClause(viewNames)
+    val statement = prepare("SELECT count(1) FROM ${sqliteMasterTable(databaseName)} WHERE type='view' AND tbl_name IN $inClaus")
 
     var viewCount = 0
     statement.use {

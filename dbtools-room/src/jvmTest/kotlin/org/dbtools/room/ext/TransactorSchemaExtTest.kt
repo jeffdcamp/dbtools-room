@@ -66,6 +66,13 @@ class TransactorSchemaExtTest {
         assertThat(transactor.columnExists("note", "note_id", databaseName = "my db")).isTrue()
     }
 
+    @Test
+    fun `table and view lookups in an attached database whose name needs quoting`() = runTest {
+        assertThat(transactor.findTableNames("my db")).containsExactly("note")
+        assertThat(transactor.tableExists("note", "my db")).isTrue()
+        assertThat(transactor.viewExists("item_title")).isTrue()
+    }
+
     /** A [Transactor] over a single connection: just enough for the extensions, which only prepare statements. */
     private class ConnectionTransactor(private val connection: SQLiteConnection) : Transactor {
         override suspend fun <R> usePrepared(sql: String, block: suspend (SQLiteStatement) -> R): R =
