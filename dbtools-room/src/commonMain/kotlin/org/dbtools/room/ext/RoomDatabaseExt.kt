@@ -11,6 +11,8 @@ import okio.FileSystem
 import okio.Path
 import org.dbtools.room.DatabaseViewQuery
 import org.dbtools.room.data.AttachedDatabaseInfo
+import org.dbtools.room.data.DatabaseColumnInfo
+import org.dbtools.room.data.DatabaseTableInfo
 
 /**
  * Preform a PRAGMA check on the database and optionally check a table for existing data.
@@ -114,6 +116,52 @@ suspend fun RoomDatabase.viewExists(viewNames: List<String>, databaseName: Strin
     return useReaderConnection { it.viewExists(viewNames, databaseName) }
 }
 
+/**
+ * Find the tables and views in this database, with each one's type and CREATE statement.
+ *
+ * A richer form of [findTableNames] / [findViewNames], for code that needs to describe a database rather than just
+ * check for a name (schema browsers, debugging tools, generic export).
+ *
+ * @param databaseName Alias name for database (such as an attached database) (optional)
+ * @param includeInternalTables Also return the tables SQLite and Room create for their own bookkeeping
+ * (`sqlite_*`, `room_master_table`, `android_metadata`). Default false.
+ *
+ * @return tables, then views, each sorted by name
+ */
+suspend fun RoomDatabase.findTablesInfo(databaseName: String = "", includeInternalTables: Boolean = false): List<DatabaseTableInfo> {
+    return useReaderConnection { it.findTablesInfo(databaseName, includeInternalTables) }
+}
+
+/**
+ * Find the columns of a table or view.
+ *
+ * The table name is bound as a parameter (not built into the SQL), so any table name works as-is, including one
+ * containing spaces or quotes.
+ *
+ * @param tableName Table or view to describe (unquoted)
+ * @param databaseName Alias name for database (such as an attached database) (optional)
+ *
+ * @return columns in table order, or an empty list if the table does not exist
+ */
+suspend fun RoomDatabase.findColumnsInfo(tableName: String, databaseName: String = ""): List<DatabaseColumnInfo> {
+    return useReaderConnection { it.findColumnsInfo(tableName, databaseName) }
+}
+
+/**
+ * Count the rows in a table or view.
+ *
+ * The name is quoted with [quoteSqlIdentifier] (SQLite cannot bind an identifier), so any table name works as-is.
+ *
+ * @param tableName Table or view to count (unquoted)
+ * @param databaseName Alias name for database (such as an attached database) (optional)
+ *
+ * @return number of rows
+ * @throws androidx.sqlite.SQLiteException if the table or view does not exist
+ */
+suspend fun RoomDatabase.rowCount(tableName: String, databaseName: String = ""): Long {
+    return useReaderConnection { it.rowCount(tableName, databaseName) }
+}
+
 internal suspend fun RoomDatabase.execIntResultSql(sql: String, columnIndex: Int = 0): Int? {
     return useReaderConnection { it.execIntResultSql(sql, columnIndex) }
 }
@@ -177,24 +225,25 @@ suspend fun RoomDatabase.applySqlFile(fileSystem: FileSystem, sqlPath: Path): Bo
 
 /**
  * Check to see if a column in a database exists, if it does not... alter query will be run
- * @param tableName table for columnName
+ * @param tableName table for columnName (unquoted)
  * @param columnName column to from tableName to be checked
  * @param alterSql SQL to be run if the column does not exist.
  * Example: alterTableIfColumnDoesNotExist(database, "individual", "middle_name", "ALTER TABLE individual ADD `middle_name` TEXT DEFAULT '' NOT NULL")
+ * @param databaseName Alias name for database (such as an attached database) (optional)
  */
-suspend fun RoomDatabase.alterTableIfColumnDoesNotExist(tableName: String, columnName: String, alterSql: String) {
-    return useWriterConnection { it.alterTableIfColumnDoesNotExist(tableName, columnName, alterSql) }
+suspend fun RoomDatabase.alterTableIfColumnDoesNotExist(tableName: String, columnName: String, alterSql: String, databaseName: String = "") {
+    return useWriterConnection { it.alterTableIfColumnDoesNotExist(tableName, columnName, alterSql, databaseName) }
 }
 
 /**
  * Check to see if a column in a database exists
- * @param tableName table for columnName
+ * @param tableName table for columnName (unquoted)
  * @param columnName column to from tableName to be checked
+ * @param databaseName Alias name for database (such as an attached database) (optional)
  * @return true if the column exists otherwise false
  */
-@Suppress("NestedBlockDepth")
-suspend fun RoomDatabase.columnExists(tableName: String, columnName: String): Boolean {
-    return useReaderConnection { it.columnExists(tableName, columnName) }
+suspend fun RoomDatabase.columnExists(tableName: String, columnName: String, databaseName: String = ""): Boolean {
+    return useReaderConnection { it.columnExists(tableName, columnName, databaseName) }
 }
 
 /**

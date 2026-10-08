@@ -90,6 +90,12 @@ kotlin {
                 implementation(libs.okio.fakefilesystem)
             }
         }
+        val jvmTest by getting {
+            dependencies {
+                // A real SQLite, for the tests that run SQL (schema/statement extensions)
+                implementation(libs.sqlite.bundled)
+            }
+        }
     }
 }
 

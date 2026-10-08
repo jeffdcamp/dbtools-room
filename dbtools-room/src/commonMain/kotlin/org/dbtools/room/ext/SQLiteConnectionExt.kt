@@ -11,6 +11,8 @@ import okio.FileSystem
 import okio.Path
 import org.dbtools.room.DatabaseViewQuery
 import org.dbtools.room.data.AttachedDatabaseInfo
+import org.dbtools.room.data.DatabaseColumnInfo
+import org.dbtools.room.data.DatabaseTableInfo
 import kotlin.time.TimeSource.Monotonic.markNow
 
 /**
@@ -216,6 +218,60 @@ fun SQLiteConnection.viewExists(viewNames: List<String>, databaseName: String = 
     return viewCount == viewNames.size
 }
 
+/**
+ * Find the tables and views in this database, with each one's type and CREATE statement.
+ *
+ * A richer form of [findTableNames] / [findViewNames], for code that needs to describe a database rather than just
+ * check for a name (schema browsers, debugging tools, generic export).
+ *
+ * @param databaseName Alias name for database (such as an attached database) (optional)
+ * @param includeInternalTables Also return the tables SQLite and Room create for their own bookkeeping
+ * (`sqlite_*`, `room_master_table`, `android_metadata`). Default false.
+ *
+ * @return tables, then views, each sorted by name
+ */
+fun SQLiteConnection.findTablesInfo(databaseName: String = "", includeInternalTables: Boolean = false): List<DatabaseTableInfo> {
+    return prepare(findTablesInfoSql(databaseName, includeInternalTables)).use { statement ->
+        statement.readTableInfoRows(includeInternalTables)
+    }
+}
+
+/**
+ * Find the columns of a table or view.
+ *
+ * The table name is bound as a parameter (not built into the SQL), so any table name works as-is, including one
+ * containing spaces or quotes.
+ *
+ * @param tableName Table or view to describe (unquoted)
+ * @param databaseName Alias name for database (such as an attached database) (optional)
+ *
+ * @return columns in table order, or an empty list if the table does not exist
+ */
+fun SQLiteConnection.findColumnsInfo(tableName: String, databaseName: String = ""): List<DatabaseColumnInfo> {
+    return prepare(findColumnsInfoSql(databaseName)).use { statement ->
+        statement.bindFindColumnsArgs(tableName, databaseName)
+        statement.readColumnInfoRows()
+    }
+}
+
+/**
+ * Count the rows in a table or view.
+ *
+ * The name is quoted with [quoteSqlIdentifier] (SQLite cannot bind an identifier), so any table name works as-is.
+ *
+ * @param tableName Table or view to count (unquoted)
+ * @param databaseName Alias name for database (such as an attached database) (optional)
+ *
+ * @return number of rows
+ * @throws androidx.sqlite.SQLiteException if the table or view does not exist
+ */
+fun SQLiteConnection.rowCount(tableName: String, databaseName: String = ""): Long {
+    return prepare(rowCountSql(tableName, databaseName)).use { statement ->
+        statement.step()
+        statement.getLong(0)
+    }
+}
+
 internal fun SQLiteConnection.execIntResultSql(sql: String, columnIndex: Int = 0): Int? {
     return this.prepare(sql).use { statement ->
         if (statement.step()) {
@@ -304,13 +360,14 @@ suspend fun SQLiteConnection.applySqlFile(fileSystem: FileSystem, sqlPath: Path)
 
 /**
  * Check to see if a column in a database exists, if it does not... alter query will be run
- * @param tableName table for columnName
+ * @param tableName table for columnName (unquoted)
  * @param columnName column to from tableName to be checked
  * @param alterSql SQL to be run if the column does not exist.
  * Example: alterTableIfColumnDoesNotExist(database, "individual", "middle_name", "ALTER TABLE individual ADD `middle_name` TEXT DEFAULT '' NOT NULL")
+ * @param databaseName Alias name for database (such as an attached database) (optional)
  */
-fun SQLiteConnection.alterTableIfColumnDoesNotExist(tableName: String, columnName: String, alterSql: String) {
-    if (!this.columnExists(tableName, columnName)) {
+fun SQLiteConnection.alterTableIfColumnDoesNotExist(tableName: String, columnName: String, alterSql: String, databaseName: String = "") {
+    if (!this.columnExists(tableName, columnName, databaseName)) {
         Logger.i { "Adding column [$columnName] to table [$tableName]" }
         execSQL(alterSql)
     }
@@ -318,29 +375,18 @@ fun SQLiteConnection.alterTableIfColumnDoesNotExist(tableName: String, columnNam
 
 /**
  * Check to see if a column in a database exists
- * @param tableName table for columnName
+ * @param tableName table for columnName (unquoted)
  * @param columnName column to from tableName to be checked
+ * @param databaseName Alias name for database (such as an attached database) (optional)
  * @return true if the column exists otherwise false
  */
-@Suppress("NestedBlockDepth")
-fun SQLiteConnection.columnExists(tableName: String, columnName: String): Boolean {
-    var columnExists = false
-
-    this.prepare("PRAGMA table_info($tableName)").use { statement: SQLiteStatement ->
-        if (statement.step()) {
-            do {
-                val currentColumn = statement.getText(statement.getColumnIndexOrThrow("name"))
-                if (currentColumn == columnName) {
-                    columnExists = true
-                }
-            } while (!columnExists && statement.step())
-        } else {
-            Logger.w { "Query: [PRAGMA table_info($tableName)] returned NO data" }
-        }
-
+fun SQLiteConnection.columnExists(tableName: String, columnName: String, databaseName: String = ""): Boolean {
+    val columns = findColumnsInfo(tableName, databaseName)
+    if (columns.isEmpty()) {
+        Logger.w { "columnExists - table [$tableName] has no columns (does it exist?)" }
     }
 
-    return columnExists
+    return columns.any { it.name == columnName }
 }
 
 /**

@@ -1,5 +1,9 @@
 package org.dbtools.room.ext
 
+import androidx.sqlite.SQLITE_DATA_BLOB
+import androidx.sqlite.SQLITE_DATA_FLOAT
+import androidx.sqlite.SQLITE_DATA_INTEGER
+import androidx.sqlite.SQLITE_DATA_NULL
 import androidx.sqlite.SQLiteStatement
 
 /**
@@ -50,3 +54,26 @@ fun SQLiteStatement.getLongOrNull(index: Int): Long? = if (isNull(index)) null e
 fun SQLiteStatement.getDoubleOrNull(index: Int): Double? = if (isNull(index)) null else getDouble(index)
 fun SQLiteStatement.getFloatOrNull(index: Int): Float? = if (isNull(index)) null else getFloat(index)
 fun SQLiteStatement.getBooleanOrNull(index: Int): Boolean? = if (isNull(index)) null else getBoolean(index)
+
+/**
+ * Read a column of the current row as the type SQLite actually stored it as, so nothing is silently coerced
+ * (an INTEGER column holding the text `"1"` comes back as a String, not a Long).
+ *
+ * This is the reading counterpart to [bindArgs], for code that does not know a result's column types ahead of
+ * time (ad-hoc queries, debugging tools, copying rows between databases).
+ *
+ * @param index 0-based column index
+ * @return null, Long, Double, String, or ByteArray, matching the value's SQLite storage class
+ */
+fun SQLiteStatement.getValue(index: Int): Any? = when (getColumnType(index)) {
+    SQLITE_DATA_NULL -> null
+    SQLITE_DATA_INTEGER -> getLong(index)
+    SQLITE_DATA_FLOAT -> getDouble(index)
+    SQLITE_DATA_BLOB -> getBlob(index)
+    else -> getText(index)
+}
+
+/**
+ * Read every column of the current row with [getValue], in column order.
+ */
+fun SQLiteStatement.getValues(): List<Any?> = List(getColumnCount()) { index -> getValue(index) }
