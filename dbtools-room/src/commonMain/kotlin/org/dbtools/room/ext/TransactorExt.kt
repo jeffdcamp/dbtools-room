@@ -28,7 +28,7 @@ import kotlin.time.TimeSource.Monotonic.markNow
 suspend fun Transactor.validateDatabase(tag: String = "", tableDataCountCheck: String? = null, allowZeroCount: Boolean = true): Boolean {
     Logger.i { "Checking database integrity for [$tag]" }
     val mark = markNow()
-    try {
+    runCatching {
         // pragma check
         if (!isIntegrityOk()) {
             Logger.e { "validateDatabase - database [$tag] isDatabaseIntegrityOk check failed" }
@@ -56,8 +56,8 @@ suspend fun Transactor.validateDatabase(tag: String = "", tableDataCountCheck: S
                 return false
             }
         }
-    } catch (expected: Exception) {
-        Logger.e(expected) { "Failed to validate database [$tag]" }
+    }.onFailure { e ->
+        Logger.e(e) { "Failed to validate database [$tag]" }
         return false
     }
 

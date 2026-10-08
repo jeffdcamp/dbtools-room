@@ -126,7 +126,7 @@ abstract class RoomDatabaseRepository<K, out T: RoomDatabase> {
     }
 
     private fun closeDatabase(key: String, deleteFile: Boolean = false): Boolean {
-        try {
+        kotlin.runCatching {
             val databaseRepositoryItem = databaseList[key]
             databaseRepositoryItem?.let {
                 databaseRepositoryItem.database.close()
@@ -136,8 +136,8 @@ abstract class RoomDatabaseRepository<K, out T: RoomDatabase> {
                 }
 
             }
-        } catch(ignore: Exception) {
-            Logger.e(ignore) { "Failed to close database - key: [$key]" }
+        }.onFailure { e ->
+            Logger.e(e) { "Failed to close database - key: [$key]" }
         }
 
         return databaseList.remove(key) != null

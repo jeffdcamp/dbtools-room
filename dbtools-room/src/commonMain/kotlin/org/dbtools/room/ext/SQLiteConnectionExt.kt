@@ -28,7 +28,7 @@ import kotlin.time.TimeSource.Monotonic.markNow
 fun SQLiteConnection.validateDatabase(tag: String = "", tableDataCountCheck: String? = null, allowZeroCount: Boolean = true): Boolean {
     Logger.i { "Checking database integrity for [$tag]" }
     val mark = markNow()
-    try {
+    runCatching {
         // pragma check
         if (!isIntegrityOk()) {
             Logger.e { "validateDatabase - database [$tag] isDatabaseIntegrityOk check failed" }
@@ -50,8 +50,8 @@ fun SQLiteConnection.validateDatabase(tag: String = "", tableDataCountCheck: Str
                 }
             }
         }
-    } catch (expected: Exception) {
-        Logger.e(expected) { "Failed to validate database [$tag]" }
+    }.onFailure { e ->
+        Logger.e(e) { "Failed to validate database [$tag]" }
         return false
     }
 
@@ -450,15 +450,14 @@ fun SQLiteConnection.isIntegrityOk(): Boolean {
  * Executes the specified block in a database transaction. The transaction will be
  * marked as successful unless an exception is thrown in the block.
  */
-@Suppress("TooGenericExceptionCaught")
 inline fun SQLiteConnection.runInTransaction(block: () -> Unit): Boolean {
     beginTransaction()
-    return try {
+    return runCatching {
         block()
         endTransaction()
         true
-    } catch (transactionException: Throwable) {
-        Logger.i(transactionException) { "Failed to execute transaction.  Message: ${transactionException.message}" }
+    }.getOrElse { e ->
+        Logger.i(e) { "Failed to execute transaction.  Message: ${e.message}" }
         rollbackTransaction()
         false
     }

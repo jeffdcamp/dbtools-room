@@ -45,62 +45,62 @@ fun SQLiteConnection.mergeDatabase(
 ): Boolean {
     val mergeDbName = "merge_db"
 
-    try {
-        // Attach sourceDatabase with primary
-        attachDatabase(otherDatabasePath, mergeDbName)
+    return try {
+        runCatching {
+            // Attach sourceDatabase with primary
+            attachDatabase(otherDatabasePath, mergeDbName)
 
-        // Get a list of tables to merge
-        val sourceTableNames = findTableNames(mergeDbName)
-        val targetTableNames = findTableNames()
+            // Get a list of tables to merge
+            val sourceTableNames = findTableNames(mergeDbName)
+            val targetTableNames = findTableNames()
 
-        val tableNamesToMerge = createTableNamesToMerge(sourceTableNames, includeTables, excludeTables, sourceTableNameMap)
+            val tableNamesToMerge = createTableNamesToMerge(sourceTableNames, includeTables, excludeTables, sourceTableNameMap)
 
-        // verify the remaining tables actually exist in the target database
-        tableNamesToMerge.forEach {
-            if (!targetTableNames.contains(it.targetTableName)) {
-                Logger.e { "Table does not exist in target database: [${it.targetTableName}]" }
-                return false
-            }
-        }
-
-        // Merge table content
-        beginTransaction()
-
-        try {
-            tableNamesToMerge.forEach { mergeTable ->
-                if (sourceTableNames.contains(mergeTable.sourceTableName)) {
-                    val sourceTableName = "$mergeDbName.${mergeTable.sourceTableName}"
-
-                    Logger.i { "Merging [$sourceTableName] INTO [${mergeTable.targetTableName}]" }
-                    mergeBlock(this, sourceTableName, mergeTable.targetTableName) // default: database.executeSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
-                } else {
-                    Logger.w { "WARNING: Cannot merge table [${mergeTable.sourceTableName}]... it does not exist in sourceDatabaseFile... skipping..." }
+            // verify the remaining tables actually exist in the target database
+            tableNamesToMerge.forEach {
+                if (!targetTableNames.contains(it.targetTableName)) {
+                    Logger.e { "Table does not exist in target database: [${it.targetTableName}]" }
+                    return@runCatching false
                 }
             }
 
-            endTransaction()
-        } catch (expected: Exception) {
-            Logger.e(expected) { "Failed to merge database tables (inner) (sourceDatabaseFile: [${otherDatabasePath}]" }
-            onFailBlock?.invoke(expected, this)
-            return false
-        } finally {
-            rollbackTransaction()
+            // Merge table content
+            beginTransaction()
+
+            runCatching {
+                tableNamesToMerge.forEach { mergeTable ->
+                    if (sourceTableNames.contains(mergeTable.sourceTableName)) {
+                        val sourceTableName = "$mergeDbName.${mergeTable.sourceTableName}"
+
+                        Logger.i { "Merging [$sourceTableName] INTO [${mergeTable.targetTableName}]" }
+                        mergeBlock(this, sourceTableName, mergeTable.targetTableName) // default: database.executeSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
+                    } else {
+                        Logger.w { "WARNING: Cannot merge table [${mergeTable.sourceTableName}]... it does not exist in sourceDatabaseFile... skipping..." }
+                    }
+                }
+
+                endTransaction()
+                true
+            }.getOrElse { e ->
+                Logger.e(e) { "Failed to merge database tables (inner) (sourceDatabaseFile: [${otherDatabasePath}]" }
+                rollbackTransaction()
+                onFailBlock?.invoke(e.asException(), this)
+                false
+            }
+        }.getOrElse { e ->
+            Logger.e(e) { "Failed to merge database tables (outer) (sourceDatabaseFile: [${otherDatabasePath}]" }
+            onFailBlock?.invoke(e.asException(), this)
+            false
         }
-    } catch (expected: Exception) {
-        Logger.e(expected) { "Failed to merge database tables (outer) (sourceDatabaseFile: [${otherDatabasePath}]" }
-        onFailBlock?.invoke(expected, this)
-        return false
     } finally {
-        try {
-            // Detach databases
+        // Detach databases
+        runCatching {
             detachDatabase(mergeDbName)
-        } catch (expected: Exception) {
-            Logger.e(expected) { "Failed detach database (merge database tables)... may have never been attached" }
-            onFailBlock?.invoke(expected, this)
+        }.onFailure { e ->
+            Logger.e(e) { "Failed detach database (merge database tables)... may have never been attached" }
+            onFailBlock?.invoke(e.asException(), this)
         }
     }
-
-    return true
 }
 
 @Suppress("NestedBlockDepth")
@@ -116,57 +116,61 @@ suspend fun Transactor.mergeDatabase(
 ): Boolean {
     val mergeDbName = "merge_db"
 
-    try {
-        // Attach sourceDatabase with primary
-        attachDatabase(otherDatabasePath, mergeDbName)
+    return try {
+        runCatching {
+            // Attach sourceDatabase with primary
+            attachDatabase(otherDatabasePath, mergeDbName)
 
-        // Get a list of tables to merge
-        val sourceTableNames = findTableNames(mergeDbName)
-        val targetTableNames = findTableNames()
+            // Get a list of tables to merge
+            val sourceTableNames = findTableNames(mergeDbName)
+            val targetTableNames = findTableNames()
 
-        val tableNamesToMerge = createTableNamesToMerge(sourceTableNames, includeTables, excludeTables, sourceTableNameMap)
+            val tableNamesToMerge = createTableNamesToMerge(sourceTableNames, includeTables, excludeTables, sourceTableNameMap)
 
-        // verify the remaining tables actually exist in the target database
-        tableNamesToMerge.forEach {
-            if (!targetTableNames.contains(it.targetTableName)) {
-                Logger.e { "Table does not exist in target database: [${it.targetTableName}]" }
-                return false
-            }
-        }
-
-        // Merge table content
-        try {
-            tableNamesToMerge.forEach { mergeTable ->
-                if (sourceTableNames.contains(mergeTable.sourceTableName)) {
-                    val sourceTableName = "$mergeDbName.${mergeTable.sourceTableName}"
-
-                    Logger.i { "Merging [$sourceTableName] INTO [${mergeTable.targetTableName}]" }
-                    mergeBlock(this, sourceTableName, mergeTable.targetTableName) // default: database.executeSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
-                } else {
-                    Logger.w { "WARNING: Cannot merge table [${mergeTable.sourceTableName}]... it does not exist in sourceDatabaseFile... skipping..." }
+            // verify the remaining tables actually exist in the target database
+            tableNamesToMerge.forEach {
+                if (!targetTableNames.contains(it.targetTableName)) {
+                    Logger.e { "Table does not exist in target database: [${it.targetTableName}]" }
+                    return@runCatching false
                 }
             }
-        } catch (expected: Exception) {
-            Logger.e(expected) { "Failed to merge database tables (inner) (sourceDatabaseFile: [${otherDatabasePath}]" }
-            onFailBlock?.invoke(expected, this)
-            return false
+
+            // Merge table content
+            runCatching {
+                tableNamesToMerge.forEach { mergeTable ->
+                    if (sourceTableNames.contains(mergeTable.sourceTableName)) {
+                        val sourceTableName = "$mergeDbName.${mergeTable.sourceTableName}"
+
+                        Logger.i { "Merging [$sourceTableName] INTO [${mergeTable.targetTableName}]" }
+                        mergeBlock(this, sourceTableName, mergeTable.targetTableName) // default: database.executeSQL("INSERT OR IGNORE INTO $tableName SELECT * FROM $sourceTableName")
+                    } else {
+                        Logger.w { "WARNING: Cannot merge table [${mergeTable.sourceTableName}]... it does not exist in sourceDatabaseFile... skipping..." }
+                    }
+                }
+                true
+            }.getOrElse { e ->
+                Logger.e(e) { "Failed to merge database tables (inner) (sourceDatabaseFile: [${otherDatabasePath}]" }
+                onFailBlock?.invoke(e.asException(), this)
+                false
+            }
+        }.getOrElse { e ->
+            Logger.e(e) { "Failed to merge database tables (outer) (sourceDatabaseFile: [${otherDatabasePath}]" }
+            onFailBlock?.invoke(e.asException(), this)
+            false
         }
-    } catch (expected: Exception) {
-        Logger.e(expected) { "Failed to merge database tables (outer) (sourceDatabaseFile: [${otherDatabasePath}]" }
-        onFailBlock?.invoke(expected, this)
-        return false
     } finally {
-        try {
-            // Detach databases
+        // Detach databases
+        runCatching {
             detachDatabase(mergeDbName)
-        } catch (expected: Exception) {
-            Logger.e(expected) { "Failed detach database (merge database tables)... may have never been attached" }
-            onFailBlock?.invoke(expected, this)
+        }.onFailure { e ->
+            Logger.e(e) { "Failed detach database (merge database tables)... may have never been attached" }
+            onFailBlock?.invoke(e.asException(), this)
         }
     }
-
-    return true
 }
+
+/** onFailBlock takes an Exception; runCatching hands back any Throwable */
+private fun Throwable.asException(): Exception = this as? Exception ?: Exception(this)
 
 private fun createTableNamesToMerge(
     sourceTableNames: List<String>,
