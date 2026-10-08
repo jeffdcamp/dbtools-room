@@ -18,4 +18,7 @@ dependencyResolutionManagement {
     }
 }
 
+// Fixed name (instead of the checkout directory's) so the klib ABI dump in dbtools-room/api/ matches in any checkout
+rootProject.name = "dbtools-room"
+
 include(":dbtools-room")

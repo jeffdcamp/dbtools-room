@@ -1,0 +1,302 @@
+public final class org/dbtools/room/DatabaseViewQuery {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun getViewName ()Ljava/lang/String;
+	public final fun getViewQuery ()Ljava/lang/String;
+}
+
+public final class org/dbtools/room/converter/KotlinDateTimeTextConverter {
+	public static final field INSTANCE Lorg/dbtools/room/converter/KotlinDateTimeTextConverter;
+	public final fun fromInstantToString (Lkotlin/time/Instant;)Ljava/lang/String;
+	public final fun fromLocalDateTimeToString (Lkotlinx/datetime/LocalDateTime;)Ljava/lang/String;
+	public final fun fromLocalDateToString (Lkotlinx/datetime/LocalDate;)Ljava/lang/String;
+	public final fun fromLocalTimeToString (Lkotlinx/datetime/LocalTime;)Ljava/lang/String;
+	public final fun fromStringToInstant (Ljava/lang/String;)Lkotlin/time/Instant;
+	public final fun fromStringToLocalDate (Ljava/lang/String;)Lkotlinx/datetime/LocalDate;
+	public final fun fromStringToLocalDateTime (Ljava/lang/String;)Lkotlinx/datetime/LocalDateTime;
+	public final fun fromStringToLocalTime (Ljava/lang/String;)Lkotlinx/datetime/LocalTime;
+}
+
+public final class org/dbtools/room/data/AttachedDatabaseInfo {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lorg/dbtools/room/data/AttachedDatabaseInfo;
+	public static synthetic fun copy$default (Lorg/dbtools/room/data/AttachedDatabaseInfo;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lorg/dbtools/room/data/AttachedDatabaseInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFile ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class org/dbtools/room/data/DatabaseColumnInfo {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;I)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Z
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()I
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;I)Lorg/dbtools/room/data/DatabaseColumnInfo;
+	public static synthetic fun copy$default (Lorg/dbtools/room/data/DatabaseColumnInfo;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;IILjava/lang/Object;)Lorg/dbtools/room/data/DatabaseColumnInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDefaultValue ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getNotNull ()Z
+	public final fun getPrimaryKeyPosition ()I
+	public final fun getType ()Ljava/lang/String;
+	public fun hashCode ()I
+	public final fun isPrimaryKey ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class org/dbtools/room/data/DatabaseTableInfo {
+	public fun <init> (Ljava/lang/String;Lorg/dbtools/room/data/DatabaseTableType;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lorg/dbtools/room/data/DatabaseTableType;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Lorg/dbtools/room/data/DatabaseTableType;Ljava/lang/String;)Lorg/dbtools/room/data/DatabaseTableInfo;
+	public static synthetic fun copy$default (Lorg/dbtools/room/data/DatabaseTableInfo;Ljava/lang/String;Lorg/dbtools/room/data/DatabaseTableType;Ljava/lang/String;ILjava/lang/Object;)Lorg/dbtools/room/data/DatabaseTableInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getSql ()Ljava/lang/String;
+	public final fun getType ()Lorg/dbtools/room/data/DatabaseTableType;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class org/dbtools/room/data/DatabaseTableType : java/lang/Enum {
+	public static final field Companion Lorg/dbtools/room/data/DatabaseTableType$Companion;
+	public static final field TABLE Lorg/dbtools/room/data/DatabaseTableType;
+	public static final field VIEW Lorg/dbtools/room/data/DatabaseTableType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getSqliteType ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lorg/dbtools/room/data/DatabaseTableType;
+	public static fun values ()[Lorg/dbtools/room/data/DatabaseTableType;
+}
+
+public final class org/dbtools/room/data/DatabaseTableType$Companion {
+	public final fun fromSqliteType (Ljava/lang/String;)Lorg/dbtools/room/data/DatabaseTableType;
+}
+
+public abstract class org/dbtools/room/database/DatabaseProvider {
+	public fun <init> ()V
+	public fun closeDatabase (Z)V
+	public static synthetic fun closeDatabase$default (Lorg/dbtools/room/database/DatabaseProvider;ZILjava/lang/Object;)V
+	public abstract fun createDatabase ()Landroidx/room3/RoomDatabase;
+	public abstract fun deleteDatabase ()V
+	public fun getDatabase ()Landroidx/room3/RoomDatabase;
+}
+
+public abstract class org/dbtools/room/database/RoomDatabaseRepository {
+	public fun <init> ()V
+	public fun closeAllDatabases (Z)V
+	public static synthetic fun closeAllDatabases$default (Lorg/dbtools/room/database/RoomDatabaseRepository;ZILjava/lang/Object;)V
+	public fun closeDatabase (Ljava/lang/Object;Z)Z
+	public static synthetic fun closeDatabase$default (Lorg/dbtools/room/database/RoomDatabaseRepository;Ljava/lang/Object;ZILjava/lang/Object;)Z
+	protected abstract fun createDatabase (Ljava/lang/String;)Landroidx/room3/RoomDatabase;
+	protected abstract fun deleteDatabase (Ljava/lang/String;)V
+	public fun getDatabase (Ljava/lang/Object;)Landroidx/room3/RoomDatabase;
+	public abstract fun getDatabaseFilename (Ljava/lang/Object;)Ljava/lang/String;
+	public final fun isDatabaseRegistered (Ljava/lang/Object;)Z
+	protected abstract fun keyToString (Ljava/lang/Object;)Ljava/lang/String;
+}
+
+public final class org/dbtools/room/ext/KotlinFilesystemExtKt {
+	public static final fun deleteDatabaseFiles (Lkotlinx/io/files/FileSystem;Lkotlinx/io/files/Path;)Z
+	public static final fun parseAndExecuteSqlStatements (Lkotlinx/io/files/FileSystem;Lkotlinx/io/files/Path;Lkotlin/jvm/functions/Function1;)V
+	public static final fun renameDatabaseFiles (Lkotlinx/io/files/FileSystem;Lkotlinx/io/files/Path;Lkotlinx/io/files/Path;)Z
+}
+
+public final class org/dbtools/room/ext/MergeDatabaseExtKt {
+	public static final fun mergeDatabase (Landroidx/room3/Transactor;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/util/Map;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function4;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun mergeDatabase (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/util/Map;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function3;)Z
+	public static synthetic fun mergeDatabase$default (Landroidx/room3/Transactor;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/util/Map;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function4;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static synthetic fun mergeDatabase$default (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/util/Map;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function3;ILjava/lang/Object;)Z
+}
+
+public final class org/dbtools/room/ext/MergeTable {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lorg/dbtools/room/ext/MergeTable;
+	public static synthetic fun copy$default (Lorg/dbtools/room/ext/MergeTable;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lorg/dbtools/room/ext/MergeTable;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getSourceTableName ()Ljava/lang/String;
+	public final fun getTargetTableName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class org/dbtools/room/ext/OkioFilesystemExtKt {
+	public static final fun deleteDatabaseFiles (Lokio/FileSystem;Lokio/Path;)Z
+	public static final fun parseAndExecuteSqlStatements (Lokio/FileSystem;Lokio/Path;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun renameDatabaseFiles (Lokio/FileSystem;Lokio/Path;Lokio/Path;)Z
+}
+
+public final class org/dbtools/room/ext/RoomDatabaseExtKt {
+	public static final fun alterTableIfColumnDoesNotExist (Landroidx/room3/RoomDatabase;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun alterTableIfColumnDoesNotExist$default (Landroidx/room3/RoomDatabase;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun applySqlFile (Landroidx/room3/RoomDatabase;Lokio/FileSystem;Lokio/Path;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun attachDatabase (Landroidx/room3/RoomDatabase;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun columnExists (Landroidx/room3/RoomDatabase;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun columnExists$default (Landroidx/room3/RoomDatabase;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun createAllViews (Landroidx/room3/RoomDatabase;Ljava/util/List;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun createView (Landroidx/room3/RoomDatabase;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun detachDatabase (Landroidx/room3/RoomDatabase;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun dropAllViews (Landroidx/room3/RoomDatabase;Ljava/util/List;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun dropAllViews$default (Landroidx/room3/RoomDatabase;Ljava/util/List;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun dropView (Landroidx/room3/RoomDatabase;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun findColumnsInfo (Landroidx/room3/RoomDatabase;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun findColumnsInfo$default (Landroidx/room3/RoomDatabase;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun findTableNames (Landroidx/room3/RoomDatabase;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun findTableNames$default (Landroidx/room3/RoomDatabase;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun findTablesInfo (Landroidx/room3/RoomDatabase;Ljava/lang/String;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun findTablesInfo$default (Landroidx/room3/RoomDatabase;Ljava/lang/String;ZLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun findViewNames (Landroidx/room3/RoomDatabase;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun findViewNames$default (Landroidx/room3/RoomDatabase;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun getAttachedDatabases (Landroidx/room3/RoomDatabase;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun getDatabaseFilename (Landroidx/room3/RoomDatabase;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun getDatabaseFilename$default (Landroidx/room3/RoomDatabase;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun getDatabaseVersion (Landroidx/room3/RoomDatabase;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun isIntegrityOk (Landroidx/room3/RoomDatabase;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun recreateAllViews (Landroidx/room3/RoomDatabase;Ljava/util/List;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun recreateView (Landroidx/room3/RoomDatabase;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun resetRoom (Landroidx/room3/RoomDatabase;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun resetRoom$default (Landroidx/room3/RoomDatabase;ILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun rowCount (Landroidx/room3/RoomDatabase;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun rowCount$default (Landroidx/room3/RoomDatabase;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun setDatabaseVersion (Landroidx/room3/RoomDatabase;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun tableExists (Landroidx/room3/RoomDatabase;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun tableExists$default (Landroidx/room3/RoomDatabase;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun tablesExists (Landroidx/room3/RoomDatabase;Ljava/util/List;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun tablesExists$default (Landroidx/room3/RoomDatabase;Ljava/util/List;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun validateDatabase (Landroidx/room3/RoomDatabase;Ljava/lang/String;Ljava/lang/String;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun validateDatabase$default (Landroidx/room3/RoomDatabase;Ljava/lang/String;Ljava/lang/String;ZLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun viewExists (Landroidx/room3/RoomDatabase;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun viewExists (Landroidx/room3/RoomDatabase;Ljava/util/List;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun viewExists$default (Landroidx/room3/RoomDatabase;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static synthetic fun viewExists$default (Landroidx/room3/RoomDatabase;Ljava/util/List;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun withImmediateTransaction (Landroidx/room3/RoomDatabase;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class org/dbtools/room/ext/SQLiteConnectionExtKt {
+	public static final fun alterTableIfColumnDoesNotExist (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public static synthetic fun alterTableIfColumnDoesNotExist$default (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun applySqlFile (Landroidx/sqlite/SQLiteConnection;Lokio/FileSystem;Lokio/Path;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun attachDatabase (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/lang/String;)V
+	public static final fun beginTransaction (Landroidx/sqlite/SQLiteConnection;)V
+	public static final fun checkAndFixRoomIdentityHash (Landroidx/sqlite/SQLiteConnection;ILjava/lang/String;)Z
+	public static final fun columnExists (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z
+	public static synthetic fun columnExists$default (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Z
+	public static final fun createAllViews (Landroidx/sqlite/SQLiteConnection;Ljava/util/List;)V
+	public static final fun createView (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/lang/String;)V
+	public static final fun detachDatabase (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;)V
+	public static final fun dropAllViews (Landroidx/sqlite/SQLiteConnection;Ljava/util/List;)V
+	public static synthetic fun dropAllViews$default (Landroidx/sqlite/SQLiteConnection;Ljava/util/List;ILjava/lang/Object;)V
+	public static final fun dropView (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;)V
+	public static final fun endTransaction (Landroidx/sqlite/SQLiteConnection;)V
+	public static final fun execSQLWithArgs (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/util/List;)V
+	public static final fun findColumnsInfo (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;
+	public static synthetic fun findColumnsInfo$default (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ljava/util/List;
+	public static final fun findRoomIdentityHash (Landroidx/sqlite/SQLiteConnection;)Ljava/lang/String;
+	public static final fun findTableNames (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;)Ljava/util/List;
+	public static synthetic fun findTableNames$default (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;ILjava/lang/Object;)Ljava/util/List;
+	public static final fun findTablesInfo (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Z)Ljava/util/List;
+	public static synthetic fun findTablesInfo$default (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;ZILjava/lang/Object;)Ljava/util/List;
+	public static final fun findViewNames (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;)Ljava/util/List;
+	public static synthetic fun findViewNames$default (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;ILjava/lang/Object;)Ljava/util/List;
+	public static final fun getAttachedDatabases (Landroidx/sqlite/SQLiteConnection;)Ljava/util/List;
+	public static final fun getDatabaseVersion (Landroidx/sqlite/SQLiteConnection;)I
+	public static final fun isIntegrityOk (Landroidx/sqlite/SQLiteConnection;)Z
+	public static final fun recreateAllViews (Landroidx/sqlite/SQLiteConnection;Ljava/util/List;)V
+	public static final fun recreateView (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/lang/String;)V
+	public static final fun resetRoom (Landroidx/sqlite/SQLiteConnection;I)V
+	public static synthetic fun resetRoom$default (Landroidx/sqlite/SQLiteConnection;IILjava/lang/Object;)V
+	public static final fun rollbackTransaction (Landroidx/sqlite/SQLiteConnection;)V
+	public static final fun rowCount (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/lang/String;)J
+	public static synthetic fun rowCount$default (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)J
+	public static final fun runInTransaction (Landroidx/sqlite/SQLiteConnection;Lkotlin/jvm/functions/Function0;)Z
+	public static final fun setDatabaseVersion (Landroidx/sqlite/SQLiteConnection;I)V
+	public static final fun tableExists (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/lang/String;)Z
+	public static synthetic fun tableExists$default (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Z
+	public static final fun tablesExists (Landroidx/sqlite/SQLiteConnection;Ljava/util/List;Ljava/lang/String;)Z
+	public static synthetic fun tablesExists$default (Landroidx/sqlite/SQLiteConnection;Ljava/util/List;Ljava/lang/String;ILjava/lang/Object;)Z
+	public static final fun validateDatabase (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/lang/String;Z)Z
+	public static synthetic fun validateDatabase$default (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Z
+	public static final fun viewExists (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/lang/String;)Z
+	public static final fun viewExists (Landroidx/sqlite/SQLiteConnection;Ljava/util/List;Ljava/lang/String;)Z
+	public static synthetic fun viewExists$default (Landroidx/sqlite/SQLiteConnection;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Z
+	public static synthetic fun viewExists$default (Landroidx/sqlite/SQLiteConnection;Ljava/util/List;Ljava/lang/String;ILjava/lang/Object;)Z
+}
+
+public final class org/dbtools/room/ext/SQLiteDriverExtKt {
+	public static final fun checkAndFixRoomIdentityHash (Landroidx/sqlite/SQLiteDriver;Ljava/lang/String;ILjava/lang/String;Lkotlin/jvm/functions/Function2;)V
+	public static synthetic fun checkAndFixRoomIdentityHash$default (Landroidx/sqlite/SQLiteDriver;Ljava/lang/String;ILjava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)V
+	public static final fun validateDatabase (Landroidx/sqlite/SQLiteDriver;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)Z
+	public static synthetic fun validateDatabase$default (Landroidx/sqlite/SQLiteDriver;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Z
+}
+
+public final class org/dbtools/room/ext/SQLiteStatementExtKt {
+	public static final fun bindArgs (Landroidx/sqlite/SQLiteStatement;Ljava/util/List;)V
+	public static final fun getBooleanOrNull (Landroidx/sqlite/SQLiteStatement;I)Ljava/lang/Boolean;
+	public static final fun getColumnIndexOrThrow (Landroidx/sqlite/SQLiteStatement;Ljava/lang/String;)I
+	public static final fun getDoubleOrNull (Landroidx/sqlite/SQLiteStatement;I)Ljava/lang/Double;
+	public static final fun getFloatOrNull (Landroidx/sqlite/SQLiteStatement;I)Ljava/lang/Float;
+	public static final fun getIntOrNull (Landroidx/sqlite/SQLiteStatement;I)Ljava/lang/Integer;
+	public static final fun getLongOrNull (Landroidx/sqlite/SQLiteStatement;I)Ljava/lang/Long;
+	public static final fun getTextOrNull (Landroidx/sqlite/SQLiteStatement;I)Ljava/lang/String;
+	public static final fun getValue (Landroidx/sqlite/SQLiteStatement;I)Ljava/lang/Object;
+	public static final fun getValues (Landroidx/sqlite/SQLiteStatement;)Ljava/util/List;
+}
+
+public final class org/dbtools/room/ext/SqlSchemaExtKt {
+	public static final fun quoteSqlIdentifier (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class org/dbtools/room/ext/TransactorExtKt {
+	public static final fun alterTableIfColumnDoesNotExist (Landroidx/room3/Transactor;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun alterTableIfColumnDoesNotExist$default (Landroidx/room3/Transactor;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun applySqlFile (Landroidx/room3/Transactor;Lokio/FileSystem;Lokio/Path;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun attachDatabase (Landroidx/room3/Transactor;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun columnExists (Landroidx/room3/Transactor;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun columnExists$default (Landroidx/room3/Transactor;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun createAllViews (Landroidx/room3/Transactor;Ljava/util/List;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun createView (Landroidx/room3/Transactor;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun detachDatabase (Landroidx/room3/Transactor;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun dropAllViews (Landroidx/room3/Transactor;Ljava/util/List;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun dropAllViews$default (Landroidx/room3/Transactor;Ljava/util/List;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun dropView (Landroidx/room3/Transactor;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun findColumnsInfo (Landroidx/room3/Transactor;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun findColumnsInfo$default (Landroidx/room3/Transactor;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun findTableNames (Landroidx/room3/Transactor;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun findTableNames$default (Landroidx/room3/Transactor;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun findTablesInfo (Landroidx/room3/Transactor;Ljava/lang/String;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun findTablesInfo$default (Landroidx/room3/Transactor;Ljava/lang/String;ZLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun findViewNames (Landroidx/room3/Transactor;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun findViewNames$default (Landroidx/room3/Transactor;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun getAttachedDatabases (Landroidx/room3/Transactor;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun getDatabaseVersion (Landroidx/room3/Transactor;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun isIntegrityOk (Landroidx/room3/Transactor;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun recreateAllViews (Landroidx/room3/Transactor;Ljava/util/List;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun recreateView (Landroidx/room3/Transactor;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun resetRoom (Landroidx/room3/Transactor;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun resetRoom$default (Landroidx/room3/Transactor;ILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun rowCount (Landroidx/room3/Transactor;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun rowCount$default (Landroidx/room3/Transactor;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun setDatabaseVersion (Landroidx/room3/Transactor;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun tableExists (Landroidx/room3/Transactor;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun tableExists$default (Landroidx/room3/Transactor;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun tablesExists (Landroidx/room3/Transactor;Ljava/util/List;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun tablesExists$default (Landroidx/room3/Transactor;Ljava/util/List;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun validateDatabase (Landroidx/room3/Transactor;Ljava/lang/String;Ljava/lang/String;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun validateDatabase$default (Landroidx/room3/Transactor;Ljava/lang/String;Ljava/lang/String;ZLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun viewExists (Landroidx/room3/Transactor;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun viewExists (Landroidx/room3/Transactor;Ljava/util/List;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun viewExists$default (Landroidx/room3/Transactor;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static synthetic fun viewExists$default (Landroidx/room3/Transactor;Ljava/util/List;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class org/dbtools/room/log/DbToolsRoomCrashLogException : java/lang/RuntimeException {
+	public fun <init> ()V
+}
+

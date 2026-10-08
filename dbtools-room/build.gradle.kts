@@ -2,6 +2,7 @@
 
 import de.undercouch.gradle.tasks.download.Download
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.konan.target.HostManager
 
@@ -21,6 +22,12 @@ kotlin {
     compilerOptions {
         optIn.add("kotlin.time.ExperimentalTime")
     }
+
+    // Public API (binary compatibility) check against the committed dump in api/
+    // ./gradlew updateKotlinAbi (after an intentional API change)
+    // ./gradlew checkKotlinAbi (also runs as part of check)
+    @OptIn(ExperimentalAbiValidation::class)
+    abiValidation()
 
     android {
         namespace = "com.dbtools.room"
