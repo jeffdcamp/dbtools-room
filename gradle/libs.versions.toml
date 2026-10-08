@@ -8,7 +8,7 @@ kotlinxDateTime = "0.8.0"
 kotlinxIo = "0.9.1"
 
 android-compileSdk = "37"
-android-minSdk = "24"
+android-minSdk = "26"
 
 assertk = "0.28.1"
 detekt = "2.0.0-alpha.6"
