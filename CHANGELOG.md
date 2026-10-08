@@ -5,7 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [11.0.0] - 2026-10-08
+
+### Added
+
+- `findTablesInfo()` - tables and views with their type and `CREATE` statement (`DatabaseTableInfo`), skipping SQLite/Room bookkeeping tables (`sqlite_*`, `room_master_table`, `android_metadata`, and the shadow tables behind FTS3/4/5 and R*Tree virtual tables) unless `includeInternalTables = true`. Sorted tables first, then views, by name ignoring case
+- `findColumnsInfo()` - full column info (`DatabaseColumnInfo`: name, declared type, not-null, default, primary key position) via `pragma_table_info()` with the table name bound
+- `rowCount()` - row count for a table or view, with the name safely quoted (throws `SQLiteException` if the table does not exist)
+- All three on `SQLiteConnection`, `Transactor`, and `RoomDatabase`, and all support an attached `databaseName`
+- `String.quoteSqlIdentifier()` - quote a table/column/schema name for use in SQL (SQLite cannot bind identifiers)
+- `SQLiteStatement.getValue()` / `getValues()` - read a column (or whole row) as its SQLite storage class (`Long`, `Double`, `String`, `ByteArray`, or `null`); the reading counterpart to `bindArgs()`
+- `columnExists()` / `alterTableIfColumnDoesNotExist()` take an optional `databaseName` for an attached database
+- JVM tests against a real SQLite database (`sqlite-bundled` test dependency), covering both the `SQLiteConnection` and `Transactor` forms
+
+### Changed
+
+- **Breaking:** Raised Android `minSdk` to 26. Android 26 ships SQLite 3.18, which the new schema functions need (`pragma_table_info()` requires SQLite 3.16+); `columnExists()` / `alterTableIfColumnDoesNotExist()` would fail on Android 24/25 with the framework SQLite driver
+- **Breaking:** `columnExists()` now uses `findColumnsInfo()`, binding the table name instead of building `PRAGMA table_info($tableName)`. Table names that need quoting (spaces, quotes) now work; a caller that passed a pre-quoted name (for example `` `item` ``) must pass it unquoted (otherwise `columnExists()` returns false and `alterTableIfColumnDoesNotExist()` runs its `ALTER` again).
+- Kotlin 2.4.21
+- Updated Gradle to 9.8.1
+
+### Fixed
+
+- `SQLiteConnection.mergeDatabase()` returned `false` (and called `onFailBlock`) after a successful merge, because it always ran `ROLLBACK` after `END TRANSACTION`. It now rolls back only when the merge fails
+- `findTableNames()`, `findViewNames()`, `tableExists()` / `tablesExists()`, and `viewExists()` now quote the attached `databaseName` and escape `'` in table/view names, so names that need quoting work
 
 ## [10.2.1] - 2026-09-29
 
